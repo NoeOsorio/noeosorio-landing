@@ -1,7 +1,8 @@
 import { Project } from '../types/portfolio'
 
-export const projects: { [key: string]: Project } = {
-  osmind: {
+export const projects: Project[] = [
+  {
+    id: 'osmind',
     title: "Osmind EHR",
     description: "Enhanced mental health data management and telemedicine app UX using React and Node.js.",
     role: "Software Engineer",
@@ -70,13 +71,9 @@ export const projects: { [key: string]: Project } = {
       website: 'https://www.osmind.org',
       demo: 'https://demo.osmind.org'
     },
+    confidential: true,
     resources: {
       logo: "https://assets-global.website-files.com/624378a4ca64f003be92dd58/6259f0cf05b044f05181fcbb_Logo.svg",
-      screenshots: [
-        "https://placehold.co/1920x1080/2563eb/ffffff?text=Dashboard+View",
-        "https://placehold.co/1920x1080/2563eb/ffffff?text=Patient+Records",
-        "https://placehold.co/1920x1080/2563eb/ffffff?text=Scheduling+Interface"
-      ],
       testimonial: {
         quote: "Osmind has transformed how we deliver mental health care",
         author: "Dr. Sarah Johnson",
@@ -84,12 +81,14 @@ export const projects: { [key: string]: Project } = {
       }
     }
   },
-  clip: {
+  {
+    id: 'clip',
     title: "Logistics Team",
     description: "Integrated Amazon Seller API through microservices, focusing on automated builds and CI for scalability.",
     role: "Software Engineer",
     company: "Clip",
     companyLink: "https://www.clip.mx/",
+    confidential: true,
     technologies: [
       { 
         name: "React", 
@@ -153,15 +152,11 @@ export const projects: { [key: string]: Project } = {
       website: 'https://www.clip.mx'
     },
     resources: {
-      logo: "https://firebasestorage.googleapis.com/v0/b/noeosorio-web.appspot.com/o/images%2Fclip.png?alt=media&token=52fdeb88-61d3-438c-8d42-f3df055632a0",
-      screenshots: [
-        "https://placehold.co/1920x1080/fc4c01/ffffff?text=Logistics+Dashboard",
-        "https://placehold.co/1920x1080/fc4c01/ffffff?text=Order+Management",
-        "https://placehold.co/1920x1080/fc4c01/ffffff?text=Analytics+View"
-      ]
+      logo: "https://firebasestorage.googleapis.com/v0/b/noeosorio-web.appspot.com/o/images%2Fclip.png?alt=media&token=52fdeb88-61d3-438c-8d42-f3df055632a0"
     }
   },
-  fstack: {
+  {
+    id: 'fstack',
     title: "Frontend Department",
     description: "Led frontend development and mentoring at Fstack, optimizing team and project outcomes through Agile and React.js.",
     role: "Software Engineer",
@@ -227,11 +222,9 @@ export const projects: { [key: string]: Project } = {
     links: {
       website: 'https://fstack.tech'
     },
+    confidential: true,
     resources: {
       logo: "https://fstack.tech/_astro/logo_blanco.DxPX-sKd_Z2drN1k.svg",
-      screenshots: [
-        "https://example.com/fstack-projects.png"
-      ],
       testimonial: {
         quote: "Exceptional leadership in modernizing our development practices",
         author: "Carlos Martinez",
@@ -239,7 +232,8 @@ export const projects: { [key: string]: Project } = {
       }
     }
   },
-  finloop: {
+  {
+    id: 'finloop',
     title: "Web Admin",
     description: "Developed the frontend for Finloop, focusing on UI/UX for a lending and borrowing platform.",
     role: "Frontend Developer",
@@ -307,16 +301,13 @@ export const projects: { [key: string]: Project } = {
     links: {
       website: 'https://finloop.com.mx'
     },
+    confidential: true,
     resources: {
-      logo: "https://finloop.com.mx/_next/static/media/finloop.5623e2d2.svg",
-      screenshots: [
-        "https://placehold.co/1920x1080/492eb0/ffffff?text=Financial+Dashboard",
-        "https://placehold.co/1920x1080/492eb0/ffffff?text=Transaction+History",
-        "https://placehold.co/1920x1080/492eb0/ffffff?text=User+Management"
-      ]
+      logo: "https://finloop.com.mx/_next/static/media/finloop.5623e2d2.svg"
     }
   },
-  voztour: {
+  {
+    id: 'voztour',
     title: "VozTour",
     description: "Developed an interactive tour guide app using Flutter and Firebase, improving performance and user experience.",
     role: "Project Leader",
@@ -386,16 +377,13 @@ export const projects: { [key: string]: Project } = {
       appStore: 'https://apps.apple.com/voztour',
       playStore: 'https://play.google.com/store/voztour'
     },
+    confidential: true,
     resources: {
-      logo: "https://is1-ssl.mzstatic.com/image/thumb/Purple125/v4/b2/89/9e/b2899e01-ca5c-3ac7-5152-faad7fe1eda9/AppIcon-1x_U007emarketing-0-7-0-0-85-220.png/230x0w.webp",
-      screenshots: [
-        "https://example.com/voztour-app1.png",
-        "https://example.com/voztour-app2.png"
-      ],
-      video: "https://example.com/voztour-demo.mp4"
+      logo: "https://is1-ssl.mzstatic.com/image/thumb/Purple125/v4/b2/89/9e/b2899e01-ca5c-3ac7-5152-faad7fe1eda9/AppIcon-1x_U007emarketing-0-7-0-0-85-220.png/230x0w.webp"
     }
   },
-  appgua: {
+  {
+    id: 'appgua',
     title: "Appgua",
     description: "Led the transition from Ionic to Flutter for Appgua, improving architecture for a water management system.",
     role: "Project Leader",
@@ -463,27 +451,140 @@ export const projects: { [key: string]: Project } = {
       appStore: 'https://apps.apple.com/appgua',
       playStore: 'https://play.google.com/store/appgua'
     },
+    confidential: true,
     resources: {
       logo: "https://appgua.com.mx/logos/logo.webp",
-      screenshots: [
-        "https://example.com/appgua-screens.png"
-      ],
       testimonial: {
         quote: "Appgua revolutionized our water delivery service",
         author: "Luis Ramírez",
         role: "Operations Director"
       }
     }
+  },
+  {
+    id: 'nihongoFlip',
+    title: "Japanese Learning App",
+    description: "A React Native app for learning languages using Anki-style flashcards, providing an interactive learning experience.",
+    role: "Mobile Developer",
+    company: "Personal",
+    companyLink: "https://github.com/NoeOsorio/NihongoFlip",
+    technologies: [
+      { name: "React Native", icon: "FaReact", category: "mobile" },
+      { name: "Firebase", icon: "SiFirebase", category: "cloud" },
+      { name: "Expo", icon: "SiExpo", category: "mobile" }
+    ],
+    images: [
+      "https://github.com/NoeOsorio/NihongoFlip/raw/main/assets/ss1.png",
+      "https://github.com/NoeOsorio/NihongoFlip/raw/main/assets/ss3.png"
+    ],
+    backgroundColor: "#185463",
+    keyPoints: [
+      {
+        title: "Optimized Flashcard System",
+        content: "Developed a highly interactive flashcard-based learning system utilizing Anki-style spaced repetition, which improves retention and understanding of Japanese vocabulary. This innovative solution allows users to track their progress across different levels of difficulty, enhancing the learning experience."
+      },
+      {
+        title: "Firebase Integration",
+        content: "Seamlessly integrated Firebase Firestore to manage and synchronize user data, offering a reliable and scalable backend solution. This ensures real-time updates across devices, improving user engagement and data security while maintaining low latency for a smooth user experience."
+      },
+      {
+        title: "Cross-platform Compatibility",
+        content: "Leveraged Expo to deploy the app across both iOS and Android, ensuring consistent performance and UX. This cross-platform functionality expanded the app's reach, providing seamless updates and uniform experiences across different devices without compromising performance."
+      },
+      {
+        title: "User Feedback Implementation",
+        content: "Implemented direct feedback loops with users, iterating quickly to improve UX. Enhanced user navigation, responsiveness, and app stability by addressing common pain points identified through feedback, resulting in a higher user satisfaction rate and better app reviews."
+      }
+    ],
+    timeline: [
+      {
+        title: "Project Kickoff",
+        description: "Started the project by laying the foundation with React Native, Firebase, and Expo to ensure scalability and smooth performance.",
+        date: "January 2021"
+      },
+      {
+        title: "Beta Launch",
+        description: "Released the beta version with core learning features, focusing on delivering interactive flashcards and tracking user progress.",
+        date: "April 2021"
+      }
+    ],
+    category: 'mobile',
+    priority: 7,
+    featured: true,
+    links: {
+      github: 'https://github.com/NoeOsorio/NihongoFlip'
+    },
+    resources: {
+      logo: "https://github.com/NoeOsorio/NihongoFlip/raw/main/assets/icon.png",
+      screenshots: [
+        "https://github.com/NoeOsorio/NihongoFlip/raw/main/assets/ss1.png",
+        "https://github.com/NoeOsorio/NihongoFlip/raw/main/assets/ss3.png"
+      ]
+    }
+  },
+  {
+    id: 'drgravili',
+    title: "Medical Appointment Manager",
+    description: "A Flutter-based health appointment management app, focusing on improving reliability through BLoC architecture.",
+    role: "Mobile Developer",
+    company: "Personal",
+    companyLink: "https://noeosorio.com/",
+    technologies: [
+      { name: "Flutter", icon: "SiFlutter", category: "mobile" },
+      { name: "Firebase", icon: "SiFirebase", category: "cloud" },
+      { name: "Node.js", icon: "FaNodeJs", category: "backend" },
+      { name: "Google Cloud", icon: "FaAws", category: "cloud" }
+    ],
+    images: [
+      "https://play-lh.googleusercontent.com/0eQVNR5fnbzfrXhcmb3mXQgwUj5TmLOXfbbJ8bygoM4mWp8fJp4_rRdDNqlEPwSsIw=s360-rw"
+    ],
+    backgroundColor: "#185463",
+    keyPoints: [
+      {
+        title: "BLoC Architecture Implementation",
+        content: "Applied BLoC (Business Logic Component) architecture to effectively manage app state, ensuring smooth scalability and high performance. This structure was crucial in enhancing the stability of appointment scheduling systems while reducing overall code complexity and improving maintainability."
+      },
+      {
+        title: "Firebase Integration for Real-time Data",
+        content: "Utilized Firebase Firestore to provide real-time synchronization for appointments, allowing both patients and doctors to interact with live data. This real-time system increased user engagement and streamlined the scheduling process, making appointment management more efficient."
+      },
+      {
+        title: "Enhanced User Experience",
+        content: "Focused on developing an intuitive user interface with easy navigation, ensuring that patients and medical staff can manage appointments with ease. The integration of user-friendly features like appointment reminders via push notifications greatly improved patient satisfaction."
+      },
+      {
+        title: "Multi-platform Support",
+        content: "Built the app to support both iOS and Android platforms seamlessly, leveraging Flutter's cross-platform capabilities. This allowed for cost-efficient development while maintaining a native-like performance across devices, ensuring a smooth and consistent user experience."
+      }
+    ],
+    timeline: [
+      {
+        title: "Initial Development",
+        description: "Designed the core features for the app using Flutter and Firebase for real-time data management.",
+        date: "May 2020"
+      },
+      {
+        title: "App Launch",
+        description: "Launched the first version of the app, allowing patients to book, reschedule, and manage medical appointments with ease.",
+        date: "September 2020"
+      }
+    ],
+    category: 'mobile',
+    priority: 8,
+    featured: true,
+    links: {
+      website: 'https://noeosorio.com',
+      playStore: 'https://play.google.com/store/apps/details?id=com.drgravili'
+    },
+    confidential: true,
+    resources: {
+      logo: "https://play-lh.googleusercontent.com/0eQVNR5fnbzfrXhcmb3mXQgwUj5TmLOXfbbJ8bygoM4mWp8fJp4_rRdDNqlEPwSsIw=s360-rw"
+    }
   }
-}
-
-export const featuredProjects = [
-  projects.osmind,
-  projects.clip,
-  projects.fstack,
-  projects.finloop,
-  projects.voztour,
-  projects.appgua
 ]
+
+export const featuredProjects = projects.filter(p => p.featured)
+export const workProjects = projects.filter(p => p.company !== 'Personal')
+export const personalProjects = projects.filter(p => p.company === 'Personal')
 
 export default projects 

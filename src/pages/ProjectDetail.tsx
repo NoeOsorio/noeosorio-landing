@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { projects } from '../data/projects'
 import { Technology, technologyColors, technologyIcons } from '../types/portfolio'
+import { HiLockClosed } from 'react-icons/hi'
 
 const TechnologyBadge = ({ tech }: { tech: Technology }) => {
   const Icon = technologyIcons[tech.icon]
@@ -14,7 +15,7 @@ const TechnologyBadge = ({ tech }: { tech: Technology }) => {
 
 const ProjectDetail = () => {
   const { projectId } = useParams()
-  const project = projects[projectId as string]
+  const project = projects.find(p => p.id === projectId)
 
   if (!project) {
     return <div>Proyecto no encontrado</div>
@@ -93,16 +94,30 @@ const ProjectDetail = () => {
           {/* Screenshots Gallery */}
           <div className="space-y-8">
             <h2 className="text-2xl font-bold text-white mb-6">Galería</h2>
-            <div className="grid gap-4">
-              {project.resources.screenshots.map((screenshot, i) => (
-                <img
-                  key={i}
-                  src={screenshot}
-                  alt={`${project.title} screenshot ${i + 1}`}
-                  className="rounded-lg w-full"
-                />
-              ))}
-            </div>
+            {project.confidential ? (
+              <div className="bg-zinc-800/50 rounded-xl p-8 text-center">
+                <HiLockClosed className="w-12 h-12 text-zinc-500 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-white mb-2">
+                  Contenido Confidencial
+                </h3>
+                <p className="text-zinc-400">
+                  Debido a acuerdos de confidencialidad, no podemos mostrar capturas de pantalla de este proyecto.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-4">
+                {project.resources.screenshots?.map((screenshot, i) => (
+                  <div className="max-w-xl mx-auto">
+                    <img
+                      key={i}
+                      src={screenshot}
+                      alt={`${project.title} screenshot ${i + 1}`}
+                      className="rounded-lg w-full max-w-xl mx-auto h-[400px] object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
             {project.resources.video && (
               <div>
                 <h3 className="text-xl font-bold text-white mb-4">Demo</h3>

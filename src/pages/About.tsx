@@ -1,3 +1,52 @@
+import { Technology, technologyColors, technologyIcons } from '../types/portfolio'
+
+const TechnologyBadge = ({ tech }: { tech: Technology }) => {
+  const Icon = technologyIcons[tech.icon]
+  return (
+    <span className={`px-3 py-1 rounded-full text-sm flex items-center gap-2 ${technologyColors[tech.category]}`}>
+      <Icon className="w-4 h-4" />
+      {tech.name}
+    </span>
+  )
+}
+
+const technologies: Technology[] = [
+  // Frontend
+  { name: "React", icon: "FaReact", category: "frontend" },
+  { name: "Next.js", icon: "SiVercel", category: "frontend" },
+  { name: "TypeScript", icon: "SiTypescript", category: "frontend" },
+  { name: "Tailwind", icon: "SiTailwindcss", category: "frontend" },
+  { name: "Redux", icon: "SiRedux", category: "frontend" },
+
+  // Backend
+  { name: "Node.js", icon: "FaNodeJs", category: "backend" },
+  { name: "Python", icon: "FaPython", category: "backend" },
+  { name: "GraphQL", icon: "SiGraphql", category: "backend" },
+  { name: "REST APIs", icon: "SiSwagger", category: "backend" },
+  { name: "Serverless", icon: "SiServerless", category: "backend" },
+
+  // Mobile
+  { name: "React Native", icon: "FaReact", category: "mobile" },
+  { name: "Flutter", icon: "SiFlutter", category: "mobile" },
+  { name: "Expo", icon: "SiExpo", category: "mobile" },
+
+  // Database & Cloud
+  { name: "MongoDB", icon: "SiMongodb", category: "database" },
+  { name: "PostgreSQL", icon: "FaDatabase", category: "database" },
+  { name: "Firebase", icon: "SiFirebase", category: "cloud" },
+  { name: "AWS", icon: "FaAws", category: "cloud" },
+  { name: "Google Cloud", icon: "SiGooglecloud", category: "cloud" },
+  { name: "Cloudflare", icon: "SiCloudflare", category: "cloud" },
+  { name: "Vercel", icon: "SiVercel", category: "cloud" }
+]
+
+const industries = [
+  { name: "Educación", color: "text-blue-300 bg-blue-300/10" },
+  { name: "Salud", color: "text-emerald-300 bg-emerald-300/10" },
+  { name: "Finanzas", color: "text-amber-300 bg-amber-300/10" },
+  { name: "Business", color: "text-purple-300 bg-purple-300/10" }
+]
+
 const About = () => {
   return (
     <div className="min-h-screen">
@@ -26,61 +75,75 @@ const About = () => {
               Hola, soy Noe Osorio
             </h1>
             <p className="text-xl text-zinc-400 leading-relaxed mb-8">
-              Ingeniero de Software visionario apasionado por crear soluciones tecnológicas 
-              innovadoras que generan impacto global. Dedicado a la educación como servicio, 
-              explorando constantemente nuevas metodologías para optimizar los procesos de 
-              enseñanza y aprendizaje.
+              Ingeniero de Software especializado en crear soluciones tecnológicas 
+              innovadoras para industrias de alto impacto.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 rounded-full">
-                <span className="w-2 h-2 bg-lime-300 rounded-full" />
-                <span className="text-zinc-300">Senior Software Engineer</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 rounded-full">
-                <span className="w-2 h-2 bg-lime-300 rounded-full" />
-                <span className="text-zinc-300">Educador Tecnológico</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 rounded-full">
-                <span className="w-2 h-2 bg-lime-300 rounded-full" />
-                <span className="text-zinc-300">Creador de Contenido</span>
-              </div>
+            <div className="flex flex-wrap gap-2">
+              {industries.map((industry, i) => (
+                <span key={i} className={`px-4 py-2 rounded-full text-sm ${industry.color}`}>
+                  {industry.name}
+                </span>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Expertise Section */}
+      {/* Expertise Section - Rediseñado */}
       <section className="bg-zinc-900/50 py-24">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-16 text-center">
             Expertise Técnico
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                area: "Frontend Development",
-                skills: ["TypeScript", "React", "React Native", "Flutter", "Next.js", "TailwindCSS"]
-              },
-              {
-                area: "Backend & Cloud",
-                skills: ["Node.js", "Python", "AWS Lambda", "Firebase", "PostgreSQL", "MongoDB"]
-              },
-              {
-                area: "DevOps & Tools",
-                skills: ["AWS", "Git", "Jest", "Cypress", "Webpack", "CI/CD"]
-              }
-            ].map((expertise, index) => (
-              <div key={index} className="group p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50 hover:border-lime-300/50 transition-all duration-300">
-                <h3 className="text-2xl font-semibold text-white mb-6">{expertise.area}</h3>
-                <div className="flex flex-wrap gap-3">
-                  {expertise.skills.map((skill, skillIndex) => (
-                    <span key={skillIndex} className="px-4 py-2 bg-zinc-900/50 text-zinc-300 rounded-full text-sm">
-                      {skill}
-                    </span>
+          
+          <div className="grid gap-16">
+            {/* Frontend */}
+            <div className="space-y-6">
+              <h3 className="text-2xl font-semibold text-white">Frontend Development</h3>
+              <div className="flex flex-wrap gap-2">
+                {technologies
+                  .filter(tech => tech.category === 'frontend')
+                  .map((tech, i) => (
+                    <TechnologyBadge key={i} tech={tech} />
                   ))}
-                </div>
               </div>
-            ))}
+            </div>
+
+            {/* Backend */}
+            <div className="space-y-6">
+              <h3 className="text-2xl font-semibold text-white">Backend & APIs</h3>
+              <div className="flex flex-wrap gap-2">
+                {technologies
+                  .filter(tech => tech.category === 'backend')
+                  .map((tech, i) => (
+                    <TechnologyBadge key={i} tech={tech} />
+                  ))}
+              </div>
+            </div>
+
+            {/* Mobile */}
+            <div className="space-y-6">
+              <h3 className="text-2xl font-semibold text-white">Mobile Development</h3>
+              <div className="flex flex-wrap gap-2">
+                {technologies
+                  .filter(tech => tech.category === 'mobile')
+                  .map((tech, i) => (
+                    <TechnologyBadge key={i} tech={tech} />
+                  ))}
+              </div>
+            </div>
+
+            {/* Cloud & DevOps */}
+            <div className="space-y-6">
+              <h3 className="text-2xl font-semibold text-white">Cloud & Infrastructure</h3>
+              <div className="flex flex-wrap gap-2">
+                {technologies
+                  .filter(tech => tech.category === 'cloud' || tech.category === 'database')
+                  .map((tech, i) => (
+                    <TechnologyBadge key={i} tech={tech} />
+                  ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

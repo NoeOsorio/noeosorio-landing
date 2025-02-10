@@ -1,6 +1,6 @@
 import { IconType } from 'react-icons'
-import { FaReact, FaNodeJs, FaDatabase, FaAws } from 'react-icons/fa'
-import { SiFlutter, SiFirebase, SiExpo, SiTailwindcss, SiVercel } from 'react-icons/si'
+import { FaReact, FaNodeJs, FaDatabase, FaAws, FaPython } from 'react-icons/fa'
+import { SiFlutter, SiFirebase, SiExpo, SiTailwindcss, SiVercel, SiTypescript, SiRedux, SiGraphql, SiSwagger, SiServerless, SiMongodb, SiGooglecloud, SiCloudflare } from 'react-icons/si'
 
 export type ProjectCategory = 'web' | 'mobile' | 'api' | 'desktop' | 'cli'
 export type TechnologyCategory = 'frontend' | 'backend' | 'mobile' | 'cloud' | 'database'
@@ -18,11 +18,20 @@ export const technologyIcons: Record<string, IconType> = {
   FaNodeJs,
   FaDatabase,
   FaAws,
+  FaPython,
   SiFlutter,
   SiFirebase,
   SiExpo,
   SiTailwindcss,
-  SiVercel
+  SiVercel,
+  SiTypescript,
+  SiRedux,
+  SiGraphql,
+  SiSwagger,
+  SiServerless,
+  SiMongodb,
+  SiGooglecloud,
+  SiCloudflare
 }
 
 export interface Technology {
@@ -52,7 +61,7 @@ export interface ProjectLinks {
 
 export interface ProjectResources {
   logo: string
-  screenshots: string[]
+  screenshots?: string[]
   video?: string
   testimonial?: {
     quote: string
@@ -62,6 +71,7 @@ export interface ProjectResources {
 }
 
 export interface Project {
+  id: string
   title: string
   description: string
   role: string
@@ -77,4 +87,5 @@ export interface Project {
   featured: boolean
   links: ProjectLinks
   resources: ProjectResources
+  confidential?: boolean
 } 
