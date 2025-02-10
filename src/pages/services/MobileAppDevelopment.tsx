@@ -1,4 +1,4 @@
-import { ServicePage } from '../../components/services/ServicePage';
+import { ServicePage } from './ServicePage';
 import { mobileAppFeatures } from '../../data/services';
 
 const mobileAppObjectives = [

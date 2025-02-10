@@ -1,8 +1,8 @@
-import HeroSection from '../sections/HeroSection'
-import FeaturedProjects from '../sections/FeaturedProjects'
-import EducationPreview from '../sections/EducationPreview'
-import Industries from '../sections/Industries'
-import CTASection from '../sections/CTASection'
+import HeroSection from '../sections/home/HeroSection'
+import FeaturedProjects from '../sections/home/FeaturedProjects'
+import EducationPreview from '../sections/home/EducationPreview'
+import Industries from '../sections/home/Industries'
+import CTASection from '../sections/home/CTASection'
 import { SEO } from '../components/SEO'
 import { ServicesShowcase } from '../components/home/ServicesShowcase'
 // Importaremos las demás secciones cuando las creemos

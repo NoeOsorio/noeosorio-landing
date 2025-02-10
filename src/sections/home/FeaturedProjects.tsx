@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { HiArrowRight, HiExternalLink } from 'react-icons/hi'
-import { projects } from '../data/projects'
-import TechnologyBadge from '../components/TechnologyBadge'
+import { projects } from '../../data/projects'
+import TechnologyBadge from '../../components/TechnologyBadge'
 
 const featuredProjects = projects
   .filter(project => project.featured)

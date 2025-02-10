@@ -1,14 +1,14 @@
 import { SEO } from '../components/SEO';
 import { ServiceCard } from '../components/services/ServiceCard';
 import { FinancingCard } from '../components/services/FinancingCard';
-import { ValueProposition } from '../components/services/ValueProposition';
+import { ValueProposition } from '../sections/services/ValueProposition';
 import { StartupBundle } from '../components/services/StartupBundle';
 import { servicesData } from '../data/services';
 import { motion } from 'framer-motion';
 import { AddonCard } from '../components/services/AddonCard';
-import { UseCasesSection } from '../components/services/UseCasesSection';
-import { ProcessSection } from '../components/services/ProcessSection';
-import { SakuraKodeSection } from '../components/services/SakuraKodeSection';
+import { UseCasesSection } from '../sections/services/UseCasesSection';
+import { ProcessSection } from '../sections/services/ProcessSection';
+import { SakuraKodeSection } from '../sections/services/SakuraKodeSection';
 
 const BackgroundPattern = () => (
   <div className="fixed inset-0">

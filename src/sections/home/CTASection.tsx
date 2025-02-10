@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { HiArrowRight, HiMail, HiCalendar } from 'react-icons/hi'
-import { projects } from '../data/projects'
+import { projects } from '../../data/projects'
 
 const CTASection = () => {
   return (

@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import QuoteCalculator from './QuoteCalculator';
-import { ServiceObjectives } from './ServiceObjectives';
-import { ServiceDeliverables } from './ServiceDeliverables';
-import { ServiceFAQ } from './ServiceFAQ';
+import QuoteCalculator from '../../components/services/QuoteCalculator';
+import { ServiceObjectives } from '../../components/services/ServiceObjectives';
+import { ServiceDeliverables } from '../../components/services/ServiceDeliverables';
+import { ServiceFAQ } from '../../sections/services/ServiceFAQ';
 
 interface ServiceFeatureOption {
   id: string;

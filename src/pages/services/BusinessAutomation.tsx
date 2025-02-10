@@ -1,7 +1,7 @@
-import { ServicePage } from '../../components/services/ServicePage';
+import { ServicePage } from './ServicePage';  
 import { businessAutomationFeatures } from '../../data/services';
 
-const businessObjectives = [
+const businessObjectives = [  
   {
     id: "efficiency",
     title: "Maximiza la Eficiencia",

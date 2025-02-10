@@ -1,4 +1,4 @@
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa'
 
 interface SocialLinksProps {
   className?: string;
@@ -14,14 +14,14 @@ const SocialLinks = ({ className = "", linkClassName = "", iconClassName = "" }:
       label: "Visitar perfil de GitHub de Noé Osorio"
     },
     {
-      href: "https://linkedin.com/in/noeosorioh",
+      href: "https://www.linkedin.com/in/noeosorioh/",
       icon: FaLinkedin,
       label: "Conectar con Noé Osorio en LinkedIn"
     },
     {
-      href: "https://twitter.com/noeosorio",
-      icon: FaTwitter,
-      label: "Seguir a Noé Osorio en Twitter"
+      href: "https://www.instagram.com/noeosorio.dev",
+      icon: FaInstagram,
+      label: "Seguir a Noé Osorio en Instagram"
     }
   ]
 

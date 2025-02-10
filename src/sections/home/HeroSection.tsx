@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { HiArrowRight, HiCode, HiLightningBolt } from 'react-icons/hi';
-import SocialLinks from '../components/SocialLinks'
+import SocialLinks from '../../components/SocialLinks'
 
 export const HeroSection = () => (
   <section className="pt-32 pb-24 relative overflow-hidden">

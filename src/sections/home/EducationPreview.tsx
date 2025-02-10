@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { HiArrowRight, HiAcademicCap, HiLightningBolt, HiUsers } from 'react-icons/hi'
-import { scrollToElement } from '../utils/scroll'
+import { scrollToElement } from '../../utils/scroll'
 
 const EducationPreview = () => {
   const navigate = useNavigate()
