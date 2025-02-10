@@ -1,102 +1,102 @@
-import { SEO } from '../components/SEO';
-import { ServiceCard } from '../components/services/ServiceCard';
-import { FinancingCard } from '../components/services/FinancingCard';
-import { ValueProposition } from '../sections/services/ValueProposition';
-import { StartupBundle } from '../components/services/StartupBundle';
-import { servicesData } from '../data/services';
-import { motion } from 'framer-motion';
-import { AddonCard } from '../components/services/AddonCard';
-import { UseCasesSection } from '../sections/services/UseCasesSection';
-import { ProcessSection } from '../sections/services/ProcessSection';
-import { SakuraKodeSection } from '../sections/services/SakuraKodeSection';
+import { SEO } from "../components/SEO";
+import { ServiceCard } from "../components/services/ServiceCard";
+import { FinancingCard } from "../components/services/FinancingCard";
+import { ValueProposition } from "../sections/services/ValueProposition";
+import { StartupBundle } from "../components/services/StartupBundle";
+import { servicesData } from "../data/services";
+import { motion } from "framer-motion";
+import { AddonCard } from "../components/services/AddonCard";
+import { UseCasesSection } from "../sections/services/UseCasesSection";
+import { ProcessSection } from "../sections/services/ProcessSection";
+import { SakuraKodeSection } from "../sections/services/SakuraKodeSection";
 
 // Configuraciones de animación
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.5 }
-}
+  transition: { duration: 0.5 },
+};
 
 const staggerContainer = {
   initial: { opacity: 0 },
   whileInView: { opacity: 1 },
   viewport: { once: true },
-  transition: { staggerChildren: 0.1 }
-}
+  transition: { staggerChildren: 0.1 },
+};
 
 const cardVariant = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true }
-}
+  viewport: { once: true },
+};
 
 const BackgroundPattern = () => (
-  <motion.div 
+  <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 1 }}
     className="fixed inset-0"
   >
     <div className="absolute inset-0 bg-gradient-to-b from-lime-500/5 via-transparent to-transparent" />
-    <motion.div 
+    <motion.div
       className="absolute top-0 left-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px]"
-      animate={{ 
+      animate={{
         scale: [1, 1.2, 1],
-        opacity: [0.2, 0.3, 0.2] 
+        opacity: [0.2, 0.3, 0.2],
       }}
-      transition={{ 
+      transition={{
         duration: 8,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: "easeInOut",
       }}
     />
-    <motion.div 
+    <motion.div
       className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px]"
-      animate={{ 
+      animate={{
         scale: [1.2, 1, 1.2],
-        opacity: [0.3, 0.2, 0.3] 
+        opacity: [0.3, 0.2, 0.3],
       }}
-      transition={{ 
+      transition={{
         duration: 8,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: "easeInOut",
       }}
     />
   </motion.div>
 );
 
 const HeroSection = () => (
-  <motion.section 
-    {...fadeInUp}
-    className="pt-32 pb-24"
-  >
+  <motion.section {...fadeInUp} className="pt-32 pb-24">
     <div className="container mx-auto px-4">
       <motion.div
         variants={staggerContainer}
         className="max-w-4xl mx-auto text-center"
       >
-        <motion.div variants={cardVariant} className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
+        <motion.div
+          variants={cardVariant}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6"
+        >
           <div className="w-2 h-2 bg-lime-300 rounded-full" />
           <p className="text-lime-300 font-medium">Servicios Premium</p>
         </motion.div>
-        
-        <motion.h1 
+
+        <motion.h1
           variants={cardVariant}
           className="text-4xl md:text-6xl font-bold text-white mb-6"
         >
-          Soluciones Tecnológicas{' '}
+          Soluciones Tecnológicas{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-300">
             de Alto Impacto
           </span>
         </motion.h1>
-        
-        <motion.p 
+
+        <motion.p
           variants={cardVariant}
           className="text-xl text-zinc-400 mb-12"
         >
-          Desarrollamos aplicaciones web y móviles escalables, 
-          optimizadas para el crecimiento de tu negocio.
+          Desarrollamos aplicaciones web y móviles escalables, optimizadas para
+          el crecimiento de tu negocio.
         </motion.p>
       </motion.div>
     </div>
@@ -104,39 +104,30 @@ const HeroSection = () => (
 );
 
 const FinancingSection = () => (
-  <motion.section 
-    {...fadeInUp}
-    className="py-24 bg-zinc-800/30"
-  >
+  <motion.section {...fadeInUp} className="py-24 bg-zinc-800/30">
     <div className="container mx-auto px-4">
       <motion.div
         variants={staggerContainer}
         className="max-w-4xl mx-auto text-center mb-16"
       >
-        <motion.h2 
+        <motion.h2
           variants={cardVariant}
           className="text-3xl md:text-4xl font-bold text-white mb-6"
         >
           Opciones de Financiamiento Flexibles
         </motion.h2>
-        <motion.p 
-          variants={cardVariant}
-          className="text-xl text-zinc-400"
-        >
-          Facilitamos tu inversión con planes de pago adaptados a tus necesidades
+        <motion.p variants={cardVariant} className="text-xl text-zinc-400">
+          Facilitamos tu inversión con planes de pago adaptados a tus
+          necesidades
         </motion.p>
       </motion.div>
-      
+
       <motion.div
         variants={staggerContainer}
         className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
       >
         {servicesData.financingOptions.map((option, index) => (
-          <motion.div
-            key={index}
-            variants={cardVariant}
-            whileHover={{ y: -5 }}
-          >
+          <motion.div key={index} variants={cardVariant} whileHover={{ y: -5 }}>
             <FinancingCard {...option} index={index} />
           </motion.div>
         ))}
@@ -146,39 +137,29 @@ const FinancingSection = () => (
 );
 
 const AddonsSection = () => (
-  <motion.section 
-    {...fadeInUp}
-    className="py-24"
-  >
+  <motion.section {...fadeInUp} className="py-24">
     <div className="container mx-auto px-4">
       <motion.div
         variants={staggerContainer}
         className="max-w-4xl mx-auto text-center mb-16"
       >
-        <motion.h2 
+        <motion.h2
           variants={cardVariant}
           className="text-3xl md:text-4xl font-bold text-white mb-6"
         >
           Servicios Adicionales
         </motion.h2>
-        <motion.p 
-          variants={cardVariant}
-          className="text-xl text-zinc-400"
-        >
+        <motion.p variants={cardVariant} className="text-xl text-zinc-400">
           Personaliza y mejora tu aplicación con funciones avanzadas
         </motion.p>
       </motion.div>
-      
+
       <motion.div
         variants={staggerContainer}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"
       >
         {servicesData.addons.map((addon, index) => (
-          <motion.div
-            key={index}
-            variants={cardVariant}
-            whileHover={{ y: -5 }}
-          >
+          <motion.div key={index} variants={cardVariant} whileHover={{ y: -5 }}>
             <AddonCard {...addon} index={index} />
           </motion.div>
         ))}
@@ -188,10 +169,7 @@ const AddonsSection = () => (
 );
 
 const CTASection = () => (
-  <motion.section 
-    {...fadeInUp}
-    className="py-24"
-  >
+  <motion.section {...fadeInUp} className="py-24">
     <div className="container mx-auto px-4">
       <motion.div
         whileHover={{ scale: 1.02 }}
@@ -201,7 +179,8 @@ const CTASection = () => (
           ¿Listo para Transformar tu Negocio?
         </h2>
         <p className="text-xl text-zinc-400 mb-8">
-          Agenda una consulta gratuita y diseñemos la mejor estrategia para tu aplicación.
+          Agenda una consulta gratuita y diseñemos la mejor estrategia para tu
+          aplicación.
         </p>
         <motion.a
           href="/contact"
@@ -219,72 +198,63 @@ const CTASection = () => (
 const Services = () => {
   return (
     <>
-      <SEO 
+      <SEO
         title="Services | Noé Osorio - Premium Development Solutions"
         description="Servicios profesionales de desarrollo web y móvil. Creamos soluciones tecnológicas eficientes y escalables para startups y empresas."
         image="https://noeosorio.com/services-og.png"
         url="https://noeosorio.com/services"
       />
-      
+
       <div className="relative min-h-screen bg-zinc-900 overflow-hidden">
         <BackgroundPattern />
 
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="relative"
-        >
-          <HeroSection />
-          <ValueProposition values={servicesData.businessValue} />
-          
-          <motion.section 
-            {...staggerContainer}
-            className="py-24"
-          >
-            <div className="container mx-auto px-4">
-              <motion.div
-                variants={staggerContainer}
-                className="grid grid-cols-1 md:grid-cols-3 gap-8"
-              >
-                {servicesData.mainServices.map((service, index) => (
-                  <motion.div
-                    key={service.id}
-                    variants={cardVariant}
-                    whileHover={{ y: -5 }}
-                  >
-                    <ServiceCard {...service} index={index} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </motion.section>
+        <HeroSection />
+        <ValueProposition values={servicesData.businessValue} />
 
-          <StartupBundle data={servicesData.startupBundle} />
-          <ProcessSection />
-          <UseCasesSection 
-            services={[
-              ...servicesData.mainServices.map(service => ({
-                title: service.title,
-                icon: service.icon,
-                color: service.color,
-                useCases: service.useCases
-              })),
-              {
-                title: servicesData.startupBundle.title,
-                icon: servicesData.startupBundle.icon,
-                color: servicesData.startupBundle.color,
-                useCases: servicesData.startupBundle.useCases
-              }
-            ]}
-          />
-          <FinancingSection />
-          <AddonsSection />
-          <SakuraKodeSection />
-          <CTASection />
-        </motion.div>
+        <motion.section {...staggerContainer} className="py-24">
+          <div className="container mx-auto px-4">
+            <motion.div
+              variants={staggerContainer}
+              className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            >
+              {servicesData.mainServices.map((service, index) => (
+                <motion.div
+                  key={service.id}
+                  variants={cardVariant}
+                  whileHover={{ y: -5 }}
+                >
+                  <ServiceCard {...service} index={index} />
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </motion.section>
+
+        <StartupBundle data={servicesData.startupBundle} />
+        <ProcessSection />
+        <UseCasesSection
+          services={[
+            ...servicesData.mainServices.map((service) => ({
+              title: service.title,
+              icon: service.icon,
+              color: service.color,
+              useCases: service.useCases,
+            })),
+            {
+              title: servicesData.startupBundle.title,
+              icon: servicesData.startupBundle.icon,
+              color: servicesData.startupBundle.color,
+              useCases: servicesData.startupBundle.useCases,
+            },
+          ]}
+        />
+        <FinancingSection />
+        <AddonsSection />
+        <SakuraKodeSection />
+        <CTASection />
       </div>
     </>
   );
 };
 
-export default Services; 
+export default Services;

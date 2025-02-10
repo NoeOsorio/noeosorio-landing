@@ -74,12 +74,7 @@ const Portfolio = () => {
       
       <div className="relative min-h-screen bg-zinc-900 overflow-hidden">
         {/* Background animado */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="fixed inset-0"
-        >
+
           <div className="absolute inset-0 bg-gradient-to-b from-lime-500/5 via-transparent to-transparent" />
           <motion.div 
             className="absolute top-0 left-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px]"
@@ -105,7 +100,7 @@ const Portfolio = () => {
               ease: "easeInOut"
             }}
           />
-        </motion.div>
+
 
         <div className="relative">
           {/* Hero Section */}

@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react'
 import Layout from './components/Layout'
 import ScrollToTop from './components/ScrollToTop'
 import LoadingScreen from './components/LoadingScreen'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'))
@@ -107,6 +108,10 @@ const router = createBrowserRouter([
             <StartupAcceleration />
           </Suspense>
         )
+      },
+      {
+        path: "privacy-policy",
+        element: <PrivacyPolicy />
       }
     ]
   }
