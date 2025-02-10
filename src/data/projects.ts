@@ -297,7 +297,7 @@ export const projects: Project[] = [
     ],
     category: 'web',
     priority: 4,
-    featured: true,
+    featured: false,
     links: {
       website: 'https://finloop.com.mx'
     },
@@ -371,7 +371,7 @@ export const projects: Project[] = [
     ],
     category: 'mobile',
     priority: 5,
-    featured: true,
+    featured: false,
     links: {
       website: 'https://www.smartkode.mx',
       appStore: 'https://apps.apple.com/voztour',
@@ -445,7 +445,7 @@ export const projects: Project[] = [
     ],
     category: 'mobile',
     priority: 6,
-    featured: true,
+    featured: false,
     links: {
       website: 'https://appgua.com.mx',
       appStore: 'https://apps.apple.com/appgua',
@@ -510,7 +510,7 @@ export const projects: Project[] = [
     ],
     category: 'mobile',
     priority: 7,
-    featured: true,
+    featured: false,
     links: {
       github: 'https://github.com/NoeOsorio/NihongoFlip'
     },
@@ -571,7 +571,7 @@ export const projects: Project[] = [
     ],
     category: 'mobile',
     priority: 8,
-    featured: true,
+    featured: false,
     links: {
       website: 'https://noeosorio.com',
       playStore: 'https://play.google.com/store/apps/details?id=com.drgravili'
@@ -583,7 +583,7 @@ export const projects: Project[] = [
   }
 ]
 
-export const featuredProjects = projects.filter(p => p.featured)
+export const featuredProjects = projects.filter(p => p.featured).sort((a, b) => b.priority - a.priority)
 export const workProjects = projects.filter(p => p.company !== 'Personal')
 export const personalProjects = projects.filter(p => p.company === 'Personal')
 
