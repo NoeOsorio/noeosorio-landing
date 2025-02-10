@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { HiMenu, HiX } from 'react-icons/hi'
 import Logo from './Logo'
 
 const navigation = [
@@ -59,14 +58,27 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-zinc-400 hover:text-white"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Abrir menú de navegación"
+            aria-expanded={isMenuOpen}
+            className="md:hidden p-2 text-zinc-400 hover:text-white"
           >
-            {isMenuOpen ? (
-              <HiX className="w-6 h-6" />
-            ) : (
-              <HiMenu className="w-6 h-6" />
-            )}
+            <svg 
+              className="w-6 h-6" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+              />
+            </svg>
+            <span className="sr-only">
+              {isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            </span>
           </button>
         </div>
 

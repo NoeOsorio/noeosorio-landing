@@ -1,12 +1,16 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import Layout from './components/Layout'
-import Home from './pages/Home'
-import About from './pages/About'
-import Services from './pages/Services'
-import Portfolio from './pages/Portfolio'
-import Contact from './pages/Contact'
-import ProjectDetail from './pages/ProjectDetail'
 import ScrollToTop from './components/ScrollToTop'
+import LoadingScreen from './components/LoadingScreen'
+
+// Lazy load pages
+const Home = lazy(() => import('./pages/Home'))
+const About = lazy(() => import('./pages/About'))
+const Services = lazy(() => import('./pages/Services'))
+const Portfolio = lazy(() => import('./pages/Portfolio'))
+const Contact = lazy(() => import('./pages/Contact'))
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 
 const router = createBrowserRouter([
   {
@@ -18,12 +22,54 @@ const router = createBrowserRouter([
       </>
     ),
     children: [
-      { path: "/", element: <Home /> },
-      { path: "/about", element: <About /> },
-      { path: "/services", element: <Services /> },
-      { path: "/portfolio", element: <Portfolio /> },
-      { path: "/portfolio/:projectId", element: <ProjectDetail /> },
-      { path: "/contact", element: <Contact /> },
+      { 
+        path: "/", 
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Home />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: "/about", 
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <About />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: "/services", 
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Services />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: "/portfolio", 
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Portfolio />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: "/portfolio/:projectId", 
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <ProjectDetail />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: "/contact", 
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Contact />
+          </Suspense>
+        ) 
+      },
     ]
   }
 ])

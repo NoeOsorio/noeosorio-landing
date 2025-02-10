@@ -1,10 +1,10 @@
-import favicon from '../assets/favicon.ico'
+import androidChrome from '/android-chrome-192x192.png'
 
 const Logo = () => {
   return (
     <div className="flex items-center gap-2">
       <img 
-        src={favicon} 
+        src={androidChrome}
         alt="Logo" 
         className="w-8 h-8 object-contain"
       />

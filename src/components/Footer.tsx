@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { HiArrowRight } from 'react-icons/hi'
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
 import Logo from './Logo'
+import SocialLinks from './SocialLinks'
 
 const Footer = () => {
   return (
@@ -14,32 +14,7 @@ const Footer = () => {
             <p className="text-zinc-400">
               Transformando ideas en soluciones digitales innovadoras.
             </p>
-            <div className="flex items-center gap-4">
-              <a 
-                href="https://github.com/NoeOsorio"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-400 hover:text-lime-300 transition-colors"
-              >
-                <FaGithub className="w-5 h-5" />
-              </a>
-              <a 
-                href="https://linkedin.com/in/noeosorio"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-400 hover:text-lime-300 transition-colors"
-              >
-                <FaLinkedin className="w-5 h-5" />
-              </a>
-              <a 
-                href="https://twitter.com/noeosorio"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-400 hover:text-lime-300 transition-colors"
-              >
-                <FaTwitter className="w-5 h-5" />
-              </a>
-            </div>
+            <SocialLinks />
           </div>
 
           {/* Quick Links */}

@@ -1,5 +1,6 @@
 import { Technology, technologyColors, technologyIcons, Experience } from '../types/portfolio'
 import { useState } from 'react'
+import { SEO } from '../components/SEO'
 
 const TechnologyBadge = ({ tech }: { tech: Technology }) => {
   const Icon = technologyIcons[tech.icon]
@@ -280,327 +281,335 @@ const ExperienceSection = () => {
 
 const About = () => {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section Mejorado */}
-      <section className="relative container mx-auto px-4 py-32">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-fixed opacity-5" />
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* Imagen Personal */}
-          <div className="relative order-2 md:order-1">
-            <div className="aspect-[4/5] bg-zinc-800 rounded-2xl overflow-hidden relative">
-              {/* Tu foto profesional */}
+    <>
+      <SEO 
+        title="About | Noé Osorio - Software Engineer"
+        description="Con más de 5 años de experiencia en desarrollo de software, especializado en arquitecturas cloud y desarrollo full-stack."
+        image="https://noeosorio.com/about-og.png"
+        url="https://noeosorio.com/about"
+      />
+      <div className="min-h-screen">
+        {/* Hero Section Mejorado */}
+        <section className="relative container mx-auto px-4 py-32">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-fixed opacity-5" />
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            {/* Imagen Personal */}
+            <div className="relative order-2 md:order-1">
+              <div className="aspect-[4/5] bg-zinc-800 rounded-2xl overflow-hidden relative">
+                {/* Tu foto profesional */}
+              </div>
+              <div className="absolute -bottom-8 left-8 right-8 bg-zinc-800/90 backdrop-blur-sm p-4 rounded-xl border border-zinc-700/50">
+                <div className="flex items-center gap-4">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <p className="text-zinc-300 text-sm">
+                    Disponible para roles de Tech Lead y Senior Software Engineer
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="absolute -bottom-8 left-8 right-8 bg-zinc-800/90 backdrop-blur-sm p-4 rounded-xl border border-zinc-700/50">
-              <div className="flex items-center gap-4">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <p className="text-zinc-300 text-sm">
-                  Disponible para roles de Tech Lead y Senior Software Engineer
+
+            {/* Contenido Principal */}
+            <div className="order-1 md:order-2 space-y-8">
+              <div className="space-y-2">
+                <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+                  Noe Osorio
+                </h1>
+                <p className="text-xl text-lime-300 font-medium">
+                  Senior Software Engineer & Tech Educator
                 </p>
               </div>
-            </div>
-          </div>
 
-          {/* Contenido Principal */}
-          <div className="order-1 md:order-2 space-y-8">
-            <div className="space-y-2">
-              <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-                Noe Osorio
-              </h1>
-              <p className="text-xl text-lime-300 font-medium">
-                Senior Software Engineer & Tech Educator
+              <p className="text-xl text-zinc-400 leading-relaxed">
+                +5 años transformando ideas en soluciones tecnológicas escalables. 
+                Especializado en arquitecturas cloud-native y desarrollo full-stack, 
+                con un fuerte compromiso en mentorear a la próxima generación de 
+                desarrolladores.
               </p>
-            </div>
 
-            <p className="text-xl text-zinc-400 leading-relaxed">
-              +5 años transformando ideas en soluciones tecnológicas escalables. 
-              Especializado en arquitecturas cloud-native y desarrollo full-stack, 
-              con un fuerte compromiso en mentorear a la próxima generación de 
-              desarrolladores.
-            </p>
-
-            {/* Industrias con descripciones */}
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-white">Áreas de Impacto</h2>
-              <div className="grid gap-4">
-                {industries.map((industry, i) => (
-                  <div 
-                    key={i} 
-                    className={`p-4 rounded-xl border border-zinc-800 hover:border-lime-300/50 transition-colors ${industry.color.replace('text', 'bg').replace('/10', '/5')}`}
-                  >
-                    <h3 className={`font-medium mb-2 ${industry.color.replace('bg', 'text')}`}>
-                      {industry.name}
-                    </h3>
-                    <p className="text-zinc-400 text-sm">
-                      {industry.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Keywords para SEO y reclutadores */}
-            <div className="flex flex-wrap gap-2 pt-4">
-              {[
-                "Software Architecture",
-                "Team Leadership",
-                "Cloud Solutions",
-                "Tech Mentorship",
-                "Agile Development",
-                "System Design"
-              ].map((keyword, i) => (
-                <span key={i} className="px-3 py-1 bg-zinc-800/50 rounded-full text-sm text-zinc-400">
-                  {keyword}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tech Stack Section */}
-      <section className="bg-zinc-900/50 py-24">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-16 text-center">
-            Tech Stack
-          </h2>
-          
-          <div className="grid gap-16">
-            {/* Frontend */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-white">Frontend Development</h3>
-              <div className="flex flex-wrap gap-2">
-                {technologies
-                  .filter(tech => tech.category === 'frontend')
-                  .map((tech, i) => (
-                    <TechnologyBadge key={i} tech={tech} />
-                  ))}
-              </div>
-            </div>
-
-            {/* Backend */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-white">Backend & APIs</h3>
-              <div className="flex flex-wrap gap-2">
-                {technologies
-                  .filter(tech => tech.category === 'backend')
-                  .map((tech, i) => (
-                    <TechnologyBadge key={i} tech={tech} />
-                  ))}
-              </div>
-            </div>
-
-            {/* Mobile */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-white">Mobile Development</h3>
-              <div className="flex flex-wrap gap-2">
-                {technologies
-                  .filter(tech => tech.category === 'mobile')
-                  .map((tech, i) => (
-                    <TechnologyBadge key={i} tech={tech} />
-                  ))}
-              </div>
-            </div>
-
-            {/* Cloud & DevOps */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-white">Cloud & Infrastructure</h3>
-              <div className="flex flex-wrap gap-2">
-                {technologies
-                  .filter(tech => tech.category === 'cloud' || tech.category === 'database')
-                  .map((tech, i) => (
-                    <TechnologyBadge key={i} tech={tech} />
-                  ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Experience Section */}
-      <ExperienceSection />
-
-      {/* Education as Service Section */}
-      <section id="education" className="bg-zinc-900/50 py-32">
-        <div className="container mx-auto px-4">
-          {/* Header */}
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
-              <div className="w-2 h-2 bg-lime-300 rounded-full" />
-              <p className="text-lime-300 font-medium">Education & Innovation</p>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Transformando la Educación a través de la Tecnología
-            </h2>
-            <p className="text-xl text-zinc-400 leading-relaxed">
-              Combinando educación, tecnología e innovación para crear experiencias de 
-              aprendizaje significativas y accesibles.
-            </p>
-          </div>
-
-          {/* Main Content */}
-          <div className="max-w-5xl mx-auto">
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-              {[
-                { number: "100k+", label: "Views en Contenido" },
-                { number: "200+", label: "Estudiantes" },
-                { number: "50+", label: "Mentorías" },
-                { number: "400%", label: "Mejora en Productividad" }
-              ].map((stat, i) => (
-                <div key={i} className="p-6 bg-zinc-800/30 rounded-xl text-center">
-                  <p className="text-2xl font-bold text-lime-300 mb-1">{stat.number}</p>
-                  <p className="text-sm text-zinc-400">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Experience Cards */}
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* AI Education */}
-              <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-lime-300/10 rounded-lg">
-                      <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
+              {/* Industrias con descripciones */}
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-white">Áreas de Impacto</h2>
+                <div className="grid gap-4">
+                  {industries.map((industry, i) => (
+                    <div 
+                      key={i} 
+                      className={`p-4 rounded-xl border border-zinc-800 hover:border-lime-300/50 transition-colors ${industry.color.replace('text', 'bg').replace('/10', '/5')}`}
+                    >
+                      <h3 className={`font-medium mb-2 ${industry.color.replace('bg', 'text')}`}>
+                        {industry.name}
+                      </h3>
+                      <p className="text-zinc-400 text-sm">
+                        {industry.description}
+                      </p>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-white">AI in Education Instructor</h3>
-                      <p className="text-zinc-400">Instituto Tecnológico Superior de Salina Cruz</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-3">
-                    {[
-                      "Workshops sobre integración de IA en metodologías educativas",
-                      "Implementación de ChatGPT y Copilot en procesos educativos",
-                      "Automatización de creación y evaluación de exámenes"
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-zinc-300">
-                        <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  ))}
                 </div>
               </div>
 
-              {/* SaaS Development */}
-              <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-lime-300/10 rounded-lg">
-                      <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-white">SaaS Developer & Educator</h3>
-                      <p className="text-zinc-400">Independent</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-3">
-                    {[
-                      "Desarrollo de soluciones open-source con JavaScript y TypeScript",
-                      "Automatización de flujos de contenido con IA",
-                      "Herramientas de automatización Python para optimización de contenido"
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-zinc-300">
-                        <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              {/* Academic Advisor */}
-              <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-lime-300/10 rounded-lg">
-                      <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          strokeWidth={2} 
-                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" 
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-white">Academic Advisor</h3>
-                      <p className="text-zinc-400">Instituto Tecnológico Superior de Tepeaca</p>
-                    </div>
-                  </div>
-                  <ul className="space-y-3">
-                    {[
-                      "Workshop de desarrollo web con React para estudiantes de Ing. en TI",
-                      "Participación en cuadro de expertos para mejora curricular",
-                      "Evaluación de desempeño académico y docente"
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-zinc-300">
-                        <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Areas of Expertise */}
-            <div className="mt-16">
-              <h3 className="text-xl font-semibold text-white mb-6">Áreas de Expertise</h3>
-              <div className="flex flex-wrap gap-3">
+              {/* Keywords para SEO y reclutadores */}
+              <div className="flex flex-wrap gap-2 pt-4">
                 {[
-                  "AI en Educación",
-                  "Automatización",
-                  "Open Source",
-                  "Mentoría Tech",
-                  "Innovación Educativa",
-                  "Content Creation",
-                  "Workshop Facilitation",
-                  "Educational Technology"
-                ].map((tag, i) => (
-                  <span 
-                    key={i} 
-                    className="px-4 py-2 bg-zinc-800/50 text-zinc-300 rounded-full text-sm hover:bg-zinc-800 hover:text-lime-300 transition-colors cursor-default"
-                  >
-                    {tag}
+                  "Software Architecture",
+                  "Team Leadership",
+                  "Cloud Solutions",
+                  "Tech Mentorship",
+                  "Agile Development",
+                  "System Design"
+                ].map((keyword, i) => (
+                  <span key={i} className="px-3 py-1 bg-zinc-800/50 rounded-full text-sm text-zinc-400">
+                    {keyword}
                   </span>
                 ))}
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Quote */}
-            <div className="mt-16 p-8 bg-gradient-to-br from-lime-300/5 to-transparent rounded-xl border border-lime-300/10">
-              <blockquote className="text-xl text-zinc-300 italic text-center">
-                "La combinación de tecnología y educación no solo democratiza el conocimiento, 
-                sino que crea nuevas formas de aprender y crecer profesionalmente."
-              </blockquote>
+        {/* Tech Stack Section */}
+        <section className="bg-zinc-900/50 py-24">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-16 text-center">
+              Tech Stack
+            </h2>
+            
+            <div className="grid gap-16">
+              {/* Frontend */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-white">Frontend Development</h3>
+                <div className="flex flex-wrap gap-2">
+                  {technologies
+                    .filter(tech => tech.category === 'frontend')
+                    .map((tech, i) => (
+                      <TechnologyBadge key={i} tech={tech} />
+                    ))}
+                </div>
+              </div>
+
+              {/* Backend */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-white">Backend & APIs</h3>
+                <div className="flex flex-wrap gap-2">
+                  {technologies
+                    .filter(tech => tech.category === 'backend')
+                    .map((tech, i) => (
+                      <TechnologyBadge key={i} tech={tech} />
+                    ))}
+                </div>
+              </div>
+
+              {/* Mobile */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-white">Mobile Development</h3>
+                <div className="flex flex-wrap gap-2">
+                  {technologies
+                    .filter(tech => tech.category === 'mobile')
+                    .map((tech, i) => (
+                      <TechnologyBadge key={i} tech={tech} />
+                    ))}
+                </div>
+              </div>
+
+              {/* Cloud & DevOps */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-white">Cloud & Infrastructure</h3>
+                <div className="flex flex-wrap gap-2">
+                  {technologies
+                    .filter(tech => tech.category === 'cloud' || tech.category === 'database')
+                    .map((tech, i) => (
+                      <TechnologyBadge key={i} tech={tech} />
+                    ))}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            ¿Listo para Innovar Juntos?
-          </h2>
-          <p className="text-xl text-zinc-400 mb-8">
-            Ya sea que busques transformar tu negocio con tecnología o mejorar tus 
-            habilidades como desarrollador, estoy aquí para ayudarte.
-          </p>
-          <button className="group px-8 py-4 bg-lime-300 text-zinc-900 rounded-lg font-medium relative overflow-hidden transition-all duration-300">
-            <span className="relative z-10">Agendar una Llamada</span>
-            <div className="absolute inset-0 bg-lime-400 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-          </button>
-        </div>
-      </section>
-    </div>
+        {/* Experience Section */}
+        <ExperienceSection />
+
+        {/* Education as Service Section */}
+        <section id="education" className="bg-zinc-900/50 py-32">
+          <div className="container mx-auto px-4">
+            {/* Header */}
+            <div className="max-w-3xl mx-auto text-center mb-16">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
+                <div className="w-2 h-2 bg-lime-300 rounded-full" />
+                <p className="text-lime-300 font-medium">Education & Innovation</p>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                Transformando la Educación a través de la Tecnología
+              </h2>
+              <p className="text-xl text-zinc-400 leading-relaxed">
+                Combinando educación, tecnología e innovación para crear experiencias de 
+                aprendizaje significativas y accesibles.
+              </p>
+            </div>
+
+            {/* Main Content */}
+            <div className="max-w-5xl mx-auto">
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+                {[
+                  { number: "100k+", label: "Views en Contenido" },
+                  { number: "200+", label: "Estudiantes" },
+                  { number: "50+", label: "Mentorías" },
+                  { number: "400%", label: "Mejora en Productividad" }
+                ].map((stat, i) => (
+                  <div key={i} className="p-6 bg-zinc-800/30 rounded-xl text-center">
+                    <p className="text-2xl font-bold text-lime-300 mb-1">{stat.number}</p>
+                    <p className="text-sm text-zinc-400">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Experience Cards */}
+              <div className="grid md:grid-cols-3 gap-8">
+                {/* AI Education */}
+                <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 bg-lime-300/10 rounded-lg">
+                        <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-white">AI in Education Instructor</h3>
+                        <p className="text-zinc-400">Instituto Tecnológico Superior de Salina Cruz</p>
+                      </div>
+                    </div>
+                    <ul className="space-y-3">
+                      {[
+                        "Workshops sobre integración de IA en metodologías educativas",
+                        "Implementación de ChatGPT y Copilot en procesos educativos",
+                        "Automatización de creación y evaluación de exámenes"
+                      ].map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 text-zinc-300">
+                          <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* SaaS Development */}
+                <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 bg-lime-300/10 rounded-lg">
+                        <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-white">SaaS Developer & Educator</h3>
+                        <p className="text-zinc-400">Independent</p>
+                      </div>
+                    </div>
+                    <ul className="space-y-3">
+                      {[
+                        "Desarrollo de soluciones open-source con JavaScript y TypeScript",
+                        "Automatización de flujos de contenido con IA",
+                        "Herramientas de automatización Python para optimización de contenido"
+                      ].map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 text-zinc-300">
+                          <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Academic Advisor */}
+                <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 bg-lime-300/10 rounded-lg">
+                        <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" 
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-white">Academic Advisor</h3>
+                        <p className="text-zinc-400">Instituto Tecnológico Superior de Tepeaca</p>
+                      </div>
+                    </div>
+                    <ul className="space-y-3">
+                      {[
+                        "Workshop de desarrollo web con React para estudiantes de Ing. en TI",
+                        "Participación en cuadro de expertos para mejora curricular",
+                        "Evaluación de desempeño académico y docente"
+                      ].map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 text-zinc-300">
+                          <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Areas of Expertise */}
+              <div className="mt-16">
+                <h3 className="text-xl font-semibold text-white mb-6">Áreas de Expertise</h3>
+                <div className="flex flex-wrap gap-3">
+                  {[
+                    "AI en Educación",
+                    "Automatización",
+                    "Open Source",
+                    "Mentoría Tech",
+                    "Innovación Educativa",
+                    "Content Creation",
+                    "Workshop Facilitation",
+                    "Educational Technology"
+                  ].map((tag, i) => (
+                    <span 
+                      key={i} 
+                      className="px-4 py-2 bg-zinc-800/50 text-zinc-300 rounded-full text-sm hover:bg-zinc-800 hover:text-lime-300 transition-colors cursor-default"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quote */}
+              <div className="mt-16 p-8 bg-gradient-to-br from-lime-300/5 to-transparent rounded-xl border border-lime-300/10">
+                <blockquote className="text-xl text-zinc-300 italic text-center">
+                  "La combinación de tecnología y educación no solo democratiza el conocimiento, 
+                  sino que crea nuevas formas de aprender y crecer profesionalmente."
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="container mx-auto px-4 py-24">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              ¿Listo para Innovar Juntos?
+            </h2>
+            <p className="text-xl text-zinc-400 mb-8">
+              Ya sea que busques transformar tu negocio con tecnología o mejorar tus 
+              habilidades como desarrollador, estoy aquí para ayudarte.
+            </p>
+            <button className="group px-8 py-4 bg-lime-300 text-zinc-900 rounded-lg font-medium relative overflow-hidden transition-all duration-300">
+              <span className="relative z-10">Agendar una Llamada</span>
+              <div className="absolute inset-0 bg-lime-400 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            </button>
+          </div>
+        </section>
+      </div>
+    </>
   )
 }
 
