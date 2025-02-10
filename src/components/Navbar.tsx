@@ -24,7 +24,7 @@ const Navbar = () => {
 
   return (
     <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-zinc-900/80 backdrop-blur-xl' : 'bg-transparent'
+      isScrolled || isMenuOpen ? 'bg-zinc-900/80 backdrop-blur-xl' : 'bg-transparent'
     }`}>
       <nav className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">

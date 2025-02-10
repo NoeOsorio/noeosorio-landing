@@ -50,7 +50,7 @@ const ImpactNumbers = () => {
         </div>
 
         {/* Metrics Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {metrics.map((metric, index) => (
             <div 
               key={index}
