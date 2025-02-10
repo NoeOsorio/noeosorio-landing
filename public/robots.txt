@@ -1,4 +1,27 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://noeosorio.com/sitemap.xml 
+# Sitemap
+Sitemap: https://noeosorio.com/sitemap.xml
+
+# Rutas principales
+Allow: /about
+Allow: /portfolio
+Allow: /services
+Allow: /contact
+
+# Rutas de servicios
+Allow: /services/web-app
+Allow: /services/mobile-app
+Allow: /services/business-automation
+Allow: /services/startup-acceleration
+
+# Rutas de portfolio
+Allow: /portfolio/*
+
+# Archivos y directorios a excluir
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$ 

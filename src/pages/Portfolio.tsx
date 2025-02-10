@@ -64,10 +64,12 @@ const Portfolio = () => {
   return (
     <>
       <SEO 
-        title="Portfolio | Noé Osorio - Full Stack Developer"
-        description="Explora mi portafolio de proyectos web y móviles. Desarrollo de aplicaciones modernas y soluciones tecnológicas innovadoras."
+        title="Portfolio | Noé Osorio - Proyectos Destacados"
+        description="Explora mi portfolio de proyectos en desarrollo web, móvil y automatización. Casos de éxito en healthtech, fintech y más."
         image="https://noeosorio.com/portfolio-og.png"
         url="https://noeosorio.com/portfolio"
+        type="website"
+        keywords="portfolio, proyectos, desarrollo web, aplicaciones móviles, React, Node.js, AWS"
       />
       
       <div className="relative min-h-screen bg-zinc-900 overflow-hidden">

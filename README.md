@@ -236,6 +236,107 @@ This methodical approach allowed for:
 - Scalable architecture
 - Efficient development process
 
+
+# Guía de Modificación de Contenido
+
+## Estructura de Archivos
+Los archivos principales para modificar el contenido están en:
+
+src/
+├── data/
+│   ├── services.ts     # Servicios y paquetes
+│   └── projects.ts     # Proyectos y portfolio
+├── pages/
+│   ├── services/       # Páginas detalladas de servicios
+│   │   ├── WebAppDevelopment.tsx
+│   │   ├── MobileAppDevelopment.tsx
+│   │   ├── BusinessAutomation.tsx
+│   │   └── StartupAcceleration.tsx
+│   ├── Home.tsx       # Página principal
+│   ├── About.tsx      # Información personal
+│   ├── Portfolio.tsx  # Galería de proyectos
+│   └── Contact.tsx    # Página de contacto
+
+## 1. Modificar Servicios (src/data/services.ts)
+
+### Servicios Principales
+Cada servicio en mainServices[] tiene:
+- id: Identificador único para rutas (ej: 'web-app')
+- icon: Icono de react-icons/hi
+- title: Título del servicio
+- description: Descripción corta
+- useCases: Array de casos de uso con title y description
+- features: Array de características
+- price: Precio base
+- timeline: Tiempo estimado
+- color: Gradiente de Tailwind
+
+### Paquete Startup (startupBundle)
+- Misma estructura que los servicios principales
+- Se muestra de forma destacada en la página de servicios
+
+### Opciones de Financiamiento (financingOptions[])
+- title: Título del plan
+- description: Descripción
+- features: Array de características
+- icon: Icono de react-icons/hi
+- highlight: Boolean para destacar
+
+## 2. Modificar Proyectos (src/data/projects.ts)
+
+Cada proyecto tiene:
+- id: Identificador único
+- title: Título del proyecto
+- description: Descripción
+- role: Tu rol en el proyecto
+- company: Nombre de la empresa
+- technologies: Array de tecnologías usadas
+- images: Array de URLs de imágenes
+- keyPoints: Puntos destacados del proyecto
+- timeline: Eventos importantes
+- category: Categoría (web, mobile, etc)
+- priority: Orden de aparición
+- featured: Boolean para destacar
+
+## 3. Modificar Información Personal (src/pages/About.tsx)
+
+### Technologies[]
+- name: Nombre de la tecnología
+- icon: Icono de react-icons
+- category: Categoría (frontend, backend, etc)
+
+### Industries[]
+- name: Nombre de la industria
+- color: Clases de Tailwind para estilos
+- description: Descripción de tu experiencia
+
+### Experience[]
+- role: Puesto
+- company: Empresa
+- location: Ubicación
+- period: Período
+- description: Descripción
+- achievements: Array de logros
+
+## Notas Importantes
+
+1. IDs y Rutas:
+   - Los IDs deben coincidir con las rutas en el router
+   - Ejemplo: id:'web-app' → /services/web-app
+
+2. Imágenes:
+   - Usar WebP cuando sea posible
+   - Optimizar antes de subir
+   - Preferir URLs de CDN
+
+3. Iconos:
+   - Importar de react-icons/hi
+   - Usar prefijo Hi (ej: HiCode)
+
+4. Estilos:
+   - Usar sistema de colores de Tailwind
+   - Gradientes: from-[color]-[shade] to-[color]-[shade]
+
 ## 👤 Author
 
 **Noé Osorio**
@@ -251,14 +352,14 @@ This project is licensed under the MIT License.
 ---
 
 <div align="center">
-  <img src="public/logo-small.png" alt="Logo" width="40px" height="40px" />
+  <img src="public/logo.png" alt="Logo" width="40px" height="40px" />
   <p>
     <sub>Made with ❤️ by <a href="https://noeosorio.com">Noé Osorio</a></sub>
   </p>
 
   <br />
 
-  [![GitHub followers](https://img.shields.io/github/followers/NoeOsorio?style=social)](https://github.com/NoeOsorio)
-  [![Twitter Follow](https://img.shields.io/twitter/follow/noeosorio?style=social)](https://twitter.com/noeosorio)
-  [![LinkedIn](https://img.shields.io/badge/-Connect-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://linkedin.com/in/noeosorioh)](https://linkedin.com/in/noeosorioh)
+  [![GitHub](https://img.shields.io/badge/-GitHub-black?style=flat-square&logo=Github&logoColor=white&link=https://github.com/NoeOsorio)](https://github.com/NoeOsorio)
+  [![Instagram](https://img.shields.io/badge/-Instagram-E4405F?style=flat-square&logo=Instagram&logoColor=white&link=https://instagram.com/noeosorio.dev)](https://instagram.com/noeosorio.dev)
+  [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=Linkedin&logoColor=white&link=https://linkedin.com/in/noeosorioh)](https://linkedin.com/in/noeosorioh)
 </div>

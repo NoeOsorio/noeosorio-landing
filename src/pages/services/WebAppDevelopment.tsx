@@ -1,5 +1,6 @@
 import { ServicePage } from './ServicePage';
 import { webAppFeatures } from '../../data/services';
+import { SEO } from '../../components/SEO';
 
 const webAppObjectives = [
   {
@@ -70,16 +71,26 @@ const webAppFAQs = [
 ];
 
 const WebAppDevelopment = () => (
-  <ServicePage
-    title="Web App Development"
-    description="Aplicaciones web robustas y escalables que transforman tu visión en una solución digital que impulsa el crecimiento de tu negocio."
-    features={webAppFeatures}
-    caseStudies={[]}
-    serviceType="web-app"
-    objectives={webAppObjectives}
-    deliverables={webAppDeliverables}
-    faqs={webAppFAQs}
-  />
+  <>
+    <SEO 
+      title="Desarrollo de Aplicaciones Web | Noé Osorio"
+      description="Creamos aplicaciones web robustas y escalables que transforman tu visión en una solución digital que impulsa el crecimiento de tu negocio."
+      image="https://noeosorio.com/services/web-app-og.png"
+      url="https://noeosorio.com/services/web-app"
+      type="product"
+      keywords="desarrollo web, aplicaciones empresariales, React, Node.js, AWS, full-stack"
+    />
+    <ServicePage
+      title="Web App Development"
+      description="Aplicaciones web robustas y escalables que transforman tu visión en una solución digital que impulsa el crecimiento de tu negocio."
+      features={webAppFeatures}
+      caseStudies={[]}
+      serviceType="web-app"
+      objectives={webAppObjectives}
+      deliverables={webAppDeliverables}
+      faqs={webAppFAQs}
+    />
+  </>
 );
 
 export default WebAppDevelopment; 
