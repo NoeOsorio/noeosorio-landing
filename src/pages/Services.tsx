@@ -10,99 +10,193 @@ import { UseCasesSection } from '../sections/services/UseCasesSection';
 import { ProcessSection } from '../sections/services/ProcessSection';
 import { SakuraKodeSection } from '../sections/services/SakuraKodeSection';
 
+// Configuraciones de animación
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.5 }
+}
+
+const staggerContainer = {
+  initial: { opacity: 0 },
+  whileInView: { opacity: 1 },
+  viewport: { once: true },
+  transition: { staggerChildren: 0.1 }
+}
+
+const cardVariant = {
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true }
+}
+
 const BackgroundPattern = () => (
-  <div className="fixed inset-0">
+  <motion.div 
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 1 }}
+    className="fixed inset-0"
+  >
     <div className="absolute inset-0 bg-gradient-to-b from-lime-500/5 via-transparent to-transparent" />
-    <div 
-      className="absolute inset-0 opacity-[0.15]"
-      style={{
-        backgroundImage: `
-          linear-gradient(to right, rgb(148 163 184 / 0.1) 1px, transparent 1px),
-          linear-gradient(to bottom, rgb(148 163 184 / 0.1) 1px, transparent 1px)
-        `,
-        backgroundSize: '4rem 4rem'
+    <motion.div 
+      className="absolute top-0 left-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px]"
+      animate={{ 
+        scale: [1, 1.2, 1],
+        opacity: [0.2, 0.3, 0.2] 
+      }}
+      transition={{ 
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut"
       }}
     />
-    <div className="absolute top-0 left-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px]" />
-    <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px]" />
-  </div>
+    <motion.div 
+      className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px]"
+      animate={{ 
+        scale: [1.2, 1, 1.2],
+        opacity: [0.3, 0.2, 0.3] 
+      }}
+      transition={{ 
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+    />
+  </motion.div>
 );
 
 const HeroSection = () => (
-  <section className="pt-32 pb-24">
+  <motion.section 
+    {...fadeInUp}
+    className="pt-32 pb-24"
+  >
     <div className="container mx-auto px-4">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        variants={staggerContainer}
         className="max-w-4xl mx-auto text-center"
       >
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
+        <motion.div variants={cardVariant} className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
           <div className="w-2 h-2 bg-lime-300 rounded-full" />
           <p className="text-lime-300 font-medium">Servicios Premium</p>
-        </div>
+        </motion.div>
         
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+        <motion.h1 
+          variants={cardVariant}
+          className="text-4xl md:text-6xl font-bold text-white mb-6"
+        >
           Soluciones Tecnológicas{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-300">
             de Alto Impacto
           </span>
-        </h1>
+        </motion.h1>
         
-        <p className="text-xl text-zinc-400 mb-12">
+        <motion.p 
+          variants={cardVariant}
+          className="text-xl text-zinc-400 mb-12"
+        >
           Desarrollamos aplicaciones web y móviles escalables, 
           optimizadas para el crecimiento de tu negocio.
-        </p>
+        </motion.p>
       </motion.div>
     </div>
-  </section>
+  </motion.section>
 );
 
 const FinancingSection = () => (
-  <section className="py-24 bg-zinc-800/30">
+  <motion.section 
+    {...fadeInUp}
+    className="py-24 bg-zinc-800/30"
+  >
     <div className="container mx-auto px-4">
-      <div className="max-w-4xl mx-auto text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+      <motion.div
+        variants={staggerContainer}
+        className="max-w-4xl mx-auto text-center mb-16"
+      >
+        <motion.h2 
+          variants={cardVariant}
+          className="text-3xl md:text-4xl font-bold text-white mb-6"
+        >
           Opciones de Financiamiento Flexibles
-        </h2>
-        <p className="text-xl text-zinc-400">
+        </motion.h2>
+        <motion.p 
+          variants={cardVariant}
+          className="text-xl text-zinc-400"
+        >
           Facilitamos tu inversión con planes de pago adaptados a tus necesidades
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+      <motion.div
+        variants={staggerContainer}
+        className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+      >
         {servicesData.financingOptions.map((option, index) => (
-          <FinancingCard key={index} {...option} index={index} />
+          <motion.div
+            key={index}
+            variants={cardVariant}
+            whileHover={{ y: -5 }}
+          >
+            <FinancingCard {...option} index={index} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
-  </section>
+  </motion.section>
 );
 
 const AddonsSection = () => (
-  <section className="py-24">
+  <motion.section 
+    {...fadeInUp}
+    className="py-24"
+  >
     <div className="container mx-auto px-4">
-      <div className="max-w-4xl mx-auto text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+      <motion.div
+        variants={staggerContainer}
+        className="max-w-4xl mx-auto text-center mb-16"
+      >
+        <motion.h2 
+          variants={cardVariant}
+          className="text-3xl md:text-4xl font-bold text-white mb-6"
+        >
           Servicios Adicionales
-        </h2>
-        <p className="text-xl text-zinc-400">
+        </motion.h2>
+        <motion.p 
+          variants={cardVariant}
+          className="text-xl text-zinc-400"
+        >
           Personaliza y mejora tu aplicación con funciones avanzadas
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      <motion.div
+        variants={staggerContainer}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"
+      >
         {servicesData.addons.map((addon, index) => (
-          <AddonCard key={index} {...addon} index={index} />
+          <motion.div
+            key={index}
+            variants={cardVariant}
+            whileHover={{ y: -5 }}
+          >
+            <AddonCard {...addon} index={index} />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
-  </section>
+  </motion.section>
 );
 
 const CTASection = () => (
-  <section className="py-24">
+  <motion.section 
+    {...fadeInUp}
+    className="py-24"
+  >
     <div className="container mx-auto px-4">
-      <div className="max-w-4xl mx-auto text-center bg-zinc-800/50 backdrop-blur-xl rounded-2xl p-12 border border-zinc-700/50">
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        className="max-w-4xl mx-auto text-center bg-zinc-800/50 backdrop-blur-xl rounded-2xl p-12 border border-zinc-700/50"
+      >
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
           ¿Listo para Transformar tu Negocio?
         </h2>
@@ -111,15 +205,15 @@ const CTASection = () => (
         </p>
         <motion.a
           href="/contact"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           className="inline-block px-8 py-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-colors"
         >
           Agendar Consulta
         </motion.a>
-      </div>
+      </motion.div>
     </div>
-  </section>
+  </motion.section>
 );
 
 const Services = () => {
@@ -135,19 +229,35 @@ const Services = () => {
       <div className="relative min-h-screen bg-zinc-900 overflow-hidden">
         <BackgroundPattern />
 
-        <div className="relative">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="relative"
+        >
           <HeroSection />
           <ValueProposition values={servicesData.businessValue} />
           
-          <section className="py-24">
+          <motion.section 
+            {...staggerContainer}
+            className="py-24"
+          >
             <div className="container mx-auto px-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <motion.div
+                variants={staggerContainer}
+                className="grid grid-cols-1 md:grid-cols-3 gap-8"
+              >
                 {servicesData.mainServices.map((service, index) => (
-                  <ServiceCard key={service.id} {...service} index={index} />
+                  <motion.div
+                    key={service.id}
+                    variants={cardVariant}
+                    whileHover={{ y: -5 }}
+                  >
+                    <ServiceCard {...service} index={index} />
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
-          </section>
+          </motion.section>
 
           <StartupBundle data={servicesData.startupBundle} />
           <ProcessSection />
@@ -171,7 +281,7 @@ const Services = () => {
           <AddonsSection />
           <SakuraKodeSection />
           <CTASection />
-        </div>
+        </motion.div>
       </div>
     </>
   );

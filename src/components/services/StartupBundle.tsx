@@ -47,25 +47,27 @@ export const StartupBundle = ({ data }: StartupBundleProps) => {
               ))}
             </div>
             
-            <Link
-              to="/contact"
-              className="inline-flex items-center text-lime-300 hover:text-lime-400 transition-colors group"
-            >
-              <span>Solicitar Cotización Personalizada</span>
-              <svg 
-                className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
+            <div className="text-center mt-12">
+              <Link
+                to={`/services/${data.id}`}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-colors"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M13 7l5 5m0 0l-5 5m5-5H6" 
-                />
-              </svg>
-            </Link>
+                <span>Ver Detalles y Cotizar</span>
+                <svg 
+                  className="w-5 h-5" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M17 8l4 4m0 0l-4 4m4-4H3" 
+                  />
+                </svg>
+              </Link>
+            </div>
           </motion.div>
 
           <motion.div

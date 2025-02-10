@@ -15,6 +15,7 @@ interface ServiceCardProps {
 }
 
 export const ServiceCard = ({ 
+  id,
   icon: Icon,
   title,
   description,
@@ -22,32 +23,42 @@ export const ServiceCard = ({
   price,
   timeline,
   color,
-  index
+  index 
 }: ServiceCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
     transition={{ delay: index * 0.1 }}
-    className="relative p-8 rounded-2xl bg-zinc-800/50 backdrop-blur-xl border border-zinc-700/50 group hover:border-lime-300/50 transition-all h-full flex flex-col"
+    className="h-full flex flex-col bg-zinc-800/30 backdrop-blur-xl rounded-xl border border-zinc-700/50 p-8 hover:border-lime-300/50 transition-colors"
   >
-    <div>
+    <div className="mb-8">
       <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${color} mb-6`}>
         <Icon className="w-6 h-6 text-white" />
       </div>
       
-      <h3 className="text-2xl font-bold text-white mb-2">
-        {title}
-      </h3>
-      
-      <p className="text-zinc-400 mb-6">
-        {description}
-      </p>
-      
-      <div className="space-y-4 mb-6">
+      <h3 className="text-2xl font-bold text-white mb-4">{title}</h3>
+      <p className="text-zinc-400">{description}</p>
+    </div>
+
+    <div className="flex-grow">
+      <div className="space-y-4">
         {features.map((feature, i) => (
-          <div key={i} className="flex items-start gap-2">
-            <span className="text-lime-300">✓</span>
-            <span className="text-sm text-zinc-400">{feature}</span>
+          <div key={i} className="flex items-start gap-3">
+            <svg 
+              className="w-5 h-5 text-lime-300 mt-1" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M5 13l4 4L19 7" 
+              />
+            </svg>
+            <span className="text-zinc-300">{feature}</span>
           </div>
         ))}
       </div>
@@ -61,10 +72,10 @@ export const ServiceCard = ({
         </div>
         
         <Link
-          to="/contact"
+          to={`/services/${id}`}
           className="block w-full py-3 px-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium text-center transition-colors"
         >
-          Cotizar Proyecto
+          Ver Detalles y Cotizar
         </Link>
       </div>
     )}

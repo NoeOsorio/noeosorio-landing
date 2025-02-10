@@ -18,7 +18,7 @@ import {
 
 export const mainServices = [
   {
-    id: 'web',
+    id: 'web-app',
     icon: HiCode,
     title: 'Web App Development',
     description: 'Crea una aplicación web poderosa, escalable y optimizada.',
@@ -51,7 +51,7 @@ export const mainServices = [
     color: 'from-purple-500 to-blue-500'
   },
   {
-    id: 'mobile',
+    id: 'mobile-app',
     icon: HiDeviceMobile,
     title: 'Mobile App Development',
     description: 'Aplicaciones móviles nativas o híbridas listas para escalar.',
@@ -83,7 +83,7 @@ export const mainServices = [
     color: 'from-lime-500 to-emerald-500'
   },
   {
-    id: 'automation',
+    id: 'business-automation',
     icon: HiCog,
     title: 'Business Automation Suite',
     description: 'Optimiza y automatiza tus procesos empresariales sin esfuerzo.',
@@ -177,7 +177,7 @@ export const businessValue = [
 ];
 
 export const startupBundle = {
-  id: 'startup',
+  id: 'startup-acceleration',
   icon: HiLightningBolt,
   title: 'Startup Acceleration Bundle',
   description: 'Tu MVP listo para lanzar en tiempo récord.',
