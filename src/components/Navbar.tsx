@@ -5,6 +5,7 @@ import Logo from './Logo'
 const navigation = [
   { name: 'Inicio', href: '/' },
   { name: 'Portfolio', href: '/portfolio' },
+  { name: 'Servicios', href: '/services' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' }
 ]
