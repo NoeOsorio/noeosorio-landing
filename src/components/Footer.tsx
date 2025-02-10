@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom'
 import { HiArrowRight } from 'react-icons/hi'
 import Logo from './Logo'
 import SocialLinks from './SocialLinks'
+import { footerLinks } from '../data/footerLinks'
 
 const Footer = () => {
   return (
-    <footer className="border-t border-zinc-800">
+    <footer className="border-t border-zinc-800 bg-zinc-900/50 backdrop-blur-xl">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="space-y-4">
             <Logo />
@@ -36,21 +37,27 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Services</h3>
-            <ul className="space-y-3">
-              {[
-                'Cloud Architecture',
-                'Full Stack Development',
-                'Tech Consulting',
-                'Team Training'
-              ].map((service) => (
-                <li key={service}>
-                  <Link 
-                    to="/services"
-                    className="text-zinc-400 hover:text-lime-300 transition-colors"
-                  >
-                    {service}
-                  </Link>
+            <h3 className="text-white font-bold mb-6">Servicios</h3>
+            <ul className="space-y-4">
+              {footerLinks.services.map((link) => (
+                <li key={link.href}>
+                  {link.href.startsWith('http') ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-zinc-400 hover:text-lime-300 transition-colors"
+                    >
+                      {link.title}
+                    </a>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      className="text-zinc-400 hover:text-lime-300 transition-colors"
+                    >
+                      {link.title}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -72,9 +79,11 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="pt-8 border-t border-zinc-800 text-center text-zinc-400">
-          <p>© {new Date().getFullYear()} Noé Osorio. All rights reserved.</p>
+        {/* Footer bottom */}
+        <div className="mt-16 pt-8 border-t border-zinc-800 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-zinc-400">
+            © {new Date().getFullYear()} Noé Osorio. Todos los derechos reservados.
+          </p>
         </div>
       </div>
     </footer>

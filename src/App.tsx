@@ -12,6 +12,12 @@ const Portfolio = lazy(() => import('./pages/Portfolio'))
 const Contact = lazy(() => import('./pages/Contact'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 
+// Lazy load service pages
+const WebAppDevelopment = lazy(() => import('./pages/services/WebAppDevelopment'))
+const MobileAppDevelopment = lazy(() => import('./pages/services/MobileAppDevelopment'))
+const BusinessAutomation = lazy(() => import('./pages/services/BusinessAutomation'))
+const StartupAcceleration = lazy(() => import('./pages/services/StartupAcceleration'))
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -70,6 +76,38 @@ const router = createBrowserRouter([
           </Suspense>
         ) 
       },
+      {
+        path: "/services/web-app",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <WebAppDevelopment />
+          </Suspense>
+        )
+      },
+      {
+        path: "/services/mobile-app",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <MobileAppDevelopment />
+          </Suspense>
+        )
+      },
+      {
+        path: "/services/business-automation",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <BusinessAutomation />
+          </Suspense>
+        )
+      },
+      {
+        path: "/services/startup-acceleration",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <StartupAcceleration />
+          </Suspense>
+        )
+      }
     ]
   }
 ])

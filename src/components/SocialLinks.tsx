@@ -1,6 +1,12 @@
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
 
-const SocialLinks = ({ className = '' }: { className?: string }) => {
+interface SocialLinksProps {
+  className?: string;
+  linkClassName?: string;
+  iconClassName?: string;
+}
+
+const SocialLinks = ({ className = "", linkClassName = "", iconClassName = "" }: SocialLinksProps) => {
   const socialLinks = [
     {
       href: "https://github.com/NoeOsorio",
@@ -28,10 +34,10 @@ const SocialLinks = ({ className = '' }: { className?: string }) => {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={label}
-          className="text-zinc-400 hover:text-lime-300 transition-colors"
+          className={`${linkClassName} text-zinc-400 hover:text-lime-300 transition-colors`}
         >
           <span className="sr-only">{label}</span>
-          <Icon className="w-6 h-6" />
+          <Icon className={`${iconClassName} w-6 h-6`} />
         </a>
       ))}
     </div>

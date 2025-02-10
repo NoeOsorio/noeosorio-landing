@@ -244,4 +244,394 @@ export const servicesData = {
   businessValue,
   startupBundle,
   addons
-}; 
+};
+
+export const webAppFeatures = [
+  {
+    title: "Frontend Development",
+    multiSelect: false,
+    options: [
+      { 
+        id: "basic-ui", 
+        label: "UI Básica", 
+        description: "Diseño responsive, componentes esenciales, y optimización básica.",
+        price: 2000,
+        time: 4
+      },
+      { 
+        id: "advanced-ui", 
+        label: "UI Avanzada + Animaciones", 
+        description: "Micro-interacciones, animaciones fluidas, y experiencia de usuario mejorada.",
+        price: 3500,
+        time: 6
+      },
+      { 
+        id: "premium-ui", 
+        label: "UI Premium + Interactividad", 
+        description: "Diseño único, animaciones complejas, y experiencia de usuario excepcional.",
+        price: 5000,
+        time: 8
+      }
+    ]
+  },
+  {
+    title: "Backend Development",
+    multiSelect: false,
+    options: [
+      { 
+        id: "basic-api", 
+        label: "API REST Básica", 
+        description: "CRUD operations, autenticación simple, y base de datos relacional.",
+        price: 2500,
+        time: 4
+      },
+      { 
+        id: "advanced-api", 
+        label: "API REST + Auth Avanzada", 
+        description: "OAuth, roles, permisos, y cache para mejor rendimiento.",
+        price: 4000,
+        time: 6
+      },
+      { 
+        id: "premium-api", 
+        label: "API GraphQL + Microservicios", 
+        description: "Arquitectura escalable, real-time, y optimización avanzada.",
+        price: 6000,
+        time: 8
+      }
+    ]
+  },
+  {
+    title: "Database & Infrastructure",
+    multiSelect: false,
+    options: [
+      { 
+        id: "basic-db", 
+        label: "Base de Datos Standard", 
+        description: "PostgreSQL/MySQL, backups automáticos, y monitoreo básico.",
+        price: 1500,
+        time: 2
+      },
+      { 
+        id: "advanced-db", 
+        label: "DB + Cache + Search", 
+        description: "Redis cache, Elasticsearch, y optimización de queries.",
+        price: 3000,
+        time: 3
+      },
+      { 
+        id: "premium-db", 
+        label: "Infraestructura Enterprise", 
+        description: "Alta disponibilidad, sharding, y escalado automático.",
+        price: 4500,
+        time: 4
+      }
+    ]
+  },
+  {
+    title: "Features Adicionales",
+    multiSelect: true,
+    options: [
+      { 
+        id: "analytics", 
+        label: "Analytics & Reporting", 
+        description: "Dashboard personalizado, métricas en tiempo real, y exportación de datos.",
+        price: 2000,
+        time: 2
+      },
+      { 
+        id: "payments", 
+        label: "Procesamiento de Pagos", 
+        description: "Integración con Stripe/PayPal, suscripciones, y facturación.",
+        price: 2500,
+        time: 2
+      },
+      { 
+        id: "ai-features", 
+        label: "Características con IA", 
+        description: "Integración con LLMs, procesamiento de lenguaje natural, y automatización.",
+        price: 3500,
+        time: 3
+      }
+    ]
+  }
+];
+
+export const mobileAppFeatures = [
+  {
+    title: "Desarrollo Nativo/Híbrido",
+    multiSelect: false,
+    options: [
+      { 
+        id: "basic-mobile", 
+        label: "App Híbrida Básica", 
+        description: "React Native/Flutter, UI responsive, y funcionalidades esenciales.",
+        price: 3000,
+        time: 6
+      },
+      { 
+        id: "advanced-mobile", 
+        label: "App Híbrida Avanzada", 
+        description: "Animaciones fluidas, offline mode, y optimización de rendimiento.",
+        price: 5000,
+        time: 8
+      },
+      { 
+        id: "native-mobile", 
+        label: "App Nativa Premium", 
+        description: "Desarrollo nativo iOS/Android, máximo rendimiento y UX nativa.",
+        price: 8000,
+        time: 12
+      }
+    ]
+  },
+  {
+    title: "Funcionalidades Core",
+    multiSelect: false,
+    options: [
+      { 
+        id: "basic-auth", 
+        label: "Autenticación Básica", 
+        description: "Login social, registro, y gestión de perfil básico.",
+        price: 2000,
+        time: 3
+      },
+      { 
+        id: "advanced-auth", 
+        label: "Auth + Permisos", 
+        description: "Roles personalizados, verificación 2FA, y recuperación segura.",
+        price: 3500,
+        time: 4
+      },
+      { 
+        id: "premium-auth", 
+        label: "Sistema Completo", 
+        description: "SSO, biometría, y gestión avanzada de sesiones.",
+        price: 5000,
+        time: 6
+      }
+    ]
+  },
+  {
+    title: "Características Móviles",
+    multiSelect: true,
+    options: [
+      { 
+        id: "basic-features", 
+        label: "Features Esenciales", 
+        description: "Push notifications, geolocalización, y cámara básica.",
+        price: 2500,
+        time: 2
+      },
+      { 
+        id: "advanced-features", 
+        label: "Features Avanzadas", 
+        description: "Mapas interactivos, AR básico, y sincronización offline.",
+        price: 4000,
+        time: 3
+      },
+      { 
+        id: "premium-features", 
+        label: "Features Premium", 
+        description: "AR avanzado, ML en dispositivo, y features personalizadas.",
+        price: 6000,
+        time: 4
+      }
+    ]
+  },
+  {
+    title: "Publicación y Analytics",
+    multiSelect: false,
+    options: [
+      { 
+        id: "basic-store", 
+        label: "Publicación Básica", 
+        description: "Publicación en App/Play Store y analytics básico.",
+        price: 1500,
+        time: 1
+      },
+      { 
+        id: "advanced-store", 
+        label: "Publicación + Marketing", 
+        description: "ASO, analytics avanzado, y A/B testing.",
+        price: 3000,
+        time: 2
+      },
+      { 
+        id: "premium-store", 
+        label: "Growth Package", 
+        description: "Marketing completo, engagement tools, y optimización continua.",
+        price: 4500,
+        time: 3
+      }
+    ]
+  }
+];
+
+export const businessAutomationFeatures = [
+  {
+    title: "Automatización de Procesos",
+    multiSelect: false,
+    options: [
+      {
+        id: "basic-automation",
+        label: "Automatización Básica",
+        description: "Flujos de trabajo simples, integraciones básicas con APIs existentes.",
+        price: 3000,
+        time: 4
+      },
+      {
+        id: "advanced-automation",
+        label: "Automatización Avanzada",
+        description: "Flujos complejos, reglas de negocio personalizadas, webhooks.",
+        price: 5000,
+        time: 6
+      },
+      {
+        id: "premium-automation",
+        label: "Automatización Enterprise",
+        description: "Orquestación de microservicios, procesamiento en tiempo real.",
+        price: 8000,
+        time: 8
+      }
+    ]
+  },
+  {
+    title: "Integraciones",
+    multiSelect: false,
+    options: [
+      {
+        id: "basic-integration",
+        label: "Integraciones Básicas",
+        description: "Conexión con hasta 3 servicios externos vía API REST.",
+        price: 2500,
+        time: 3
+      },
+      {
+        id: "advanced-integration",
+        label: "Integraciones Avanzadas",
+        description: "Hasta 10 servicios, sincronización bidireccional.",
+        price: 4000,
+        time: 5
+      },
+      {
+        id: "premium-integration",
+        label: "Integraciones Enterprise",
+        description: "Integraciones ilimitadas, ETL personalizado, data warehouse.",
+        price: 6000,
+        time: 7
+      }
+    ]
+  },
+  {
+    title: "Features Adicionales",
+    multiSelect: true,
+    options: [
+      {
+        id: "reporting",
+        label: "Reportes y Analytics",
+        description: "Dashboards personalizados, exportación de datos, alertas.",
+        price: 2000,
+        time: 2
+      },
+      {
+        id: "ai-automation",
+        label: "Automatización con IA",
+        description: "Procesamiento de documentos, clasificación automática, predicciones.",
+        price: 3500,
+        time: 3
+      },
+      {
+        id: "workflow-designer",
+        label: "Diseñador de Flujos",
+        description: "Interfaz visual para crear y modificar automatizaciones.",
+        price: 4000,
+        time: 4
+      }
+    ]
+  }
+];
+
+export const startupAccelerationFeatures = [
+  {
+    title: "MVP Core",
+    multiSelect: false,
+    options: [
+      {
+        id: "basic-mvp",
+        label: "MVP Básico",
+        description: "Landing page + funcionalidades core para validar tu idea.",
+        price: 5000,
+        time: 6
+      },
+      {
+        id: "advanced-mvp",
+        label: "MVP Avanzado",
+        description: "App web completa + app móvil básica + analytics.",
+        price: 8000,
+        time: 8
+      },
+      {
+        id: "premium-mvp",
+        label: "MVP Premium",
+        description: "Solución full-stack con todas las integraciones necesarias.",
+        price: 12000,
+        time: 12
+      }
+    ]
+  },
+  {
+    title: "Growth Features",
+    multiSelect: true,
+    options: [
+      {
+        id: "analytics-suite",
+        label: "Suite de Analytics",
+        description: "Métricas de crecimiento, embudos, y comportamiento de usuarios.",
+        price: 2000,
+        time: 2
+      },
+      {
+        id: "marketing-tools",
+        label: "Herramientas de Marketing",
+        description: "Email marketing, notificaciones push, A/B testing.",
+        price: 3000,
+        time: 3
+      },
+      {
+        id: "viral-features",
+        label: "Features Virales",
+        description: "Referrals, gamificación, contenido compartible.",
+        price: 4000,
+        time: 4
+      }
+    ]
+  },
+  {
+    title: "Escalabilidad",
+    multiSelect: false,
+    options: [
+      {
+        id: "basic-scale",
+        label: "Escalabilidad Básica",
+        description: "Arquitectura cloud-native básica, monitoreo esencial.",
+        price: 3000,
+        time: 3
+      },
+      {
+        id: "advanced-scale",
+        label: "Escalabilidad Avanzada",
+        description: "Microservicios, caching distribuido, CI/CD.",
+        price: 5000,
+        time: 5
+      },
+      {
+        id: "premium-scale",
+        label: "Escalabilidad Enterprise",
+        description: "Multi-región, alta disponibilidad, disaster recovery.",
+        price: 7000,
+        time: 7
+      }
+    ]
+  }
+]; 
