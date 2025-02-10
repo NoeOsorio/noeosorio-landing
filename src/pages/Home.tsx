@@ -9,18 +9,15 @@ import CTASection from '../sections/CTASection'
 
 const Home = () => {
   return (
-    <div className="min-h-screen relative">
-      <div className="absolute inset-0 bg-zinc-900" /> {/* Background base */}
-      <div className="relative">
-        <HeroSection />
-        <FeaturedServices />
-        <ImpactNumbers />
-        <FeaturedProjects />
-        <EducationPreview />
-        <Industries />
-        <CTASection />
-      </div>
-    </div>
+    <>
+      <HeroSection />
+      <FeaturedServices />
+      <ImpactNumbers />
+      <FeaturedProjects />
+      <EducationPreview />
+      <Industries />
+      <CTASection />
+    </>
   )
 }
 

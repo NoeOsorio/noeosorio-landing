@@ -4,12 +4,13 @@ import Footer from './Footer'
 
 const Layout = () => {
   return (
-    <div className="min-h-screen bg-zinc-900">
-      <Navbar />
-      <main>
+    <div className="min-h-screen relative">
+      <div className="absolute inset-0 bg-zinc-900" /> {/* Background base */}
+      <div className="relative">
+        <Navbar />
         <Outlet />
-      </main>
-      <Footer />
+        <Footer />
+      </div>
     </div>
   )
 }

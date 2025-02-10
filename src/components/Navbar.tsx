@@ -1,31 +1,103 @@
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { HiMenu, HiX } from 'react-icons/hi'
+import Logo from './Logo'
+
+const navigation = [
+  { name: 'Inicio', href: '/' },
+  { name: 'Portfolio', href: '/portfolio' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' }
+]
 
 const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <header className="fixed w-full bg-zinc-950/80 backdrop-blur-sm border-b border-zinc-800 z-50">
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="text-lime-300 font-bold text-xl">
-            NOE OSORIO
+    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      isScrolled ? 'bg-zinc-900/80 backdrop-blur-xl' : 'bg-transparent'
+    }`}>
+      <nav className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link to="/" className="shrink-0">
+            <Logo />
           </Link>
-          <div className="hidden md:flex space-x-8">
-            <Link to="/" className="text-zinc-300 hover:text-lime-300 transition-colors">
-              Home
-            </Link>
-            <Link to="/about" className="text-zinc-300 hover:text-lime-300 transition-colors">
-              About
-            </Link>
-            <Link to="/services" className="text-zinc-300 hover:text-lime-300 transition-colors">
-              Services
-            </Link>
-            <Link to="/portfolio" className="text-zinc-300 hover:text-lime-300 transition-colors">
-              Portfolio
-            </Link>
-            <Link to="/contact" className="text-zinc-300 hover:text-lime-300 transition-colors">
-              Contact
-            </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={`text-sm font-medium transition-colors ${
+                  pathname === item.href
+                    ? 'text-lime-300'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <a
+              href="#contact"
+              className="px-4 py-2 bg-lime-300 text-zinc-900 rounded-lg text-sm font-medium hover:bg-lime-400 transition-colors"
+            >
+              Contactar
+            </a>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 text-zinc-400 hover:text-white"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? (
+              <HiX className="w-6 h-6" />
+            ) : (
+              <HiMenu className="w-6 h-6" />
+            )}
+          </button>
         </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4">
+            <div className="flex flex-col gap-4">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    pathname === item.href
+                      ? 'bg-lime-300/10 text-lime-300'
+                      : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+              <a
+                href="#contact"
+                onClick={() => setIsMenuOpen(false)}
+                className="px-4 py-2 bg-lime-300 text-zinc-900 rounded-lg text-sm font-medium hover:bg-lime-400 transition-colors text-center"
+              >
+                Contactar
+              </a>
+            </div>
+          </div>
+        )}
       </nav>
     </header>
   )
