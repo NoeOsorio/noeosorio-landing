@@ -1,4 +1,5 @@
-import { Technology, technologyColors, technologyIcons } from '../types/portfolio'
+import { Technology, technologyColors, technologyIcons, Experience } from '../types/portfolio'
+import { useState } from 'react'
 
 const TechnologyBadge = ({ tech }: { tech: Technology }) => {
   const Icon = technologyIcons[tech.icon]
@@ -41,47 +42,314 @@ const technologies: Technology[] = [
 ]
 
 const industries = [
-  { name: "Educación", color: "text-blue-300 bg-blue-300/10" },
-  { name: "Salud", color: "text-emerald-300 bg-emerald-300/10" },
-  { name: "Finanzas", color: "text-amber-300 bg-amber-300/10" },
-  { name: "Business", color: "text-purple-300 bg-purple-300/10" }
+  { 
+    name: "Educación", 
+    color: "text-blue-300 bg-blue-300/10",
+    description: "Democratizando el conocimiento tecnológico a través de mentoría y contenido educativo"
+  },
+  { 
+    name: "Salud", 
+    color: "text-emerald-300 bg-emerald-300/10",
+    description: "Desarrollando soluciones HIPAA-compliant que mejoran la atención médica"
+  },
+  { 
+    name: "Finanzas", 
+    color: "text-amber-300 bg-amber-300/10",
+    description: "Construyendo sistemas seguros y escalables para procesamiento de pagos"
+  },
+  { 
+    name: "Business", 
+    color: "text-purple-300 bg-purple-300/10",
+    description: "Optimizando operaciones empresariales mediante automatización inteligente"
+  }
 ]
+
+const recentExperience = [
+  {
+    role: "Senior Consultant – Software Engineer",
+    company: "Wellmark (Apex Systems)",
+    location: "Des Moines, Iowa (Remoto)",
+    period: "2024 - Presente",
+    description: "Liderando iniciativas de modernización cloud y desarrollo de APIs empresariales.",
+    achievements: [
+      "Migración y modernización de servicios AWS con 99.9% de disponibilidad",
+      "Desarrollo de APIs robustas con TypeScript y Node.js para procesamiento de claims",
+      "Implementación de sistemas de seguridad WAFv2 y monitoreo avanzado",
+      "Optimización de costos cloud reduciendo gastos operativos en un 30%"
+    ],
+    tags: ["AWS", "TypeScript", "Node.js", "Microservicios"]
+  },
+  {
+    role: "Software Engineer",
+    company: "Osmind",
+    location: "San Francisco, CA (Remoto)",
+    period: "2022 - 2023",
+    description: "Desarrollo de soluciones healthcare-tech enfocadas en salud mental.",
+    achievements: [
+      "Sistema de programación in-house con 98% de uptime y +10k citas mensuales",
+      "Implementación de sistemas HIPAA-compliant para facturación y manejo de datos sensibles",
+      "Reducción de 85% en tasas de error en procesamiento de pagos",
+      "Arquitectura de microservicios para escalabilidad y mantenibilidad"
+    ],
+    tags: ["React", "Node.js", "AWS", "HIPAA"]
+  },
+  {
+    role: "Software Engineer",
+    company: "Clip",
+    location: "Ciudad de México",
+    period: "2021 - 2022",
+    description: "Desarrollo de soluciones de logística y pagos para e-commerce.",
+    achievements: [
+      "Automatización de servicios logísticos procesando +50k órdenes diarias",
+      "Reducción del 60% en tiempos de procesamiento de pagos",
+      "Integración con Amazon Seller API para sincronización en tiempo real",
+      "Implementación de CI/CD reduciendo tiempo de deploy en un 70%"
+    ],
+    tags: ["React", "Node.js", "AWS", "Microservicios"]
+  }
+]
+
+const pastExperience = [
+  {
+    role: "Front-End Team Lead",
+    company: "Full Stack",
+    location: "Puebla, MX",
+    period: "Ago 2021 – Jun 2022",
+    description: "Liderazgo de equipos frontend y mentoría de desarrolladores junior.",
+    achievements: [
+      "Mentoría a más de 10 desarrolladores junior, ayudándoles a conseguir roles en las principales empresas tech de México",
+      "Dirección de equipos frontend y UX/UI para sistemas en industrias de cuidado de adultos mayores y medicina veterinaria",
+      "Implementación de metodologías ágiles y mejores prácticas de desarrollo",
+      "Balance entre soluciones innovadoras y diseño centrado en el usuario"
+    ],
+    tags: ["React", "UX/UI", "Team Leadership", "Mentoring"]
+  },
+  {
+    role: "Frontend Engineer",
+    company: "Finloop",
+    location: "Puebla, MX",
+    period: "Ago 2020 – Nov 2021",
+    description: "Desarrollo frontend y optimización de rendimiento para aplicaciones financieras.",
+    achievements: [
+      "Mejora del rendimiento frontend integrando MongoDB con React, aumentando 4x la capacidad de tráfico",
+      "Automatización de pipelines de deployment para aplicaciones React en AWS S3",
+      "Reducción de tiempos de deployment a minutos",
+      "Implementación de mejores prácticas de desarrollo y testing"
+    ],
+    tags: ["React", "MongoDB", "AWS", "CI/CD"]
+  },
+  {
+    role: "Tech Lead",
+    company: "SmartKode",
+    location: "Puebla, MX",
+    period: "Oct 2018 – Abr 2020",
+    description: "Liderazgo técnico en proyectos de transformación digital.",
+    achievements: [
+      "Migración exitosa de aplicación crítica de Ionic a Flutter",
+      "Obtención de tres contratos adicionales debido a la calidad del trabajo",
+      "Digitalización de flujos de trabajo manuales para correduría de seguros",
+      "Implementación de funciones avanzadas de reportes para insights accionables"
+    ],
+    tags: ["Flutter", "Ionic", "Digital Transformation", "Leadership"]
+  }
+]
+
+const ExperienceCard = ({ experience }: { experience: Experience }) => {
+  return (
+    <div 
+      className="group relative bg-zinc-900/30 p-8 rounded-xl hover:bg-zinc-800/50 transition-all duration-300"
+    >
+      <div className="absolute top-0 left-0 w-2 h-full bg-lime-300/20 rounded-l-xl group-hover:bg-lime-300/40 transition-colors" />
+      
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h3 className="text-2xl font-semibold text-white mb-1">{experience.role}</h3>
+            <div className="flex items-center gap-2 text-zinc-400">
+              <span className="text-lime-300">{experience.company}</span>
+              <span>•</span>
+              <span>{experience.location}</span>
+            </div>
+          </div>
+          <p className="text-zinc-400 font-mono bg-zinc-800/50 px-3 py-1 rounded-full text-sm">
+            {experience.period}
+          </p>
+        </div>
+
+        {/* Description */}
+        <p className="text-zinc-300">{experience.description}</p>
+
+        {/* Achievements */}
+        <div className="space-y-3">
+          <h4 className="text-lg font-medium text-white">Logros Principales</h4>
+          <ul className="space-y-2">
+            {experience.achievements.map((achievement: string, i: number) => (
+              <li key={i} className="text-zinc-300 flex items-start gap-3">
+                <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2" />
+                <span>{achievement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 pt-4">
+          {experience.tags.map((tag: string, i: number) => (
+            <span 
+              key={i} 
+              className="px-3 py-1 bg-zinc-800/50 text-zinc-300 rounded-full text-sm"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ExperienceSection = () => {
+  const [showAllExperience, setShowAllExperience] = useState(false)
+
+  return (
+    <section className="container mx-auto px-4 py-24">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
+            <div className="w-2 h-2 bg-lime-300 rounded-full" />
+            <p className="text-lime-300 font-medium">Trayectoria Profesional</p>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-white">
+            Experiencia Destacada
+          </h2>
+        </div>
+
+        <div className="space-y-12">
+          {recentExperience.map((exp, index) => (
+            <ExperienceCard key={index} experience={exp} />
+          ))}
+
+          {showAllExperience && (
+            <>
+              <div className="relative py-8">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-zinc-800"></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="bg-zinc-900 px-4 text-sm text-zinc-400">
+                    Experiencia Anterior
+                  </span>
+                </div>
+              </div>
+
+              {pastExperience.map((exp, index) => (
+                <ExperienceCard key={index} experience={exp} />
+              ))}
+            </>
+          )}
+
+          <div className="text-center pt-8">
+            <button
+              onClick={() => setShowAllExperience(!showAllExperience)}
+              className="px-6 py-3 bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 rounded-lg transition-colors"
+            >
+              {showAllExperience ? 'Mostrar Menos' : 'Ver Más Experiencia'}
+              <svg
+                className={`inline-block ml-2 w-4 h-4 transform transition-transform ${
+                  showAllExperience ? 'rotate-180' : ''
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
 
 const About = () => {
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Más personal y diferenciado */}
+      {/* Hero Section Mejorado */}
       <section className="relative container mx-auto px-4 py-32">
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-fixed opacity-5" />
         <div className="grid md:grid-cols-2 gap-16 items-center">
           {/* Imagen Personal */}
           <div className="relative order-2 md:order-1">
             <div className="aspect-[4/5] bg-zinc-800 rounded-2xl overflow-hidden relative">
-              {/* Aquí iría tu foto */}
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
+              {/* Tu foto profesional */}
             </div>
-            {/* Decorative elements */}
-            <div className="absolute -top-4 -left-4 w-24 h-24 bg-lime-300/10 rounded-full blur-2xl" />
-            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-lime-300/10 rounded-full blur-2xl" />
+            <div className="absolute -bottom-8 left-8 right-8 bg-zinc-800/90 backdrop-blur-sm p-4 rounded-xl border border-zinc-700/50">
+              <div className="flex items-center gap-4">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <p className="text-zinc-300 text-sm">
+                  Disponible para roles de Tech Lead y Senior Software Engineer
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* Contenido */}
-          <div className="order-1 md:order-2">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
-              <div className="w-2 h-2 bg-lime-300 rounded-full animate-pulse" />
-              <p className="text-lime-300 font-medium">Disponible para Proyectos y Mentoría</p>
+          {/* Contenido Principal */}
+          <div className="order-1 md:order-2 space-y-8">
+            <div className="space-y-2">
+              <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+                Noe Osorio
+              </h1>
+              <p className="text-xl text-lime-300 font-medium">
+                Senior Software Engineer & Tech Educator
+              </p>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-              Hola, soy Noe Osorio
-            </h1>
-            <p className="text-xl text-zinc-400 leading-relaxed mb-8">
-              Ingeniero de Software especializado en crear soluciones tecnológicas 
-              innovadoras para industrias de alto impacto.
+
+            <p className="text-xl text-zinc-400 leading-relaxed">
+              +5 años transformando ideas en soluciones tecnológicas escalables. 
+              Especializado en arquitecturas cloud-native y desarrollo full-stack, 
+              con un fuerte compromiso en mentorear a la próxima generación de 
+              desarrolladores.
             </p>
-            <div className="flex flex-wrap gap-2">
-              {industries.map((industry, i) => (
-                <span key={i} className={`px-4 py-2 rounded-full text-sm ${industry.color}`}>
-                  {industry.name}
+
+            {/* Industrias con descripciones */}
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-white">Áreas de Impacto</h2>
+              <div className="grid gap-4">
+                {industries.map((industry, i) => (
+                  <div 
+                    key={i} 
+                    className={`p-4 rounded-xl border border-zinc-800 hover:border-lime-300/50 transition-colors ${industry.color.replace('text', 'bg').replace('/10', '/5')}`}
+                  >
+                    <h3 className={`font-medium mb-2 ${industry.color.replace('bg', 'text')}`}>
+                      {industry.name}
+                    </h3>
+                    <p className="text-zinc-400 text-sm">
+                      {industry.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Keywords para SEO y reclutadores */}
+            <div className="flex flex-wrap gap-2 pt-4">
+              {[
+                "Software Architecture",
+                "Team Leadership",
+                "Cloud Solutions",
+                "Tech Mentorship",
+                "Agile Development",
+                "System Design"
+              ].map((keyword, i) => (
+                <span key={i} className="px-3 py-1 bg-zinc-800/50 rounded-full text-sm text-zinc-400">
+                  {keyword}
                 </span>
               ))}
             </div>
@@ -89,11 +357,11 @@ const About = () => {
         </div>
       </section>
 
-      {/* Expertise Section - Rediseñado */}
+      {/* Tech Stack Section */}
       <section className="bg-zinc-900/50 py-24">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-16 text-center">
-            Expertise Técnico
+            Tech Stack
           </h2>
           
           <div className="grid gap-16">
@@ -149,149 +417,169 @@ const About = () => {
       </section>
 
       {/* Experience Section */}
-      <section className="container mx-auto px-4 py-24">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
-          Experiencia Destacada
-        </h2>
-        <div className="max-w-4xl mx-auto space-y-12">
-          {[
-            {
-              role: "Senior Consultant – Software Engineer",
-              company: "Wellmark (Apex Systems)",
-              period: "2024 - Presente",
-              achievements: [
-                "Migración y modernización de servicios AWS",
-                "Desarrollo de APIs robustas con TypeScript",
-                "Implementación de sistemas de seguridad WAFv2"
-              ]
-            },
-            {
-              role: "Software Engineer",
-              company: "Osmind | San Francisco",
-              period: "2022 - 2023",
-              achievements: [
-                "Sistema de programación in-house con 98% de uptime",
-                "Sistemas HIPAA-compliant de facturación",
-                "Reducción de 85% en tasas críticas"
-              ]
-            },
-            {
-              role: "Software Engineer",
-              company: "Clip | Ciudad de México",
-              period: "2021 - 2022",
-              achievements: [
-                "Automatización de servicios logísticos",
-                "Reducción del 60% en tiempos de procesamiento",
-                "Arquitectura de microservicios escalable"
-              ]
-            }
-          ].map((exp, index) => (
-            <div key={index} className="group relative bg-zinc-900/30 p-8 rounded-xl hover:bg-zinc-800/50 transition-all duration-300">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-                <div>
-                  <h3 className="text-2xl font-semibold text-white mb-2">{exp.role}</h3>
-                  <p className="text-lime-300">{exp.company}</p>
-                </div>
-                <p className="text-zinc-400 font-mono">{exp.period}</p>
-              </div>
-              <ul className="space-y-2">
-                {exp.achievements.map((achievement, i) => (
-                  <li key={i} className="text-zinc-300 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-lime-300 rounded-full" />
-                    {achievement}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ExperienceSection />
 
       {/* Education as Service Section */}
-      <section className="bg-zinc-900/50 py-24">
+      <section className="bg-zinc-900/50 py-32">
         <div className="container mx-auto px-4">
+          {/* Header */}
           <div className="max-w-3xl mx-auto text-center mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
               <div className="w-2 h-2 bg-lime-300 rounded-full" />
-              <p className="text-lime-300 font-medium">Education as a Service</p>
+              <p className="text-lime-300 font-medium">Education & Innovation</p>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Transformando la Educación en Tecnología
+              Transformando la Educación a través de la Tecnología
             </h2>
             <p className="text-xl text-zinc-400 leading-relaxed">
-              Creo firmemente que la educación es el catalizador más poderoso para 
-              el cambio social y el crecimiento profesional. Mi misión es democratizar 
-              el conocimiento tecnológico y formar la próxima generación de 
-              desarrolladores de clase mundial.
+              Combinando educación, tecnología e innovación para crear experiencias de 
+              aprendizaje significativas y accesibles.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {[
-              {
-                title: "Mentoría Personalizada",
-                description: "Guía individual adaptada a tus objetivos específicos, ayudándote a acelerar tu crecimiento profesional en tecnología."
-              },
-              {
-                title: "Contenido Educativo",
-                description: "Creación de recursos de aprendizaje accesibles y de alta calidad, desde tutoriales hasta cursos completos de desarrollo."
-              },
-              {
-                title: "Workshops y Charlas",
-                description: "Sesiones interactivas sobre tecnologías emergentes y mejores prácticas en desarrollo de software."
-              }
-            ].map((service, index) => (
-              <div key={index} className="group p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50 hover:border-lime-300/50 transition-all duration-300">
-                <h3 className="text-2xl font-semibold text-white mb-4">{service.title}</h3>
-                <p className="text-zinc-400">{service.description}</p>
+          {/* Main Content */}
+          <div className="max-w-5xl mx-auto">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+              {[
+                { number: "100k+", label: "Views en Contenido" },
+                { number: "200+", label: "Estudiantes" },
+                { number: "50+", label: "Mentorías" },
+                { number: "400%", label: "Mejora en Productividad" }
+              ].map((stat, i) => (
+                <div key={i} className="p-6 bg-zinc-800/30 rounded-xl text-center">
+                  <p className="text-2xl font-bold text-lime-300 mb-1">{stat.number}</p>
+                  <p className="text-sm text-zinc-400">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Experience Cards */}
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* AI Education */}
+              <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-lime-300/10 rounded-lg">
+                      <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-white">AI in Education Instructor</h3>
+                      <p className="text-zinc-400">Instituto Tecnológico Superior de Salina Cruz</p>
+                    </div>
+                  </div>
+                  <ul className="space-y-3">
+                    {[
+                      "Workshops sobre integración de IA en metodologías educativas",
+                      "Implementación de ChatGPT y Copilot en procesos educativos",
+                      "Automatización de creación y evaluación de exámenes"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-zinc-300">
+                        <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            ))}
-          </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
-              <h3 className="text-2xl font-semibold text-white mb-6">Impacto en Números</h3>
-              <ul className="space-y-4">
-                <li className="text-zinc-300 flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2" />
-                  <span>+100,000 views en contenido educativo de programación en TikTok</span>
-                </li>
-                <li className="text-zinc-300 flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2" />
-                  <span>+200 estudiantes en sesiones en vivo sobre algoritmos y desarrollo</span>
-                </li>
-                <li className="text-zinc-300 flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2" />
-                  <span>+50 mentorías personalizadas exitosas</span>
-                </li>
-              </ul>
-            </div>
-            <div className="p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
-              <h3 className="text-2xl font-semibold text-white mb-6">Innovación en Educación</h3>
-              <ul className="space-y-4">
-                <li className="text-zinc-300 flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2" />
-                  <span>Integración de IA en metodologías de enseñanza personalizadas</span>
-                </li>
-                <li className="text-zinc-300 flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2" />
-                  <span>Desarrollo de currículos adaptados a las necesidades de la industria actual</span>
-                </li>
-                <li className="text-zinc-300 flex items-start gap-3">
-                  <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2" />
-                  <span>Enfoque práctico basado en proyectos reales y casos de estudio</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+              {/* SaaS Development */}
+              <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-lime-300/10 rounded-lg">
+                      <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-white">SaaS Developer & Educator</h3>
+                      <p className="text-zinc-400">Independent</p>
+                    </div>
+                  </div>
+                  <ul className="space-y-3">
+                    {[
+                      "Desarrollo de soluciones open-source con JavaScript y TypeScript",
+                      "Automatización de flujos de contenido con IA",
+                      "Herramientas de automatización Python para optimización de contenido"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-zinc-300">
+                        <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
 
-          <div className="max-w-3xl mx-auto mt-16 p-8 bg-gradient-to-br from-lime-300/10 to-transparent rounded-xl">
-            <blockquote className="text-xl text-zinc-300 italic text-center">
-              "La educación no solo debe ser accesible, sino transformadora. 
-              Mi objetivo es crear un puente entre el talento emergente y las 
-              oportunidades en la industria tecnológica, formando no solo mejores 
-              programadores, sino mejores profesionales."
-            </blockquote>
+              {/* Academic Advisor */}
+              <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-lime-300/10 rounded-lg">
+                      <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" 
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-white">Academic Advisor</h3>
+                      <p className="text-zinc-400">Instituto Tecnológico Superior de Tepeaca</p>
+                    </div>
+                  </div>
+                  <ul className="space-y-3">
+                    {[
+                      "Workshop de desarrollo web con React para estudiantes de Ing. en TI",
+                      "Participación en cuadro de expertos para mejora curricular",
+                      "Evaluación de desempeño académico y docente"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-zinc-300">
+                        <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Areas of Expertise */}
+            <div className="mt-16">
+              <h3 className="text-xl font-semibold text-white mb-6">Áreas de Expertise</h3>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  "AI en Educación",
+                  "Automatización",
+                  "Open Source",
+                  "Mentoría Tech",
+                  "Innovación Educativa",
+                  "Content Creation",
+                  "Workshop Facilitation",
+                  "Educational Technology"
+                ].map((tag, i) => (
+                  <span 
+                    key={i} 
+                    className="px-4 py-2 bg-zinc-800/50 text-zinc-300 rounded-full text-sm hover:bg-zinc-800 hover:text-lime-300 transition-colors cursor-default"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Quote */}
+            <div className="mt-16 p-8 bg-gradient-to-br from-lime-300/5 to-transparent rounded-xl border border-lime-300/10">
+              <blockquote className="text-xl text-zinc-300 italic text-center">
+                "La combinación de tecnología y educación no solo democratiza el conocimiento, 
+                sino que crea nuevas formas de aprender y crecer profesionalmente."
+              </blockquote>
+            </div>
           </div>
         </div>
       </section>

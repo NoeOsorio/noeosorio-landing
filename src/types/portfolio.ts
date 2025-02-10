@@ -88,4 +88,14 @@ export interface Project {
   links: ProjectLinks
   resources: ProjectResources
   confidential?: boolean
+}
+
+export interface Experience {
+  role: string
+  company: string
+  location: string
+  period: string
+  description: string
+  achievements: string[]
+  tags: string[]
 } 
