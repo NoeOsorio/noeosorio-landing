@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 import { HiArrowRight, HiCode, HiLightningBolt } from 'react-icons/hi';
 import SocialLinks from '../../components/SocialLinks'
 
-export const HeroSection = () => (
+interface HeroSectionProps {
+  onGetStartedClick?: () => void;
+  onLearnMoreClick?: () => void;
+}
+
+export const HeroSection = ({ onGetStartedClick, onLearnMoreClick }: HeroSectionProps) => (
   <section className="pt-32 pb-24 relative overflow-hidden">
     {/* Background Pattern */}
     <div className="fixed inset-0">
@@ -70,6 +75,7 @@ export const HeroSection = () => (
         >
           <Link
             to="/contact"
+            onClick={onGetStartedClick}
             className="group inline-flex items-center gap-3 px-8 py-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-all"
           >
             <HiLightningBolt className="w-5 h-5" />
@@ -79,6 +85,7 @@ export const HeroSection = () => (
 
           <Link
             to="/services"
+            onClick={onLearnMoreClick}
             className="group inline-flex items-center gap-3 px-8 py-4 bg-zinc-800/50 hover:bg-zinc-800 text-white rounded-lg font-medium transition-all"
           >
             <HiCode className="w-5 h-5" />

@@ -7,8 +7,9 @@ interface FinancingCardProps {
   description: string;
   features: string[];
   icon: IconType;
-  highlight: boolean;
+  highlight?: boolean;
   index: number;
+  onPlanClick?: () => void;
 }
 
 export const FinancingCard = ({
@@ -17,7 +18,8 @@ export const FinancingCard = ({
   features,
   icon: Icon,
   highlight,
-  index
+  index,
+  onPlanClick
 }: FinancingCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -28,6 +30,7 @@ export const FinancingCard = ({
         ? 'bg-lime-300/10 border-lime-300/50 hover:border-lime-300'
         : 'bg-zinc-800/50 border-zinc-700/50 hover:border-zinc-600'
     }`}
+    onClick={onPlanClick}
   >
     <div className={`inline-flex p-3 rounded-xl ${
       highlight ? 'bg-lime-300/20' : 'bg-zinc-700/50'

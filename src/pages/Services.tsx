@@ -9,6 +9,7 @@ import { AddonCard } from "../components/services/AddonCard";
 import { UseCasesSection } from "../sections/services/UseCasesSection";
 import { ProcessSection } from "../sections/services/ProcessSection";
 import { SakuraKodeSection } from "../sections/services/SakuraKodeSection";
+import { trackEvent } from '../hooks/useAnalytics';
 
 // Configuraciones de animación
 const fadeInUp = {
@@ -103,7 +104,7 @@ const HeroSection = () => (
   </motion.section>
 );
 
-const FinancingSection = () => (
+const FinancingSection = ({ children }: { children: React.ReactNode }) => (
   <motion.section {...fadeInUp} className="py-24 bg-zinc-800/30">
     <div className="container mx-auto px-4">
       <motion.div
@@ -126,11 +127,7 @@ const FinancingSection = () => (
         variants={staggerContainer}
         className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
       >
-        {servicesData.financingOptions.map((option, index) => (
-          <motion.div key={index} variants={cardVariant} whileHover={{ y: -5 }}>
-            <FinancingCard {...option} index={index} />
-          </motion.div>
-        ))}
+        {children}
       </motion.div>
     </div>
   </motion.section>
@@ -168,7 +165,7 @@ const AddonsSection = () => (
   </motion.section>
 );
 
-const CTASection = () => (
+const CTASection = ({ children }: { children: React.ReactNode }) => (
   <motion.section {...fadeInUp} className="py-24">
     <div className="container mx-auto px-4">
       <motion.div
@@ -182,20 +179,41 @@ const CTASection = () => (
           Agenda una consulta gratuita y diseñemos la mejor estrategia para tu
           aplicación.
         </p>
-        <motion.a
-          href="/contact"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="inline-block px-8 py-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-colors"
-        >
-          Agendar Consulta
-        </motion.a>
+        {children}
       </motion.div>
     </div>
   </motion.section>
 );
 
 const Services = () => {
+  const handleServiceClick = (serviceId: string, serviceName: string) => {
+    trackEvent('service_details_view', {
+      service_id: serviceId,
+      service_name: serviceName,
+      source: 'services_page'
+    });
+  };
+
+  const handleStartupBundleClick = () => {
+    trackEvent('startup_bundle_click', {
+      source: 'services_page'
+    });
+  };
+
+  const handleFinancingClick = (planName: string) => {
+    trackEvent('financing_option_click', {
+      plan_name: planName,
+      source: 'services_page'
+    });
+  };
+
+  const handleCTAClick = (location: string) => {
+    trackEvent('consultation_request', {
+      source: 'services_page',
+      cta_location: location
+    });
+  };
+
   return (
     <>
       <SEO
@@ -223,35 +241,46 @@ const Services = () => {
                   variants={cardVariant}
                   whileHover={{ y: -5 }}
                 >
-                  <ServiceCard {...service} index={index} />
+                  <ServiceCard 
+                    {...service} 
+                    index={index}
+                    onServiceClick={() => handleServiceClick(service.id, service.title)}
+                  />
                 </motion.div>
               ))}
             </motion.div>
           </div>
         </motion.section>
 
-        <StartupBundle data={servicesData.startupBundle} />
-        <ProcessSection />
-        <UseCasesSection
-          services={[
-            ...servicesData.mainServices.map((service) => ({
-              title: service.title,
-              icon: service.icon,
-              color: service.color,
-              useCases: service.useCases,
-            })),
-            {
-              title: servicesData.startupBundle.title,
-              icon: servicesData.startupBundle.icon,
-              color: servicesData.startupBundle.color,
-              useCases: servicesData.startupBundle.useCases,
-            },
-          ]}
+        <StartupBundle 
+          data={servicesData.startupBundle}
+          onBundleClick={handleStartupBundleClick}
         />
-        <FinancingSection />
+        <ProcessSection />
+        <UseCasesSection services={servicesData.allServices} />
+        <FinancingSection>
+          {servicesData.financingOptions.map((option, index) => (
+            <FinancingCard 
+              key={index}
+              {...option}
+              index={index}
+              onPlanClick={() => handleFinancingClick(option.title)}
+            />
+          ))}
+        </FinancingSection>
         <AddonsSection />
         <SakuraKodeSection />
-        <CTASection />
+        <CTASection>
+          <motion.button
+            onClick={() => handleCTAClick('bottom_cta')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-block px-8 py-4 bg-lime-300 hover:bg-lime-400 
+                     text-zinc-900 rounded-lg font-medium transition-colors"
+          >
+            Agendar Consulta
+          </motion.button>
+        </CTASection>
       </div>
     </>
   );

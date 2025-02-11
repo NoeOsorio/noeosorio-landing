@@ -1,4 +1,5 @@
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa'
+import { trackEvent } from '../hooks/useAnalytics'
 
 interface SocialLinksProps {
   className?: string;
@@ -25,6 +26,13 @@ const SocialLinks = ({ className = "", linkClassName = "", iconClassName = "" }:
     }
   ]
 
+  const handleSocialClick = (platform: string) => {
+    trackEvent('social_link_click', {
+      platform,
+      source: location.pathname
+    });
+  };
+
   return (
     <div className={`flex items-center gap-4 ${className}`}>
       {socialLinks.map(({ href, icon: Icon, label }) => (
@@ -35,6 +43,7 @@ const SocialLinks = ({ className = "", linkClassName = "", iconClassName = "" }:
           rel="noopener noreferrer"
           aria-label={label}
           className={`${linkClassName} text-zinc-400 hover:text-lime-300 transition-colors`}
+          onClick={() => handleSocialClick(label.split(' ')[2])}
         >
           <span className="sr-only">{label}</span>
           <Icon className={`${iconClassName} w-6 h-6`} />

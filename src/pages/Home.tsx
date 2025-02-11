@@ -6,6 +6,7 @@ import Industries from "../sections/home/Industries";
 import CTASection from "../sections/home/CTASection";
 import { SEO } from "../components/SEO";
 import { ServicesShowcase } from "../components/home/ServicesShowcase";
+import { trackEvent } from '../hooks/useAnalytics';
 // Importaremos las demás secciones cuando las creemos
 
 // Configuraciones de animación reutilizables
@@ -24,6 +25,41 @@ const stagger = {
 };
 
 const Home = () => {
+  const handleHeroClick = (action: string) => {
+    trackEvent('hero_interaction', {
+      action,
+      source: 'home_page'
+    });
+  };
+
+  const handleProjectView = (projectId: string) => {
+    trackEvent('featured_project_view', {
+      project_id: projectId,
+      source: 'home_page'
+    });
+  };
+
+  const handleEducationClick = (courseId: string) => {
+    trackEvent('education_click', {
+      course_id: courseId,
+      source: 'home_page'
+    });
+  };
+
+  const handleIndustryClick = (industry: string) => {
+    trackEvent('industry_click', {
+      industry,
+      source: 'home_page'
+    });
+  };
+
+  const handleCTAClick = (location: string) => {
+    trackEvent('home_cta_click', {
+      location,
+      source: 'home_page'
+    });
+  };
+
   return (
     <motion.div initial="initial" animate="animate" className="relative">
       <SEO
@@ -37,26 +73,37 @@ const Home = () => {
         twitterHandle="@noeosorio.dev"
       />
 
-      <HeroSection />
+      <HeroSection 
+        onGetStartedClick={() => handleHeroClick('get_started')}
+        onLearnMoreClick={() => handleHeroClick('learn_more')}
+      />
 
       <motion.div {...stagger} className="relative z-10">
         <ServicesShowcase />
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
-        <EducationPreview />
+        <EducationPreview 
+          onCourseClick={handleEducationClick}
+        />
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.3 }}>
-        <Industries />
+        <Industries 
+          onIndustryClick={handleIndustryClick}
+        />
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.4 }}>
-        <FeaturedProjects />
+        <FeaturedProjects 
+          onProjectClick={handleProjectView}
+        />
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.5 }}>
-        <CTASection />
+        <CTASection 
+          onCTAClick={() => handleCTAClick('bottom')}
+        />
       </motion.div>
 
       {/* Background decorativo animado */}

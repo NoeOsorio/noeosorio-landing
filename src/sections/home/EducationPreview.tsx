@@ -2,7 +2,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { HiArrowRight, HiAcademicCap, HiLightningBolt, HiUsers } from 'react-icons/hi'
 import { scrollToElement } from '../../utils/scroll'
 
-const EducationPreview = () => {
+interface EducationPreviewProps {
+  onCourseClick?: (courseId: string) => void;
+}
+
+const EducationPreview = ({ onCourseClick }: EducationPreviewProps) => {
   const navigate = useNavigate()
 
   const handleEducationClick = (e: React.MouseEvent) => {
@@ -35,14 +39,20 @@ const EducationPreview = () => {
             <div className="flex flex-wrap gap-4 pt-4">
               <Link 
                 to="/about#education"
-                onClick={handleEducationClick}
+                onClick={(e) => {
+                  handleEducationClick(e);
+                  onCourseClick?.('education_preview');
+                }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-lime-300 text-zinc-900 rounded-lg font-medium hover:bg-lime-400 transition-colors"
               >
                 Explorar Programas
                 <HiArrowRight className="w-5 h-5" />
               </Link>
               <a 
-                href="#contact"
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://calendly.com/noeosorio/tech-consultation-mentorship"
+                onClick={() => onCourseClick?.('schedule_consultation')}
                 className="inline-flex items-center gap-2 px-6 py-3 border border-lime-300 text-lime-300 rounded-lg font-medium hover:bg-lime-300/10 transition-colors"
               >
                 Agendar Consulta

@@ -12,6 +12,7 @@ interface ServiceCardProps {
   timeline?: string;
   color: string;
   index: number;
+  onServiceClick?: () => void;
 }
 
 export const ServiceCard = ({ 
@@ -23,7 +24,8 @@ export const ServiceCard = ({
   price,
   timeline,
   color,
-  index 
+  index,
+  onServiceClick
 }: ServiceCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -31,6 +33,7 @@ export const ServiceCard = ({
     viewport={{ once: true }}
     transition={{ delay: index * 0.1 }}
     className="h-full flex flex-col bg-zinc-800/30 backdrop-blur-xl rounded-xl border border-zinc-700/50 p-8 hover:border-lime-300/50 transition-colors"
+    onClick={onServiceClick}
   >
     <div className="mb-8">
       <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${color} mb-6`}>

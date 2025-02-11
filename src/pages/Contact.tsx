@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { HiCode, HiAcademicCap, HiLightningBolt } from 'react-icons/hi';
+import { HiCode, HiAcademicCap, HiLightningBolt, HiArrowRight } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { SEO } from '../components/SEO'
+import { trackEvent } from '../hooks/useAnalytics';
 
 const contactOptions = [
   {
@@ -72,32 +73,86 @@ const Contact = () => {
     }
   };
 
+  const handleOptionSelect = (optionId: string) => {
+    trackEvent('contact_option_select', {
+      option_type: optionId,
+      source: 'contact_page'
+    });
+    setSelectedOption(optionId);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [id]: value
     }));
+
+    if (value && ['email', 'projectType', 'budget', 'timeline'].includes(id)) {
+      trackEvent('form_field_complete', {
+        field_name: id,
+        contact_type: selectedOption
+      });
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    await trackEvent('form_submit', {
+      form_name: 'contact',
+      contact_type: selectedOption,
+      has_company: Boolean(formData.company),
+      has_budget: Boolean(formData.budget),
+      has_timeline: Boolean(formData.timeline),
+      form_completion: calculateFormCompletion(),
+      source: location.pathname
+    });
+
     // Aquí iría la lógica de envío
     console.log(formData);
+  };
+
+  const handleSocialClick = (platform: string) => {
+    trackEvent('social_click', {
+      platform,
+      source: 'contact_page'
+    });
+  };
+
+  const handleScheduleClick = () => {
+    trackEvent('schedule_meeting_click', {
+      contact_type: selectedOption,
+      source: 'contact_page'
+    });
+  };
+
+  const calculateFormCompletion = (): number => {
+    const requiredFields = ['name', 'email', 'message'];
+    const optionalFields = {
+      project: ['company', 'budget', 'timeline', 'projectType'],
+      mentoring: ['experience', 'mentorshipType', 'availability'],
+      work: ['position', 'company', 'linkedin']
+    }[selectedOption] || [];
+
+    const allFields = [...requiredFields, ...optionalFields];
+    const completedFields = allFields.filter(field => Boolean(formData[field as keyof FormFields]));
+
+    return Math.round((completedFields.length / allFields.length) * 100);
   };
 
   return (
     <>
       <SEO 
-        title="Contact | Noé Osorio - Let's Work Together"
-        description="¿Tienes un proyecto en mente? Contáctame para discutir cómo podemos trabajar juntos para hacerlo realidad."
+        title="Contacto | Noé Osorio"
+        description="¿Listo para empezar tu proyecto? Contáctame para discutir cómo puedo ayudarte."
         image="https://noeosorio.com/contact-og.png"
         url="https://noeosorio.com/contact"
       />
       <div className="min-h-screen bg-zinc-900 py-24">
-        <div className="container mx-auto px-4">
+        <motion.div className="container mx-auto px-4">
           {/* Header */}
-          <div className="max-w-3xl mx-auto text-center mb-16">
+          <div className="max-w-4xl mx-auto text-center mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
               <div className="w-2 h-2 bg-lime-300 rounded-full" />
               <p className="text-lime-300 font-medium">Contacto</p>
@@ -120,7 +175,7 @@ const Contact = () => {
                   y: -5,
                 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedOption(option.id)}
+                onClick={() => handleOptionSelect(option.id)}
                 className={`relative p-6 rounded-2xl backdrop-blur-xl border-2 transition-all duration-300 ${
                   selectedOption === option.id
                     ? 'bg-zinc-800/80 border-lime-300 shadow-[0_0_20px_rgba(163,230,53,0.2)]'
@@ -437,11 +492,39 @@ const Contact = () => {
             )}
             {selectedOption === 'work' && (
               <p className="text-zinc-400 text-sm mb-4">
-                También puedes encontrar más información sobre mi experiencia en mi perfil de LinkedIn.
+                También puedes encontrar más información sobre mi experiencia en mi{' '}
+                <a 
+                  href="https://linkedin.com/in/noeosorioh" 
+                  target="_blank"
+                  onClick={() => handleSocialClick('linkedin')}
+                  className="text-lime-300 hover:text-lime-400"
+                >
+                  perfil de LinkedIn
+                </a>.
               </p>
             )}
           </div>
-        </div>
+
+          {/* Calendario */}
+          <div className="mt-16 text-center">
+            <a
+              href="https://calendly.com/noeosorio/tech-consultation-mentorship"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleScheduleClick}
+              className="group inline-flex items-center justify-center gap-3 w-auto px-8 py-3.5
+                bg-gradient-to-r from-lime-300 to-emerald-300 
+                text-zinc-900 rounded-lg font-medium relative overflow-hidden
+                hover:from-lime-400 hover:to-emerald-400 
+                transition-all duration-300 shadow-lg hover:shadow-lime-300/20"
+            >
+              <span className="relative z-10">Agendar Reunión</span>
+              <HiArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform relative z-10" />
+              <div className="absolute inset-0 bg-gradient-to-r from-lime-400 to-emerald-400 
+                transform translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+            </a>
+          </div>
+        </motion.div>
       </div>
     </>
   );

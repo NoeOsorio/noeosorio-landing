@@ -50,7 +50,7 @@ const Navbar = () => {
               </Link>
             ))}
             <a
-              href="#contact"
+              href="/contact"
               className="px-4 py-2 bg-lime-300 text-zinc-900 rounded-lg text-sm font-medium hover:bg-lime-400 transition-colors"
             >
               Contactar
@@ -102,7 +102,7 @@ const Navbar = () => {
                 </Link>
               ))}
               <a
-                href="#contact"
+                href="/contact"
                 onClick={() => setIsMenuOpen(false)}
                 className="px-4 py-2 bg-lime-300 text-zinc-900 rounded-lg text-sm font-medium hover:bg-lime-400 transition-colors text-center"
               >

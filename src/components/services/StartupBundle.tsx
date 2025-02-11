@@ -1,20 +1,14 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { IconType } from 'react-icons';
 import { HiLightningBolt, HiChartBar, HiCreditCard } from 'react-icons/hi';
+import { servicesData } from '../../data/services';
 
 interface StartupBundleProps {
-  data: {
-    id: string;
-    icon: IconType;
-    title: string;
-    description: string;
-    features: string[];
-    color: string;
-  };
+  data: typeof servicesData.startupBundle;
+  onBundleClick?: () => void;
 }
 
-export const StartupBundle = ({ data }: StartupBundleProps) => {
+export const StartupBundle = ({ data, onBundleClick }: StartupBundleProps) => {
   const Icon = data.icon;
   
   return (
@@ -25,6 +19,7 @@ export const StartupBundle = ({ data }: StartupBundleProps) => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="p-8 rounded-2xl bg-zinc-800/50 backdrop-blur-xl border border-zinc-700/50 group hover:border-lime-300/50 transition-all"
+            onClick={onBundleClick}
           >
             <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${data.color} mb-6`}>
               <Icon className="w-6 h-6 text-white" />
@@ -115,4 +110,4 @@ export const StartupBundle = ({ data }: StartupBundleProps) => {
       </div>
     </section>
   );
-}; 
+};

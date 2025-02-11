@@ -1,14 +1,18 @@
-import { Link } from 'react-router-dom'
-import { HiArrowRight, HiExternalLink } from 'react-icons/hi'
-import { projects } from '../../data/projects'
-import TechnologyBadge from '../../components/TechnologyBadge'
+import { Link } from "react-router-dom";
+import { HiArrowRight } from "react-icons/hi";
+import { projects } from "../../data/projects";
+import TechnologyBadge from "../../components/TechnologyBadge";
 
 const featuredProjects = projects
-  .filter(project => project.featured)
+  .filter((project) => project.featured)
   .sort((a, b) => a.priority - b.priority)
-  .slice(0, 3)
+  .slice(0, 3);
 
-const FeaturedProjects = () => {
+interface FeaturedProjectsProps {
+  onProjectClick?: (projectId: string) => void;
+}
+
+const FeaturedProjects = ({ onProjectClick }: FeaturedProjectsProps) => {
   return (
     <section className="py-32 bg-gradient-to-b from-zinc-900/50 to-zinc-900">
       <div className="container mx-auto px-4">
@@ -19,27 +23,29 @@ const FeaturedProjects = () => {
             <p className="text-lime-300 font-medium">Proyectos Destacados</p>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-            Soluciones que <span className="text-lime-300">Transforman</span> Industrias
+            Soluciones que <span className="text-lime-300">Transforman</span>{" "}
+            Industrias
           </h2>
           <p className="text-xl text-zinc-400 leading-relaxed">
-            Desarrollando aplicaciones innovadoras que impulsan el crecimiento y la eficiencia operativa.
+            Desarrollando aplicaciones innovadoras que impulsan el crecimiento y
+            la eficiencia operativa.
           </p>
         </div>
 
         {/* Projects Grid */}
         <div className="space-y-32 max-w-6xl mx-auto">
           {featuredProjects.map((project, index) => (
-            <div 
+            <div
               key={project.id}
               className={`flex flex-col md:flex-row gap-12 items-center ${
-                index % 2 === 1 ? 'md:flex-row-reverse' : ''
+                index % 2 === 1 ? "md:flex-row-reverse" : ""
               }`}
             >
               {/* Project Image */}
               <div className="w-full md:w-3/5">
                 <div className="relative group">
                   <div className="absolute -inset-2 bg-gradient-to-r from-lime-300 to-cyan-300 rounded-xl opacity-20 group-hover:opacity-30 blur transition duration-500" />
-                  <div className="relative aspect-[16/9] rounded-lg overflow-hidden">
+                  <div className="relative aspect-[16/9] rounded-lg overflow-hidden z-10">
                     <div className="absolute inset-0 p-8 bg-zinc-900">
                       <img
                         src={project.images[0]}
@@ -47,14 +53,18 @@ const FeaturedProjects = () => {
                         className="w-full h-full object-contain"
                       />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-20">
                       <div className="absolute bottom-0 left-0 right-0 p-6">
-                        <Link 
+                        <Link
                           to={`/portfolio/${project.id}`}
-                          className="inline-flex items-center gap-2 text-lime-300 font-medium"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onProjectClick?.(project.id);
+                          }}
+                          className="group inline-flex items-center gap-2 text-lime-300 hover:text-lime-400 transition-colors "
                         >
                           Ver Caso de Estudio
-                          <HiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                          <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
                         </Link>
                       </div>
                     </div>
@@ -67,9 +77,7 @@ const FeaturedProjects = () => {
                 <h3 className="text-3xl font-bold text-white">
                   {project.title}
                 </h3>
-                <p className="text-lg text-zinc-400">
-                  {project.description}
-                </p>
+                <p className="text-lg text-zinc-400">{project.description}</p>
 
                 {/* Technologies con TechnologyBadge */}
                 <div className="flex flex-wrap gap-2">
@@ -85,10 +93,10 @@ const FeaturedProjects = () => {
                       href={project.links.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-lime-300 hover:text-lime-400 transition-colors"
+                      className="relative z-30 inline-flex items-center gap-2 text-lime-300 hover:text-lime-400 transition-colors"
                     >
                       Visitar Sitio
-                      <HiExternalLink className="w-4 h-4" />
+                      <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
                     </a>
                   )}
                 </div>
@@ -96,7 +104,10 @@ const FeaturedProjects = () => {
                 {/* Key Points */}
                 <ul className="space-y-3 pt-4">
                   {project.keyPoints.slice(0, 2).map((point, i) => (
-                    <li key={i} className="flex items-start gap-3 text-zinc-300">
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 text-zinc-300"
+                    >
                       <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
                       <span>{point.content}</span>
                     </li>
@@ -111,15 +122,16 @@ const FeaturedProjects = () => {
         <div className="text-center mt-24">
           <Link
             to="/portfolio"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-lime-300 text-zinc-900 rounded-lg font-medium hover:bg-lime-400 transition-colors"
+            onClick={() => onProjectClick?.("view_all")}
+            className="relative z-30 group inline-flex items-center gap-2 px-8 py-4 bg-lime-300 text-zinc-900 rounded-lg font-medium hover:bg-lime-400 transition-colors"
           >
             Explorar Más Proyectos
-            <HiArrowRight className="w-5 h-5" />
+            <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default FeaturedProjects 
+export default FeaturedProjects;

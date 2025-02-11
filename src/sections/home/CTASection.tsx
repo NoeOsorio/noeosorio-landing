@@ -2,7 +2,11 @@ import { Link } from 'react-router-dom'
 import { HiArrowRight, HiMail, HiCalendar } from 'react-icons/hi'
 import { projects } from '../../data/projects'
 
-const CTASection = () => {
+interface CTASectionProps {
+  onCTAClick?: (action: string) => void;
+}
+
+const CTASection = ({ onCTAClick }: CTASectionProps) => {
   return (
     <section className="py-32 relative overflow-hidden">
       <div className="container mx-auto px-4">
@@ -36,6 +40,7 @@ const CTASection = () => {
               </p>
               <Link 
                 to="/contact"
+                onClick={() => onCTAClick?.('contact_message')}
                 className="inline-flex items-center gap-2 text-lime-300 hover:text-lime-400 transition-colors"
               >
                 Contactar Ahora
@@ -56,11 +61,19 @@ const CTASection = () => {
                 de 30 minutos sin compromiso.
               </p>
               <a 
-                href="#calendar"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-lime-300 text-zinc-900 rounded-lg font-medium hover:bg-lime-400 transition-colors"
+                href="https://calendly.com/noeosorio/tech-consultation-mentorship"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => onCTAClick?.('schedule_call')}
+                className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-lime-300 to-emerald-300 
+                  text-zinc-900 rounded-lg font-medium relative overflow-hidden
+                  hover:from-lime-400 hover:to-emerald-400 
+                  transition-all duration-300 shadow-lg hover:shadow-lime-300/20"
               >
-                Agendar Ahora
-                <HiArrowRight className="w-5 h-5" />
+                <span className="relative z-10">Agendar Reunión</span>
+                <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform relative z-10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-lime-400 to-emerald-400 
+                  transform translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
               </a>
             </div>
           </div>

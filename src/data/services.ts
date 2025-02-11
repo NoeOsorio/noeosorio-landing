@@ -243,7 +243,16 @@ export const servicesData = {
   financingOptions,
   businessValue,
   startupBundle,
-  addons
+  addons,
+  allServices: [
+    ...mainServices,
+    {
+      title: startupBundle.title,
+      icon: startupBundle.icon,
+      color: startupBundle.color,
+      useCases: startupBundle.useCases,
+    }
+  ]
 };
 
 export const webAppFeatures = [

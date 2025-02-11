@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { SEO } from '../components/SEO'
 import { motion } from 'framer-motion'
 import { HiCode, HiCube, HiLightningBolt } from 'react-icons/hi'
+import { trackEvent } from '../hooks/useAnalytics'
 
 // Configuraciones de animación
 const fadeInUp = {
@@ -26,11 +27,12 @@ const cardVariant = {
   viewport: { once: true }
 }
 
-const TechnologyBadge = ({ tech }: { tech: Technology }) => {
+const TechnologyBadge = ({ tech, onClick }: { tech: Technology; onClick?: () => void }) => {
   const Icon = technologyIcons[tech.icon]
   return (
     <motion.span 
       whileHover={{ scale: 1.05 }}
+      onClick={onClick}
       className={`px-3 py-1 rounded-full text-sm flex items-center gap-2 ${technologyColors[tech.category]}`}
     >
       <Icon className="w-4 h-4" />
@@ -61,6 +63,29 @@ const stats = [
 ]
 
 const Portfolio = () => {
+  const handleProjectClick = (projectId: string, projectType: string) => {
+    trackEvent('project_click', {
+      project_id: projectId,
+      project_type: projectType,
+      source: 'portfolio_page'
+    });
+  };
+
+  const handleTechnologyFilter = (tech: Technology) => {
+    trackEvent('technology_filter', {
+      technology: tech.name,
+      category: tech.category,
+      source: 'portfolio_page'
+    });
+  };
+
+  const handleCTAClick = () => {
+    trackEvent('portfolio_cta_click', {
+      source: 'portfolio_page',
+      location: 'bottom_section'
+    });
+  };
+
   return (
     <>
       <SEO 
@@ -208,7 +233,11 @@ const Portfolio = () => {
 
                           <div className="flex flex-wrap gap-2">
                             {project.technologies.map((tech, i) => (
-                              <TechnologyBadge key={i} tech={tech} />
+                              <TechnologyBadge 
+                                key={i} 
+                                tech={tech} 
+                                onClick={() => handleTechnologyFilter(tech)}
+                              />
                             ))}
                           </div>
 
@@ -227,6 +256,7 @@ const Portfolio = () => {
 
                           <Link 
                             to={`/portfolio/${project.id}`}
+                            onClick={() => handleProjectClick(project.id, 'work')}
                             className="inline-flex items-center text-lime-300 hover:text-lime-400 transition-colors"
                           >
                             Ver Proyecto
@@ -287,11 +317,16 @@ const Portfolio = () => {
                       <p className="text-zinc-400">{project.description}</p>
                       <div className="flex flex-wrap gap-2">
                         {project.technologies.map((tech, i) => (
-                          <TechnologyBadge key={i} tech={tech} />
+                          <TechnologyBadge 
+                            key={i} 
+                            tech={tech}
+                            onClick={() => handleTechnologyFilter(tech)}
+                          />
                         ))}
                       </div>
                       <Link 
                         to={`/portfolio/${project.id}`}
+                        onClick={() => handleProjectClick(project.id, 'personal')}
                         className="inline-flex items-center text-lime-300 hover:text-lime-400"
                       >
                         Ver Proyecto
@@ -336,6 +371,7 @@ const Portfolio = () => {
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={handleCTAClick}
                   className="group px-8 py-4 bg-lime-300 text-zinc-900 rounded-lg font-medium relative overflow-hidden transition-all duration-300"
                 >
                   <span className="relative z-10">Iniciar Proyecto</span>

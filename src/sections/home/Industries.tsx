@@ -1,5 +1,9 @@
 import { HiOutlineChip, HiOutlineCurrencyDollar, HiOutlineHeart, HiOutlineLightBulb } from 'react-icons/hi'
 
+interface IndustriesProps {
+  onIndustryClick?: (industry: string) => void;
+}
+
 const industries = [
   {
     icon: HiOutlineHeart,
@@ -39,7 +43,7 @@ const industries = [
   }
 ]
 
-const Industries = () => {
+const Industries = ({ onIndustryClick }: IndustriesProps) => {
   return (
     <section className="py-32 relative overflow-hidden">
       <div className="container mx-auto px-4">
@@ -66,6 +70,7 @@ const Industries = () => {
             <div 
               key={index}
               className={`group p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50 ${industry.borderColor} transition-all hover:bg-zinc-800/70 flex flex-col h-full`}
+              onClick={() => onIndustryClick?.(industry.name.toLowerCase())}
             >
               <div className="flex items-center gap-4 mb-6">
                 {/* Icon */}
