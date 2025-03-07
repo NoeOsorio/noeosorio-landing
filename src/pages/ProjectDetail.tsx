@@ -127,16 +127,6 @@ const ProjectDetail = () => {
                   ))}
                 </div>
               )}
-              {project.resources.video && (
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-4">Demo</h3>
-                  <video
-                    src={project.resources.video}
-                    controls
-                    className="rounded-lg w-full"
-                  />
-                </div>
-              )}
             </div>
 
             {/* Project Details */}
@@ -169,19 +159,6 @@ const ProjectDetail = () => {
                 </div>
               </div>
 
-              {/* Testimonial */}
-              {project.resources.testimonial && (
-                <div className="bg-zinc-800/50 p-8 rounded-xl">
-                  <blockquote className="text-lg text-zinc-300 italic mb-4">
-                    "{project.resources.testimonial.quote}"
-                  </blockquote>
-                  <div>
-                    <div className="font-semibold text-white">{project.resources.testimonial.author}</div>
-                    <div className="text-zinc-400">{project.resources.testimonial.role}</div>
-                  </div>
-                </div>
-              )}
-
               {/* Links */}
               <div className="flex flex-wrap gap-4">
                 {Object.entries(project.links).map(([key, url]) => (
@@ -196,8 +173,7 @@ const ProjectDetail = () => {
                       {key === 'website' ? 'Visitar Sitio' :
                        key === 'github' ? 'Ver Código' :
                        key === 'playStore' ? 'Google Play' :
-                       key === 'appStore' ? 'App Store' :
-                       'Ver Demo'}
+                       key === 'appStore' ? 'App Store' : key}
                     </a>
                   )
                 ))}

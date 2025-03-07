@@ -1,6 +1,6 @@
 import { workProjects, personalProjects } from '../data/projects'
 import { Technology, technologyColors, technologyIcons } from '../types/portfolio'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { SEO } from '../components/SEO'
 import { motion } from 'framer-motion'
 import { HiCode, HiCube, HiLightningBolt } from 'react-icons/hi'
@@ -63,6 +63,8 @@ const stats = [
 ]
 
 const Portfolio = () => {
+  const navigate = useNavigate()
+
   const handleProjectClick = (projectId: string, projectType: string) => {
     trackEvent('project_click', {
       project_id: projectId,
@@ -83,7 +85,8 @@ const Portfolio = () => {
     trackEvent('portfolio_cta_click', {
       source: 'portfolio_page',
       location: 'bottom_section'
-    });
+    })
+    navigate('/contact')
   };
 
   return (

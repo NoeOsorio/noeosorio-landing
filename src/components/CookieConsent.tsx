@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export const CookieConsent = () => {
   const [showConsent, setShowConsent] = useState(false);
@@ -31,12 +32,12 @@ export const CookieConsent = () => {
               <p>
                 Este sitio utiliza cookies para mejorar tu experiencia. Al continuar navegando, 
                 aceptas nuestra{' '}
-                <a 
-                  href="/privacy-policy" 
+                <Link 
+                  to="/contact" 
                   className="text-lime-300 hover:text-lime-400 underline"
                 >
                   política de privacidad
-                </a>
+                </Link>
                 {' '}y el uso de cookies.
               </p>
             </div>

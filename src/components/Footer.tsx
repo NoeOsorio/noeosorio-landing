@@ -20,9 +20,9 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-white font-semibold mb-4">Enlaces Rápidos</h3>
             <ul className="space-y-3">
-              {['About', 'Services', 'Portfolio', 'Contact'].map((item) => (
+              {['Acerca de', 'Servicios', 'Portafolio', 'Contacto'].map((item) => (
                 <li key={item}>
                   <Link 
                     to={`/${item.toLowerCase()}`}
@@ -65,7 +65,7 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Get in Touch</h3>
+            <h3 className="text-white font-semibold mb-4">Ponte en Contacto</h3>
             <p className="text-zinc-400 mb-4">
               ¿Listo para transformar tu próximo proyecto?
             </p>

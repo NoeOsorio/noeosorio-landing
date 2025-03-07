@@ -4,7 +4,7 @@ export const projects: Project[] = [
   {
     id: 'osmind',
     title: "Osmind EHR",
-    description: "Enhanced mental health data management and telemedicine app UX using React and Node.js.",
+    description: "Mejoramos la gestión de datos de salud mental y la experiencia de usuario en la app de telemedicina usando React y Node.js.",
     role: "Software Engineer",
     company: "Osmind",
     companyLink: "https://www.osmind.org/",
@@ -36,55 +36,49 @@ export const projects: Project[] = [
     backgroundColor: "#F5F5F5",
     keyPoints: [
       {
-        title: "Web App Development",
-        content: "Led the development of a provider-centric web app using React and TypeScript. Leveraged AWS serverless APIs to deliver a scalable, secure, and efficient solution for mental health professionals."
+        title: "Desarrollo de Aplicación Web",
+        content: "Lideré el desarrollo de una aplicación web centrada en proveedores usando React y TypeScript. Utilicé APIs serverless de AWS para ofrecer una solución escalable, segura y eficiente para profesionales de la salud mental."
       },
       {
-        title: "Mobile App Feature Lead",
-        content: "Spearheaded the design and launch of a revolutionary self-scheduling feature using React Native, empowering users to manage their appointments directly from their mobile devices."
+        title: "Liderazgo en Funcionalidades Móviles",
+        content: "Encabecé el diseño y lanzamiento de una innovadora función de auto-programación usando React Native, permitiendo a los usuarios gestionar sus citas desde sus dispositivos móviles."
       },
       {
-        title: "Regulatory Adherence",
-        content: "Ensured strict HIPAA compliance in all aspects of development, safeguarding patient data and maintaining legal standards."
+        title: "Cumplimiento Regulatorio",
+        content: "Aseguré el cumplimiento estricto de HIPAA en todos los aspectos del desarrollo, protegiendo los datos de los pacientes y manteniendo los estándares legales."
       },
       {
-        title: "Financial Processing Enhancement",
-        content: "Optimized financial processes by automating the generation of invoices and superbills, streamlining insurance claims for providers."
+        title: "Optimización de Procesos Financieros",
+        content: "Automatizamos la generación de facturas y superbills, agilizando los reclamos de seguros para los proveedores."
       }
     ],
     timeline: [
       {
-        title: "Project Kickoff",
-        description: "Started the backend development using Node.js and AWS, with a focus on scalability and security.",
-        date: "July 2022"
+        title: "Inicio del Proyecto",
+        description: "Comenzamos el desarrollo del backend usando Node.js y AWS, con un enfoque en escalabilidad y seguridad.",
+        date: "Julio 2022"
       },
       {
-        title: "Mobile App Self-scheduling Feature",
-        description: "Led the launch of the mobile app self-scheduling feature, allowing users to book appointments easily.",
-        date: "December 2022"
+        title: "Funcionalidad de Auto-programación Móvil",
+        description: "Lideré el lanzamiento de la función de auto-programación en la app móvil, permitiendo a los usuarios agendar citas fácilmente.",
+        date: "Diciembre 2022"
       }
     ],
     category: 'web',
     priority: 1,
     featured: true,
     links: {
-      website: 'https://www.osmind.org',
-      demo: 'https://demo.osmind.org'
+      website: 'https://www.osmind.org'
     },
     confidential: true,
     resources: {
-      logo: "https://assets-global.website-files.com/624378a4ca64f003be92dd58/6259f0cf05b044f05181fcbb_Logo.svg",
-      testimonial: {
-        quote: "Osmind has transformed how we deliver mental health care",
-        author: "Dr. Sarah Johnson",
-        role: "Chief Medical Officer"
-      }
+      logo: "https://assets-global.website-files.com/624378a4ca64f003be92dd58/6259f0cf05b044f05181fcbb_Logo.svg"
     }
   },
   {
     id: 'clip',
-    title: "Logistics Team",
-    description: "Integrated Amazon Seller API through microservices, focusing on automated builds and CI for scalability.",
+    title: "Equipo de Logística",
+    description: "Integración de la API de Amazon Seller mediante microservicios, enfocándonos en construcciones automatizadas y CI para escalabilidad.",
     role: "Software Engineer",
     company: "Clip",
     companyLink: "https://www.clip.mx/",
@@ -117,32 +111,32 @@ export const projects: Project[] = [
     backgroundColor: "#fc4c01",
     keyPoints: [
       {
-        title: "Microservices Integration",
-        content: "Developed and deployed microservices integrating the Amazon Seller API, enabling a more scalable and efficient logistics process."
+        title: "Integración de Microservicios",
+        content: "Desarrollé y desplegué microservicios integrando la API de Amazon Seller, permitiendo un proceso logístico más escalable y eficiente."
       },
       {
-        title: "Automated Build Pipelines",
-        content: "Established continuous integration (CI) and continuous delivery (CD) pipelines using AWS services and Jenkins."
+        title: "Pipelines de Construcción Automatizados",
+        content: "Establecí pipelines de integración continua (CI) y entrega continua (CD) usando servicios de AWS y Jenkins."
       },
       {
-        title: "Cloud Infrastructure Management",
-        content: "Utilized AWS CloudFormation to manage the entire infrastructure, ensuring smooth scalability."
+        title: "Gestión de Infraestructura en la Nube",
+        content: "Utilicé AWS CloudFormation para gestionar toda la infraestructura, asegurando una escalabilidad fluida."
       },
       {
-        title: "TypeScript & Clean Architecture",
-        content: "Implemented Clean Architecture principles using TypeScript, ensuring maintainability and modularity."
+        title: "TypeScript y Arquitectura Limpia",
+        content: "Implementé principios de Arquitectura Limpia usando TypeScript, asegurando mantenibilidad y modularidad."
       }
     ],
     timeline: [
       {
-        title: "Microservices Integration",
-        description: "Completed integration of Amazon Seller API into Clip's logistics operations.",
-        date: "January 2022"
+        title: "Integración de Microservicios",
+        description: "Completé la integración de la API de Amazon Seller en las operaciones logísticas de Clip.",
+        date: "Enero 2022"
       },
       {
-        title: "Automated Deployment Pipeline",
-        description: "Launched the automated build and deployment pipeline.",
-        date: "April 2022"
+        title: "Pipeline de Despliegue Automatizado",
+        description: "Lancé el pipeline automatizado de construcción y despliegue.",
+        date: "Abril 2022"
       }
     ],
     category: 'web',
@@ -152,13 +146,13 @@ export const projects: Project[] = [
       website: 'https://www.clip.mx'
     },
     resources: {
-      logo: "https://firebasestorage.googleapis.com/v0/b/noeosorio-web.appspot.com/o/images%2Fclip.png?alt=media&token=52fdeb88-61d3-438c-8d42-f3df055632a0"
+      logo: "https://fstack.tech/_astro/logo_blanco.DxPX-sKd_Z2drN1k.svg"
     }
   },
   {
     id: 'fstack',
-    title: "Frontend Department",
-    description: "Led frontend development and mentoring at Fstack, optimizing team and project outcomes through Agile and React.js.",
+    title: "Departamento Frontend",
+    description: "Lideré el desarrollo frontend y la mentoría en Fstack, optimizando resultados del equipo y proyectos a través de Agile y React.js.",
     role: "Software Engineer",
     company: "Full/Stack",
     companyLink: "https://fstack.tech/index",
@@ -188,32 +182,32 @@ export const projects: Project[] = [
     backgroundColor: "#9E9E9E",
     keyPoints: [
       {
-        title: "Optimized Web and Mobile Solutions",
-        content: "Led the development of multiple web and mobile apps using React.js, Flutter, and Redux, significantly improving performance and scalability."
+        title: "Soluciones Web y Móviles Optimizadas",
+        content: "Lideré el desarrollo de múltiples aplicaciones web y móviles usando React.js, Flutter y Redux, mejorando significativamente el rendimiento y la escalabilidad."
       },
       {
-        title: "Mentorship and Cloud Training",
-        content: "Mentored and trained interns on cloud technologies, system design, and clean architecture, boosting team productivity and technical skills."
+        title: "Mentoría y Capacitación en la Nube",
+        content: "Mentoré y capacité a practicantes en tecnologías cloud, diseño de sistemas y arquitectura limpia, aumentando la productividad del equipo y habilidades técnicas."
       },
       {
-        title: "Agile Performance Optimization",
-        content: "Utilized Agile methodologies and KPIs to measure and optimize team performance, enhancing resource management and project delivery speed."
+        title: "Optimización de Rendimiento Ágil",
+        content: "Utilicé metodologías Agile y KPIs para medir y optimizar el rendimiento del equipo, mejorando la gestión de recursos y velocidad de entrega de proyectos."
       },
       {
-        title: "Cross-functional Collaboration",
-        content: "Worked closely with backend developers and designers to ensure alignment between business requirements and frontend implementation, fostering a productive, transparent environment."
+        title: "Colaboración Multifuncional",
+        content: "Trabajé estrechamente con desarrolladores backend y diseñadores para asegurar la alineación entre requisitos de negocio e implementación frontend, fomentando un ambiente productivo y transparente."
       }
     ],
     timeline: [
       {
-        title: "Joined Fstack as Lead Developer",
-        description: "Started leading the frontend team, focusing on optimization and scalable solutions.",
-        date: "August 2021"
+        title: "Ingreso a Fstack como Desarrollador Líder",
+        description: "Comencé a liderar el equipo frontend, enfocándome en optimización y soluciones escalables.",
+        date: "Agosto 2021"
       },
       {
-        title: "Development of Senior Care App",
-        description: "Led the development of a senior care app using Flutter, focusing on mobile optimization.",
-        date: "March 2022"
+        title: "Desarrollo de App de Cuidado de Adultos Mayores",
+        description: "Lideré el desarrollo de una aplicación de cuidado de adultos mayores usando Flutter, enfocándome en optimización móvil.",
+        date: "Marzo 2022"
       }
     ],
     category: 'web',
@@ -224,18 +218,13 @@ export const projects: Project[] = [
     },
     confidential: true,
     resources: {
-      logo: "https://fstack.tech/_astro/logo_blanco.DxPX-sKd_Z2drN1k.svg",
-      testimonial: {
-        quote: "Exceptional leadership in modernizing our development practices",
-        author: "Carlos Martinez",
-        role: "CTO"
-      }
+      logo: "https://fstack.tech/_astro/logo_blanco.DxPX-sKd_Z2drN1k.svg"
     }
   },
   {
     id: 'finloop',
-    title: "Web Admin",
-    description: "Developed the frontend for Finloop, focusing on UI/UX for a lending and borrowing platform.",
+    title: "Administrador Web",
+    description: "Desarrollé el frontend para Finloop, enfocándome en UI/UX para una plataforma de préstamos.",
     role: "Frontend Developer",
     company: "Finloop",
     companyLink: "https://finloop.com.mx",
@@ -267,32 +256,32 @@ export const projects: Project[] = [
     backgroundColor: "#492eb0",
     keyPoints: [
       {
-        title: "Frontend Optimization",
-        content: "Led the design and development of the user interface, improving user interaction and navigation across the platform. Employed best practices in React to ensure the app is responsive and accessible."
+        title: "Optimización Frontend",
+        content: "Lideré el diseño y desarrollo de la interfaz de usuario, mejorando la interacción y navegación a través de la plataforma. Empleé mejores prácticas en React para asegurar que la aplicación sea responsiva y accesible."
       },
       {
-        title: "REST API Integration",
-        content: "Worked closely with backend engineers to integrate RESTful APIs that connected users to real-time data. This enhanced the platform's capability for seamless financial transactions."
+        title: "Integración de API REST",
+        content: "Trabajé estrechamente con ingenieros backend para integrar APIs RESTful que conectaron usuarios con datos en tiempo real. Esto mejoró la capacidad de la plataforma para transacciones financieras sin problemas."
       },
       {
-        title: "Modernized Codebases",
-        content: "Refactored outdated code, bringing it up to modern standards with clean architecture principles. This increased performance and made future development more efficient."
+        title: "Modernización de Código Base",
+        content: "Refactoricé código obsoleto, actualizándolo a estándares modernos con principios de arquitectura limpia. Esto aumentó el rendimiento e hizo el desarrollo futuro más eficiente."
       },
       {
-        title: "Agile Development",
-        content: "Collaborated in an Agile environment to quickly deliver high-quality updates, including new features and performance optimizations, reducing overall development time."
+        title: "Desarrollo Ágil",
+        content: "Colaboré en un entorno Agile para entregar rápidamente actualizaciones de alta calidad, incluyendo nuevas características y optimizaciones de rendimiento, reduciendo el tiempo general de desarrollo."
       }
     ],
     timeline: [
       {
-        title: "Frontend Redesign",
-        description: "Initiated a full redesign of the UI to improve user experience and increase engagement on the platform.",
-        date: "October 2020"
+        title: "Rediseño Frontend",
+        description: "Inicié un rediseño completo de la UI para mejorar la experiencia de usuario y aumentar el compromiso en la plataforma.",
+        date: "Octubre 2020"
       },
       {
-        title: "Backend API Integration",
-        description: "Successfully integrated multiple APIs for real-time financial data syncing, enhancing platform reliability.",
-        date: "January 2021"
+        title: "Integración de API Backend",
+        description: "Integré exitosamente múltiples APIs para sincronización de datos financieros en tiempo real, mejorando la confiabilidad de la plataforma.",
+        date: "Enero 2021"
       }
     ],
     category: 'web',
@@ -309,7 +298,7 @@ export const projects: Project[] = [
   {
     id: 'voztour',
     title: "VozTour",
-    description: "Developed an interactive tour guide app using Flutter and Firebase, improving performance and user experience.",
+    description: "Desarrollé una app de guía turística interactiva usando Flutter y Firebase, mejorando el rendimiento y la experiencia de usuario.",
     role: "Project Leader",
     company: "SmartKode",
     companyLink: "https://www.smartkode.mx/",
@@ -341,32 +330,32 @@ export const projects: Project[] = [
     backgroundColor: "#c850ad",
     keyPoints: [
       {
-        title: "Interactive UX",
-        content: "Led the design and development of the app's interactive tour features. Enhanced the user experience by making real-time data about each tour destination accessible at a touch."
+        title: "UX Interactiva",
+        content: "Lideré el diseño y desarrollo de las características interactivas de la app. Mejoré la experiencia de usuario haciendo que los datos en tiempo real sobre cada destino turístico sean accesibles con un toque."
       },
       {
-        title: "Efficient Data Management",
-        content: "Integrated Firebase to handle real-time data management, ensuring users received up-to-date information about tours and destinations. This improved the overall responsiveness of the app."
+        title: "Gestión Eficiente de Datos",
+        content: "Integré Firebase para manejar la gestión de datos en tiempo real, asegurando que los usuarios recibieran información actualizada sobre tours y destinos. Esto mejoró la capacidad de respuesta general de la app."
       },
       {
-        title: "Cross-Platform Support",
-        content: "Ensured smooth performance across iOS and Android platforms, offering a consistent experience for all users. Optimized the app for low-bandwidth environments, making it reliable even in remote areas."
+        title: "Soporte Multiplataforma",
+        content: "Aseguré un rendimiento fluido en plataformas iOS y Android, ofreciendo una experiencia consistente para todos los usuarios. Optimicé la app para entornos de bajo ancho de banda, haciéndola confiable incluso en áreas remotas."
       },
       {
-        title: "Scalable Backend Solutions",
-        content: "Leveraged Google Cloud for scalable backend processes, enabling the app to handle a growing number of users without compromising on performance."
+        title: "Soluciones Backend Escalables",
+        content: "Aproveché Google Cloud para procesos backend escalables, permitiendo que la app maneje un número creciente de usuarios sin comprometer el rendimiento."
       }
     ],
     timeline: [
       {
-        title: "App Development Kickoff",
-        description: "Started development on VozTour with a focus on interactive features and real-time data updates.",
-        date: "October 2019"
+        title: "Inicio del Desarrollo",
+        description: "Comencé el desarrollo en VozTour con enfoque en características interactivas y actualizaciones de datos en tiempo real.",
+        date: "Octubre 2019"
       },
       {
-        title: "App Launch",
-        description: "Released the VozTour app, providing users with an engaging and informative tour guide experience.",
-        date: "February 2020"
+        title: "Lanzamiento de la App",
+        description: "Lancé la app VozTour, proporcionando a los usuarios una experiencia de guía turística atractiva e informativa.",
+        date: "Febrero 2020"
       }
     ],
     category: 'mobile',
@@ -385,7 +374,7 @@ export const projects: Project[] = [
   {
     id: 'appgua',
     title: "Appgua",
-    description: "Led the transition from Ionic to Flutter for Appgua, improving architecture for a water management system.",
+    description: "Lideré la transición de Ionic a Flutter para Appgua, mejorando la arquitectura para un sistema de gestión de agua.",
     role: "Project Leader",
     company: "SmartKode",
     companyLink: "https://www.smartkode.mx/",
@@ -415,32 +404,32 @@ export const projects: Project[] = [
     backgroundColor: "#13AAE0",
     keyPoints: [
       {
-        title: "Transition to Flutter for Speed and Efficiency",
-        content: "Migrated the app from Ionic to Flutter, significantly improving development speed and UI performance."
+        title: "Transición a Flutter para Velocidad y Eficiencia",
+        content: "Migré la app de Ionic a Flutter, mejorando significativamente la velocidad de desarrollo y el rendimiento de la UI."
       },
       {
-        title: "Water Delivery App Success",
-        content: "Developed a user-friendly app that simplified the process of buying water gallons, resulting in increased sales and customer engagement."
+        title: "Éxito en App de Entrega de Agua",
+        content: "Desarrollé una app fácil de usar que simplificó el proceso de compra de garrafones de agua, resultando en un aumento en ventas y compromiso del cliente."
       },
       {
-        title: "State Management with BloC Architecture",
-        content: "Implemented the BloC architecture for smooth state management, ensuring the app performed efficiently even with complex animations."
+        title: "Gestión de Estado con Arquitectura BLoC",
+        content: "Implementé la arquitectura BLoC para una gestión fluida del estado, asegurando que la app funcionara eficientemente incluso con animaciones complejas."
       },
       {
-        title: "Cloud Integration for Real-time Data",
-        content: "Used Google Cloud services for real-time data syncing, integrating the backend with Alexa skills to enhance user experience."
+        title: "Integración en la Nube para Datos en Tiempo Real",
+        content: "Utilicé servicios de Google Cloud para sincronización de datos en tiempo real, integrando el backend con habilidades de Alexa para mejorar la experiencia del usuario."
       }
     ],
     timeline: [
       {
-        title: "Migration from Ionic to Flutter",
-        description: "Successfully transitioned the app to Flutter, improving UI/UX and reducing development time.",
-        date: "February 2020"
+        title: "Migración de Ionic a Flutter",
+        description: "Transicioné exitosamente la app a Flutter, mejorando UI/UX y reduciendo el tiempo de desarrollo.",
+        date: "Febrero 2020"
       },
       {
-        title: "Integration with Alexa Skills",
-        description: "Enabled users to order water via Alexa skills by integrating Google Cloud Functions.",
-        date: "June 2020"
+        title: "Integración con Habilidades de Alexa",
+        description: "Permití a los usuarios ordenar agua a través de habilidades de Alexa integrando Google Cloud Functions.",
+        date: "Junio 2020"
       }
     ],
     category: 'mobile',
@@ -453,18 +442,13 @@ export const projects: Project[] = [
     },
     confidential: true,
     resources: {
-      logo: "https://appgua.com.mx/logos/logo.webp",
-      testimonial: {
-        quote: "Appgua revolutionized our water delivery service",
-        author: "Luis Ramírez",
-        role: "Operations Director"
-      }
+      logo: "https://appgua.com.mx/logos/logo.webp"
     }
   },
   {
     id: 'nihongoFlip',
-    title: "Japanese Learning App",
-    description: "A React Native app for learning languages using Anki-style flashcards, providing an interactive learning experience.",
+    title: "Aplicación para Aprender Japonés",
+    description: "Una app en React Native para aprender idiomas usando tarjetas de memoria estilo Anki, ofreciendo una experiencia de aprendizaje interactiva.",
     role: "Mobile Developer",
     company: "Personal",
     companyLink: "https://github.com/NoeOsorio/NihongoFlip",
@@ -480,32 +464,32 @@ export const projects: Project[] = [
     backgroundColor: "#185463",
     keyPoints: [
       {
-        title: "Optimized Flashcard System",
-        content: "Developed a highly interactive flashcard-based learning system utilizing Anki-style spaced repetition, which improves retention and understanding of Japanese vocabulary. This innovative solution allows users to track their progress across different levels of difficulty, enhancing the learning experience."
+        title: "Sistema de Tarjetas Optimizado",
+        content: "Desarrollé un sistema de aprendizaje interactivo basado en tarjetas utilizando repetición espaciada estilo Anki, mejorando la retención y comprensión del vocabulario japonés. Esta solución innovadora permite a los usuarios seguir su progreso a través de diferentes niveles de dificultad, mejorando la experiencia de aprendizaje."
       },
       {
-        title: "Firebase Integration",
-        content: "Seamlessly integrated Firebase Firestore to manage and synchronize user data, offering a reliable and scalable backend solution. This ensures real-time updates across devices, improving user engagement and data security while maintaining low latency for a smooth user experience."
+        title: "Integración con Firebase",
+        content: "Integré Firebase Firestore para gestionar y sincronizar datos de usuario, ofreciendo una solución backend confiable y escalable. Esto asegura actualizaciones en tiempo real entre dispositivos, mejorando el compromiso del usuario y la seguridad de datos mientras mantiene baja latencia para una experiencia fluida."
       },
       {
-        title: "Cross-platform Compatibility",
-        content: "Leveraged Expo to deploy the app across both iOS and Android, ensuring consistent performance and UX. This cross-platform functionality expanded the app's reach, providing seamless updates and uniform experiences across different devices without compromising performance."
+        title: "Compatibilidad Multiplataforma",
+        content: "Aproveché Expo para desplegar la app tanto en iOS como en Android, asegurando un rendimiento y experiencia de usuario consistentes. Esta funcionalidad multiplataforma expandió el alcance de la app, proporcionando actualizaciones sin problemas y experiencias uniformes en diferentes dispositivos sin comprometer el rendimiento."
       },
       {
-        title: "User Feedback Implementation",
-        content: "Implemented direct feedback loops with users, iterating quickly to improve UX. Enhanced user navigation, responsiveness, and app stability by addressing common pain points identified through feedback, resulting in a higher user satisfaction rate and better app reviews."
+        title: "Implementación de Retroalimentación de Usuario",
+        content: "Implementé ciclos de retroalimentación directa con usuarios, iterando rápidamente para mejorar la experiencia de usuario. Mejoré la navegación, capacidad de respuesta y estabilidad de la app abordando puntos problemáticos comunes identificados a través de la retroalimentación, resultando en una mayor tasa de satisfacción del usuario y mejores reseñas de la app."
       }
     ],
     timeline: [
       {
-        title: "Project Kickoff",
-        description: "Started the project by laying the foundation with React Native, Firebase, and Expo to ensure scalability and smooth performance.",
-        date: "January 2021"
+        title: "Inicio del Proyecto",
+        description: "Comencé el proyecto estableciendo la base con React Native, Firebase y Expo para asegurar escalabilidad y rendimiento fluido.",
+        date: "Enero 2021"
       },
       {
-        title: "Beta Launch",
-        description: "Released the beta version with core learning features, focusing on delivering interactive flashcards and tracking user progress.",
-        date: "April 2021"
+        title: "Lanzamiento Beta",
+        description: "Lancé la versión beta con características principales de aprendizaje, enfocándome en entregar tarjetas interactivas y seguimiento del progreso del usuario.",
+        date: "Abril 2021"
       }
     ],
     category: 'mobile',
@@ -524,8 +508,8 @@ export const projects: Project[] = [
   },
   {
     id: 'drgravili',
-    title: "Medical Appointment Manager",
-    description: "A Flutter-based health appointment management app, focusing on improving reliability through BLoC architecture.",
+    title: "Gestor de Citas Médicas",
+    description: "Una app de gestión de citas médicas basada en Flutter, enfocada en mejorar la confiabilidad a través de la arquitectura BLoC.",
     role: "Mobile Developer",
     company: "Personal",
     companyLink: "https://noeosorio.com/",
@@ -541,32 +525,32 @@ export const projects: Project[] = [
     backgroundColor: "#185463",
     keyPoints: [
       {
-        title: "BLoC Architecture Implementation",
-        content: "Applied BLoC (Business Logic Component) architecture to effectively manage app state, ensuring smooth scalability and high performance. This structure was crucial in enhancing the stability of appointment scheduling systems while reducing overall code complexity and improving maintainability."
+        title: "Implementación de Arquitectura BLoC",
+        content: "Apliqué la arquitectura BLoC (Business Logic Component) para gestionar eficazmente el estado de la app, asegurando una escalabilidad fluida y alto rendimiento. Esta estructura fue crucial para mejorar la estabilidad de los sistemas de programación de citas mientras reducía la complejidad general del código y mejoraba la mantenibilidad."
       },
       {
-        title: "Firebase Integration for Real-time Data",
-        content: "Utilized Firebase Firestore to provide real-time synchronization for appointments, allowing both patients and doctors to interact with live data. This real-time system increased user engagement and streamlined the scheduling process, making appointment management more efficient."
+        title: "Integración de Firebase para Datos en Tiempo Real",
+        content: "Utilicé Firebase Firestore para proporcionar sincronización en tiempo real para citas, permitiendo tanto a pacientes como médicos interactuar con datos en vivo. Este sistema en tiempo real aumentó el compromiso del usuario y agilizó el proceso de programación, haciendo la gestión de citas más eficiente."
       },
       {
-        title: "Enhanced User Experience",
-        content: "Focused on developing an intuitive user interface with easy navigation, ensuring that patients and medical staff can manage appointments with ease. The integration of user-friendly features like appointment reminders via push notifications greatly improved patient satisfaction."
+        title: "Experiencia de Usuario Mejorada",
+        content: "Me enfoqué en desarrollar una interfaz de usuario intuitiva con navegación fácil, asegurando que pacientes y personal médico puedan gestionar citas con facilidad. La integración de características amigables para el usuario como recordatorios de citas a través de notificaciones push mejoró significativamente la satisfacción del paciente."
       },
       {
-        title: "Multi-platform Support",
-        content: "Built the app to support both iOS and Android platforms seamlessly, leveraging Flutter's cross-platform capabilities. This allowed for cost-efficient development while maintaining a native-like performance across devices, ensuring a smooth and consistent user experience."
+        title: "Soporte Multiplataforma",
+        content: "Construí la app para soportar tanto plataformas iOS como Android sin problemas, aprovechando las capacidades multiplataforma de Flutter. Esto permitió un desarrollo rentable mientras se mantenía un rendimiento similar al nativo en todos los dispositivos, asegurando una experiencia de usuario fluida y consistente."
       }
     ],
     timeline: [
       {
-        title: "Initial Development",
-        description: "Designed the core features for the app using Flutter and Firebase for real-time data management.",
-        date: "May 2020"
+        title: "Desarrollo Inicial",
+        description: "Diseñé las características principales para la app usando Flutter y Firebase para gestión de datos en tiempo real.",
+        date: "Mayo 2020"
       },
       {
-        title: "App Launch",
-        description: "Launched the first version of the app, allowing patients to book, reschedule, and manage medical appointments with ease.",
-        date: "September 2020"
+        title: "Lanzamiento de la App",
+        description: "Lancé la primera versión de la app, permitiendo a los pacientes reservar, reprogramar y gestionar citas médicas con facilidad.",
+        date: "Septiembre 2020"
       }
     ],
     category: 'mobile',

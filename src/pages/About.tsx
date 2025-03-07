@@ -602,10 +602,14 @@ const About = () => {
               Ya sea que busques transformar tu negocio con tecnología o mejorar tus 
               habilidades como desarrollador, estoy aquí para ayudarte.
             </p>
-            <button className="group px-8 py-4 bg-lime-300 text-zinc-900 rounded-lg font-medium relative overflow-hidden transition-all duration-300">
-              <span className="relative z-10">Agendar una Llamada</span>
-              <div className="absolute inset-0 bg-lime-400 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-            </button>
+            <a
+              href="https://calendly.com/noeosorio/tech-consultation-mentorship"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-8 py-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-all duration-300"
+            >
+              Agendar una Llamada
+            </a>
           </div>
         </section>
       </div>

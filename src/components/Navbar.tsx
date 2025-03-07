@@ -4,10 +4,10 @@ import Logo from './Logo'
 
 const navigation = [
   { name: 'Inicio', href: '/' },
-  { name: 'Portfolio', href: '/portfolio' },
+  { name: 'Portafolio', href: '/portfolio' },
   { name: 'Servicios', href: '/services' },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' }
+  { name: 'Acerca de', href: '/about' },
+  { name: 'Contacto', href: '/contact' }
 ]
 
 const Navbar = () => {

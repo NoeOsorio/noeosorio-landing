@@ -56,18 +56,11 @@ export interface ProjectLinks {
   github?: string
   playStore?: string
   appStore?: string
-  demo?: string
 }
 
 export interface ProjectResources {
   logo: string
   screenshots?: string[]
-  video?: string
-  testimonial?: {
-    quote: string
-    author: string
-    role: string
-  }
 }
 
 export interface Project {
