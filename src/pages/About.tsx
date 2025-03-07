@@ -290,76 +290,87 @@ const About = () => {
       />
       <div className="min-h-screen">
         {/* Hero Section Mejorado */}
-        <section className="relative container mx-auto px-4 py-32">
+        <section className="relative container mx-auto px-4 pt-16 pb-32">
           <div className="absolute inset-0 bg-[url('/grid.svg')] bg-fixed opacity-5" />
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            {/* Imagen Personal */}
-            <div className="relative order-2 md:order-1">
-              <div className="aspect-[4/5] bg-zinc-800 rounded-2xl overflow-hidden relative">
-                {/* Tu foto profesional */}
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-16 items-center">
+              {/* Imagen Personal */}
+              <div className="relative order-2 md:order-1 mx-auto w-full max-w-2xl">
+                <div className="aspect-[5/6] bg-zinc-800/20 backdrop-blur-sm rounded-2xl overflow-hidden relative border border-zinc-700/50 shadow-2xl shadow-lime-900/20">
+                  {/* Efecto de brillo superior */}
+                  <div className="absolute -inset-[40%] bg-lime-300/10 blur-3xl rounded-full" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-lime-300/10 via-transparent to-zinc-900/40" />
+                  {/* Efecto de viñeta */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 via-transparent to-zinc-900/40" />
+                  <img
+                    src="/profile-photo.png"
+                    alt="Foto de perfil"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
+                </div>
+                <div className="absolute -bottom-8 left-8 right-8 bg-zinc-800/90 backdrop-blur-sm p-4 rounded-xl border border-zinc-700/50">
+                  <div className="flex items-center gap-4">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                    <p className="text-zinc-300 text-sm">
+                      Disponible para roles de Tech Lead y Senior Software Engineer
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="absolute -bottom-8 left-8 right-8 bg-zinc-800/90 backdrop-blur-sm p-4 rounded-xl border border-zinc-700/50">
-                <div className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  <p className="text-zinc-300 text-sm">
-                    Disponible para roles de Tech Lead y Senior Software Engineer
+
+              {/* Contenido Principal */}
+              <div className="order-1 md:order-2 space-y-8">
+                <div className="space-y-2">
+                  <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+                    Noe Osorio
+                  </h1>
+                  <p className="text-xl text-lime-300 font-medium">
+                    Senior Software Engineer & Tech Educator
                   </p>
                 </div>
-              </div>
-            </div>
 
-            {/* Contenido Principal */}
-            <div className="order-1 md:order-2 space-y-8">
-              <div className="space-y-2">
-                <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-                  Noe Osorio
-                </h1>
-                <p className="text-xl text-lime-300 font-medium">
-                  Senior Software Engineer & Tech Educator
+                <p className="text-xl text-zinc-400 leading-relaxed">
+                  +5 años transformando ideas en soluciones tecnológicas escalables. 
+                  Especializado en arquitecturas cloud-native y desarrollo full-stack, 
+                  con un fuerte compromiso en mentorear a la próxima generación de 
+                  desarrolladores.
                 </p>
-              </div>
 
-              <p className="text-xl text-zinc-400 leading-relaxed">
-                +5 años transformando ideas en soluciones tecnológicas escalables. 
-                Especializado en arquitecturas cloud-native y desarrollo full-stack, 
-                con un fuerte compromiso en mentorear a la próxima generación de 
-                desarrolladores.
-              </p>
+                {/* Industrias con descripciones */}
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-white">Áreas de Impacto</h2>
+                  <div className="grid gap-4">
+                    {industries.map((industry, i) => (
+                      <div 
+                        key={i} 
+                        className={`p-4 rounded-xl border border-zinc-800 hover:border-lime-300/50 transition-colors ${industry.color.replace('text', 'bg').replace('/10', '/5')}`}
+                      >
+                        <h3 className={`font-medium mb-2 ${industry.color.replace('bg', 'text')}`}>
+                          {industry.name}
+                        </h3>
+                        <p className="text-zinc-400 text-sm">
+                          {industry.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-              {/* Industrias con descripciones */}
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-white">Áreas de Impacto</h2>
-                <div className="grid gap-4">
-                  {industries.map((industry, i) => (
-                    <div 
-                      key={i} 
-                      className={`p-4 rounded-xl border border-zinc-800 hover:border-lime-300/50 transition-colors ${industry.color.replace('text', 'bg').replace('/10', '/5')}`}
-                    >
-                      <h3 className={`font-medium mb-2 ${industry.color.replace('bg', 'text')}`}>
-                        {industry.name}
-                      </h3>
-                      <p className="text-zinc-400 text-sm">
-                        {industry.description}
-                      </p>
-                    </div>
+                {/* Keywords para SEO y reclutadores */}
+                <div className="flex flex-wrap gap-2 pt-4">
+                  {[
+                    "Software Architecture",
+                    "Team Leadership",
+                    "Cloud Solutions",
+                    "Tech Mentorship",
+                    "Agile Development",
+                    "System Design"
+                  ].map((keyword, i) => (
+                    <span key={i} className="px-3 py-1 bg-zinc-800/50 rounded-full text-sm text-zinc-400">
+                      {keyword}
+                    </span>
                   ))}
                 </div>
-              </div>
-
-              {/* Keywords para SEO y reclutadores */}
-              <div className="flex flex-wrap gap-2 pt-4">
-                {[
-                  "Software Architecture",
-                  "Team Leadership",
-                  "Cloud Solutions",
-                  "Tech Mentorship",
-                  "Agile Development",
-                  "System Design"
-                ].map((keyword, i) => (
-                  <span key={i} className="px-3 py-1 bg-zinc-800/50 rounded-full text-sm text-zinc-400">
-                    {keyword}
-                  </span>
-                ))}
               </div>
             </div>
           </div>
