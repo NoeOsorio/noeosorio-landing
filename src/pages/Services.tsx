@@ -68,7 +68,7 @@ const BackgroundPattern = () => (
 );
 
 const HeroSection = () => (
-  <motion.section {...fadeInUp} className="pt-32 pb-24">
+  <motion.section {...fadeInUp} className="pt-32 pb-12">
     <div className="container mx-auto px-4">
       <motion.div
         variants={staggerContainer}
@@ -227,6 +227,7 @@ const Services = () => {
         <BackgroundPattern />
 
         <HeroSection />
+        <SakuraKodeSection />
         <ValueProposition values={servicesData.businessValue} />
 
         <motion.section {...staggerContainer} className="py-24">
@@ -269,7 +270,6 @@ const Services = () => {
           ))}
         </FinancingSection>
         <AddonsSection />
-        <SakuraKodeSection />
         <CTASection>
           <motion.button
             onClick={() => handleCTAClick('bottom_cta')}
