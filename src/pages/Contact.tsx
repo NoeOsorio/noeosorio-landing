@@ -3,6 +3,7 @@ import { HiCode, HiAcademicCap, HiLightningBolt, HiArrowRight } from 'react-icon
 import { motion } from 'framer-motion';
 import { SEO } from '../components/SEO'
 import { trackEvent } from '../hooks/useAnalytics';
+import { submitContactForm } from '../services/api';
 
 const contactOptions = [
   {
@@ -59,6 +60,8 @@ const Contact = () => {
     position: '',
     linkedin: ''
   });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const getPlaceholderByType = () => {
     switch(selectedOption) {
@@ -96,21 +99,56 @@ const Contact = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    await trackEvent('form_submit', {
-      form_name: 'contact',
-      contact_type: selectedOption,
-      has_company: Boolean(formData.company),
-      has_budget: Boolean(formData.budget),
-      has_timeline: Boolean(formData.timeline),
-      form_completion: calculateFormCompletion(),
-      source: location.pathname
-    });
+    setStatus('loading');
+    setErrorMessage('');
 
-    // Aquí iría la lógica de envío
-    console.log(formData);
+    try {
+      await submitContactForm({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        company: formData.company,
+        projectType: formData.projectType,
+        budget: formData.budget,
+        timeline: formData.timeline,
+        experience: formData.experience,
+        mentorshipType: formData.mentorshipType,
+        availability: formData.availability,
+        position: formData.position,
+        linkedin: formData.linkedin,
+      });
+
+      await trackEvent('form_submit', {
+        form_name: 'contact',
+        contact_type: selectedOption,
+        has_company: Boolean(formData.company),
+        has_budget: Boolean(formData.budget),
+        has_timeline: Boolean(formData.timeline),
+        form_completion: calculateFormCompletion(),
+        source: location.pathname
+      });
+
+      setStatus('success');
+      setFormData({
+        name: '',
+        email: '',
+        message: '',
+        company: '',
+        budget: '',
+        timeline: '',
+        projectType: '',
+        experience: '',
+        mentorshipType: '',
+        availability: '',
+        position: '',
+        linkedin: ''
+      });
+    } catch (error) {
+      setStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'Error al enviar el formulario');
+    }
   };
 
   const handleSocialClick = (platform: string) => {
@@ -445,21 +483,47 @@ const Contact = () => {
               />
             </div>
 
-            <motion.button
-              whileHover={{ 
-                scale: 1.02,
-                boxShadow: '0 0 20px rgba(163,230,53,0.3)'
-              }}
-              whileTap={{ scale: 0.98 }}
-              type="submit"
-              className="w-full py-4 bg-gradient-to-r from-lime-300 to-emerald-300 
-              text-zinc-900 rounded-lg font-medium 
-              hover:from-lime-400 hover:to-emerald-400 
-              transition-all duration-300 shadow-lg 
-              hover:shadow-lime-300/20"
-            >
-              Enviar Mensaje
-            </motion.button>
+            {status === 'error' && (
+              <motion.p 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-400 text-sm bg-red-500/10 p-4 rounded-lg mb-6"
+              >
+                {errorMessage}
+              </motion.p>
+            )}
+
+            {status === 'success' ? (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center p-8 bg-lime-500/10 rounded-lg border-2 border-lime-500/20"
+              >
+                <div className="text-lime-400 text-4xl mb-4">🎯</div>
+                <h4 className="text-lime-400 font-semibold mb-3">¡Mensaje enviado!</h4>
+                <p className="text-lime-300/80">
+                  Me pondré en contacto contigo pronto para discutir los detalles.
+                </p>
+              </motion.div>
+            ) : (
+              <motion.button
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: '0 0 20px rgba(163,230,53,0.3)'
+                }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={status === 'loading'}
+                className="w-full py-4 bg-gradient-to-r from-lime-300 to-emerald-300 
+                text-zinc-900 rounded-lg font-medium 
+                hover:from-lime-400 hover:to-emerald-400 
+                transition-all duration-300 shadow-lg 
+                hover:shadow-lime-300/20
+                disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {status === 'loading' ? 'Enviando...' : 'Enviar Mensaje'}
+              </motion.button>
+            )}
           </motion.form>
 
           {/* Additional Contact Info */}

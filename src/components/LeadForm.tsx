@@ -1,5 +1,10 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { motion } from "framer-motion";
+import { useToast } from "../hooks/use-toast";
+import { submitLeadForm } from "../services/api";
 
 interface LeadFormProps {
   campaignId: string;
@@ -8,56 +13,63 @@ interface LeadFormProps {
   description?: string;
 }
 
-const LeadForm = ({ 
-  campaignId, 
-  onSuccess, 
-  buttonText = "Agendar consultoría",
-  description = "Déjanos tus datos y nos pondremos en contacto contigo"
-}: LeadFormProps) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    role: ''
+const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email.",
+  }),
+  company: z.string().min(2, {
+    message: "Company must be at least 2 characters.",
+  }),
+  role: z.string().min(2, {
+    message: "Role must be at least 2 characters.",
+  }),
+});
+
+export function LeadForm({ campaignId, buttonText = "Agendar Consultoría", description }: LeadFormProps) {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      company: "",
+      role: "",
+    },
   });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('loading');
-    setErrorMessage('');
-
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // TODO: Integrar con tu sistema de leads (Firebase, API, etc)
-      const response = await fetch('/api/leads', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          campaignId,
-          source: window.location.pathname,
-          timestamp: new Date().toISOString(),
-        }),
+      setIsSubmitting(true);
+      await submitLeadForm({
+        ...values,
+        campaignId,
       });
-
-      if (!response.ok) throw new Error('Error al enviar el formulario');
-      
-      setStatus('success');
-      setFormData({ name: '', email: '', company: '', role: '' });
-      onSuccess?.();
-    } catch {
-      setStatus('error');
-      setErrorMessage('Hubo un error al procesar tu solicitud. Por favor, intenta de nuevo.');
+      toast({
+        title: "Success!",
+        description: "Gracias por tu interés. Nos pondremos en contacto contigo pronto.",
+      });
+      reset();
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Hubo un error al procesar tu solicitud. Por favor, intenta de nuevo.",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  }
 
   return (
     <motion.div
@@ -66,7 +78,7 @@ const LeadForm = ({
       className="w-full max-w-md mx-auto px-8 py-10 bg-gradient-to-b from-zinc-900 via-zinc-900/95 to-zinc-900
         border border-lime-900/50 shadow-[0_0_45px_-5px_rgba(132,204,22,0.15)] rounded-xl backdrop-blur-sm"
     >
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div className="text-center space-y-3">
           <h3 className="text-3xl font-bold text-white">¡Agenda tu Consultoría!</h3>
           <p className="text-zinc-300 px-4">{description}</p>
@@ -78,18 +90,18 @@ const LeadForm = ({
               Nombre completo
             </label>
             <input
+              {...register("name")}
               type="text"
               id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
               placeholder="Juan Pérez"
-              required
               className="w-full px-5 py-3.5 rounded-lg bg-zinc-800/80 text-white placeholder-zinc-500
                 border-2 border-zinc-700 focus:outline-none focus:border-lime-500 hover:border-lime-600/50
                 transition-all duration-200"
-              disabled={status === 'loading'}
+              disabled={isSubmitting}
             />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -97,18 +109,18 @@ const LeadForm = ({
               Correo empresarial
             </label>
             <input
+              {...register("email")}
               type="email"
               id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
               placeholder="juan@tuempresa.com"
-              required
               className="w-full px-5 py-3.5 rounded-lg bg-zinc-800/80 text-white placeholder-zinc-500
                 border-2 border-zinc-700 focus:outline-none focus:border-lime-500 hover:border-lime-600/50
                 transition-all duration-200"
-              disabled={status === 'loading'}
+              disabled={isSubmitting}
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -116,18 +128,18 @@ const LeadForm = ({
               Empresa
             </label>
             <input
+              {...register("company")}
               type="text"
               id="company"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
               placeholder="Nombre de tu empresa"
-              required
               className="w-full px-5 py-3.5 rounded-lg bg-zinc-800/80 text-white placeholder-zinc-500
                 border-2 border-zinc-700 focus:outline-none focus:border-lime-500 hover:border-lime-600/50
                 transition-all duration-200"
-              disabled={status === 'loading'}
+              disabled={isSubmitting}
             />
+            {errors.company && (
+              <p className="text-red-500 text-sm mt-1">{errors.company.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -135,32 +147,22 @@ const LeadForm = ({
               Cargo
             </label>
             <input
+              {...register("role")}
               type="text"
               id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
               placeholder="Director / Gerente / etc."
-              required
               className="w-full px-5 py-3.5 rounded-lg bg-zinc-800/80 text-white placeholder-zinc-500
                 border-2 border-zinc-700 focus:outline-none focus:border-lime-500 hover:border-lime-600/50
                 transition-all duration-200"
-              disabled={status === 'loading'}
+              disabled={isSubmitting}
             />
+            {errors.role && (
+              <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
+            )}
           </div>
         </div>
 
-        {status === 'error' && (
-          <motion.p 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-red-400 text-sm bg-red-500/10 p-4 rounded-lg"
-          >
-            {errorMessage}
-          </motion.p>
-        )}
-
-        {status === 'success' ? (
+        {isSubmitting ? (
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -175,13 +177,13 @@ const LeadForm = ({
         ) : (
           <button
             type="submit"
-            disabled={status === 'loading'}
+            disabled={isSubmitting}
             className="w-full px-6 py-4 text-white bg-gradient-to-r from-lime-500 to-lime-600
               rounded-lg font-semibold hover:from-lime-400 hover:to-lime-500
               disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200
               transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
           >
-            {status === 'loading' ? 'Enviando...' : buttonText}
+            {isSubmitting ? 'Enviando...' : buttonText}
           </button>
         )}
 
@@ -191,6 +193,6 @@ const LeadForm = ({
       </form>
     </motion.div>
   );
-};
+}
 
 export default LeadForm;
