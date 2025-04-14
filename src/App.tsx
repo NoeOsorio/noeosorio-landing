@@ -20,6 +20,10 @@ const MobileAppDevelopment = lazy(() => import('./pages/services/MobileAppDevelo
 const BusinessAutomation = lazy(() => import('./pages/services/BusinessAutomation'))
 const StartupAcceleration = lazy(() => import('./pages/services/StartupAcceleration'))
 
+// Lazy load campaign pages
+const CampaignLayout = lazy(() => import('./pages/campaigns/CampaignLayout'))
+const TalentLand2025 = lazy(() => import('./pages/campaigns/TalentLand2025'))
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -121,9 +125,31 @@ const router = createBrowserRouter([
             <Social />
           </Suspense>
         )
+      },
+      {
+        path: "/campaigns",
+        element: (
+          <>
+            <ScrollToTop />
+            <Suspense fallback={<LoadingScreen />}>
+              <CampaignLayout />
+            </Suspense>
+          </>
+        ),
+        children: [
+          {
+            path: "talent-land-2025",
+            element: (
+              <Suspense fallback={<LoadingScreen />}>
+                <TalentLand2025 />
+              </Suspense>
+            )
+          }
+        ]
       }
     ]
   }
+ 
 ])
 
 function App() {
