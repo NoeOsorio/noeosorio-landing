@@ -51,7 +51,7 @@ const EducationPreview = ({ onCourseClick }: EducationPreviewProps) => {
               <a 
                 target="_blank"
                 rel="noopener noreferrer"
-                href="https://calendly.com/noeosorio/tech-consultation-mentorship"
+                href="https://calendly.com/noeosorio/tech-business-consultant"
                 onClick={() => onCourseClick?.('schedule_consultation')}
                 className="inline-flex items-center gap-2 px-6 py-3 border border-lime-300 text-lime-300 rounded-lg font-medium hover:bg-lime-300/10 transition-colors"
               >

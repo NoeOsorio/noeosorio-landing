@@ -61,7 +61,7 @@ const CTASection = ({ onCTAClick }: CTASectionProps) => {
                 de 30 minutos sin compromiso.
               </p>
               <a 
-                href="https://calendly.com/noeosorio/tech-consultation-mentorship"
+                href="https://calendly.com/noeosorio/tech-business-consultant"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => onCTAClick?.('schedule_call')}
@@ -90,14 +90,13 @@ const CTASection = ({ onCTAClick }: CTASectionProps) => {
                 .map((project, i) => (
                   <div 
                     key={i} 
-                    className="relative h-8 grayscale opacity-50 hover:opacity-100 transition-all duration-300 group"
+                    className="relative h-8 opacity-80 hover:opacity-100 transition-all duration-300 group"
                   >
                     <img
                       src={project.resources.logo}
                       alt={project.company}
-                      className="h-full w-auto object-contain brightness-0 invert opacity-20 group-hover:opacity-30 transition-opacity"
+                      className="h-full w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity"
                     />
-                    <div className="absolute inset-0 bg-zinc-900 mix-blend-color" />
                   </div>
                 ))}
             </div>

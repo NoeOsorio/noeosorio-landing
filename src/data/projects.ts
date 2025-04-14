@@ -146,7 +146,7 @@ export const projects: Project[] = [
       website: 'https://www.clip.mx'
     },
     resources: {
-      logo: "https://fstack.tech/_astro/logo_blanco.DxPX-sKd_Z2drN1k.svg"
+      logo: "https://firebasestorage.googleapis.com/v0/b/noeosorio-web.appspot.com/o/images%2Fclip.png?alt=media&token=52fdeb88-61d3-438c-8d42-f3df055632a0"
     }
   },
   {

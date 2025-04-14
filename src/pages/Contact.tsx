@@ -508,7 +508,7 @@ const Contact = () => {
           {/* Calendario */}
           <div className="mt-16 text-center">
             <a
-              href="https://calendly.com/noeosorio/tech-consultation-mentorship"
+              href="https://calendly.com/noeosorio/tech-business-consultant"
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleScheduleClick}

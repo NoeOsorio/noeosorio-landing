@@ -614,7 +614,7 @@ const About = () => {
               habilidades como desarrollador, estoy aquí para ayudarte.
             </p>
             <a
-              href="https://calendly.com/noeosorio/tech-consultation-mentorship"
+              href="https://calendly.com/noeosorio/tech-business-consultant"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center px-8 py-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-all duration-300"
