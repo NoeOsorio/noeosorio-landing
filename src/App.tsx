@@ -12,6 +12,7 @@ const Services = lazy(() => import('./pages/Services'))
 const Portfolio = lazy(() => import('./pages/Portfolio'))
 const Contact = lazy(() => import('./pages/Contact'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
+const Social = lazy(() => import('./pages/Social'))
 
 // Lazy load service pages
 const WebAppDevelopment = lazy(() => import('./pages/services/WebAppDevelopment'))
@@ -112,6 +113,14 @@ const router = createBrowserRouter([
       {
         path: "privacy-policy",
         element: <PrivacyPolicy />
+      },
+      {
+        path: "/social",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Social />
+          </Suspense>
+        )
       }
     ]
   }

@@ -1,4 +1,4 @@
-import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaInstagram, FaTiktok } from 'react-icons/fa'
 import { trackEvent } from '../hooks/useAnalytics'
 
 interface SocialLinksProps {
@@ -23,6 +23,11 @@ const SocialLinks = ({ className = "", linkClassName = "", iconClassName = "" }:
       href: "https://www.instagram.com/noeosorio.dev",
       icon: FaInstagram,
       label: "Seguir a Noé Osorio en Instagram"
+    },
+    {
+      href: "https://www.tiktok.com/@noeosorio.dev",
+      icon: FaTiktok,
+      label: "Seguir a Noé Osorio en TikTok"
     }
   ]
 
