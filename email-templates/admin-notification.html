@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuevo Lead - Consultoría</title>
+    <style>
+      /* Reset de estilos para clientes de correo */
+      body,
+      table,
+      td,
+      div,
+      p,
+      a {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.5;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #0a0a0a;
+      } /* Contenedor principal */
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: linear-gradient(145deg, #18181b 0%, #09090b 100%);
+        border: 1px solid #84cc16;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(132, 204, 22, 0.15);
+        overflow: hidden;
+      } /* Encabezado */
+      .header {
+        background: linear-gradient(90deg, #84cc16 0%, #65a30d 100%);
+        padding: 30px;
+        text-align: center;
+        color: #ffffff;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 28px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      } /* Contenido */
+      .content {
+        padding: 30px;
+        color: #ffffff;
+      }
+      .lead-info {
+        background: rgba(132, 204, 22, 0.1);
+        border: 1px solid rgba(132, 204, 22, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+      .info-row {
+        display: flex;
+        margin: 10px 0;
+        padding: 10px;
+        border-bottom: 1px solid rgba(132, 204, 22, 0.1);
+      }
+      .info-label {
+        width: 140px;
+        color: #84cc16;
+        font-weight: bold;
+      }
+      .info-value {
+        flex: 1;
+        color: #e5e7eb;
+      } /* Botón de acción */
+      .cta-button {
+        display: inline-block;
+        padding: 14px 28px;
+        background: linear-gradient(90deg, #84cc16 0%, #65a30d 100%);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        margin: 20px 0;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 12px rgba(132, 204, 22, 0.2);
+      } /* Footer */
+      .footer {
+        background: #18181b;
+        padding: 20px;
+        text-align: center;
+        color: #71717a;
+        font-size: 14px;
+        border-top: 1px solid rgba(132, 204, 22, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div
+        class="header"
+        style="background-image: url('https://noeosorio.com/logo.png')"
+      >
+        <h1>🎯 ¡Nuevo Lead Recibido!</h1>
+      </div>
+      <div class="content">
+        <p>
+          Has recibido una nueva solicitud de consultoría. Aquí están los
+          detalles:
+        </p>
+        <div class="lead-info">
+          <div class="info-row">
+            <div class="info-label">Nombre:</div>
+            <div class="info-value">{{1.name}}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Email:</div>
+            <div class="info-value">{{1.email}}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Empresa:</div>
+            <div class="info-value">{{1.company}}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Cargo:</div>
+            <div class="info-value">{{1.role}}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Campaña:</div>
+            <div class="info-value">{{1.campaignId}}</div>
+          </div>
+        </div>
+        <a href="https://airtable.com/appXJYPmPoqIcWauC/tblnpy36OZRI11nc7/viwO9U8C8l4vmdx3I?blocks=hide" class="cta-button">
+          Ver en el Dashboard →
+        </a>
+        <p style="color: #a1a1aa; font-size: 14px">
+          * Este lead fue generado desde la página web. Se recomienda contactar
+          dentro de las primeras 24 horas.
+        </p>
+      </div>
+      <div class="footer">
+        <p>© 2025 Noé Osorio | Consultoría Tecnológica</p>
+      </div>
+    </div>
+  </body>
+</html>
