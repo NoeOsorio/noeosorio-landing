@@ -1,8 +1,5 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import QuoteCalculator from '../../components/services/QuoteCalculator';
-import { ServiceObjectives } from '../../components/services/ServiceObjectives';
-import { ServiceDeliverables } from '../../components/services/ServiceDeliverables';
 import { ServiceFAQ } from '../../sections/services/ServiceFAQ';
 
 interface ServiceFeatureOption {
@@ -64,9 +61,6 @@ export const ServicePage = ({
   description, 
   features, 
   caseStudies,
-  serviceType,
-  objectives,
-  deliverables,
   faqs
 }: ServicePageProps) => {
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
@@ -197,18 +191,6 @@ export const ServicePage = ({
                 ))}
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="sticky top-24"
-              >
-                <QuoteCalculator 
-                  selectedFeatures={selectedFeatures}
-                  features={features}
-                  serviceType={serviceType}
-                />
-              </motion.div>
             </div>
 
             {/* Case Studies con el mismo estilo de las cards */}
@@ -224,8 +206,8 @@ export const ServicePage = ({
             )}
 
             <section className="mt-24">
-              <ServiceObjectives objectives={objectives} />
-              <ServiceDeliverables deliverables={deliverables} />
+              {/* <ServiceObjectives objectives={objectives} /> */}
+              {/* <ServiceDeliverables deliverables={deliverables} /> */}
               <ServiceFAQ faqs={faqs} />
             </section>
           </div>

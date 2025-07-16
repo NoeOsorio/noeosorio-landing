@@ -14,16 +14,6 @@ const Contact = lazy(() => import('./pages/Contact'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Social = lazy(() => import('./pages/Social'))
 
-// Lazy load service pages
-const WebAppDevelopment = lazy(() => import('./pages/services/WebAppDevelopment'))
-const MobileAppDevelopment = lazy(() => import('./pages/services/MobileAppDevelopment'))
-const BusinessAutomation = lazy(() => import('./pages/services/BusinessAutomation'))
-const StartupAcceleration = lazy(() => import('./pages/services/StartupAcceleration'))
-
-// Lazy load campaign pages
-const CampaignLayout = lazy(() => import('./pages/campaigns/CampaignLayout'))
-const TalentLand2025 = lazy(() => import('./pages/campaigns/TalentLand2025'))
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -83,38 +73,6 @@ const router = createBrowserRouter([
         ) 
       },
       {
-        path: "/services/web-app",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <WebAppDevelopment />
-          </Suspense>
-        )
-      },
-      {
-        path: "/services/mobile-app",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <MobileAppDevelopment />
-          </Suspense>
-        )
-      },
-      {
-        path: "/services/business-automation",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <BusinessAutomation />
-          </Suspense>
-        )
-      },
-      {
-        path: "/services/startup-acceleration",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <StartupAcceleration />
-          </Suspense>
-        )
-      },
-      {
         path: "privacy-policy",
         element: <PrivacyPolicy />
       },
@@ -125,31 +83,9 @@ const router = createBrowserRouter([
             <Social />
           </Suspense>
         )
-      },
-      {
-        path: "/campaigns",
-        element: (
-          <>
-            <ScrollToTop />
-            <Suspense fallback={<LoadingScreen />}>
-              <CampaignLayout />
-            </Suspense>
-          </>
-        ),
-        children: [
-          {
-            path: "talent-land-2025",
-            element: (
-              <Suspense fallback={<LoadingScreen />}>
-                <TalentLand2025 />
-              </Suspense>
-            )
-          }
-        ]
       }
     ]
   }
- 
 ])
 
 function App() {
