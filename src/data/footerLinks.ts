@@ -1,8 +1,8 @@
 export const footerLinks = {
-  services: [
-    { title: 'Web App Development', href: '/services' },
-    { title: 'Mobile App Development', href: '/services' },
-    { title: 'Business Automation', href: '/services' },
-    { title: 'Startup Acceleration', href: '/services' }
+  projects: [
+    { title: 'Osmind EHR', href: '/portfolio/osmind' },
+    { title: 'Clip Logistics', href: '/portfolio/clip' },
+    { title: 'Full/Stack Frontend', href: '/portfolio/fstack' },
+    { title: 'Finloop Admin', href: '/portfolio/finloop' }
   ]
 }; 

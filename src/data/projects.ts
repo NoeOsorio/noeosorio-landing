@@ -241,7 +241,7 @@ export const projects: Project[] = [
       },
       { 
         name: "MongoDB", 
-        icon: "FaDatabase",
+        icon: "SiMongodb",
         category: "database"
       },
       { 

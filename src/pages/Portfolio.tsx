@@ -3,10 +3,10 @@ import { SEO } from '../components/SEO'
 import { motion } from 'framer-motion'
 import { HiCode, HiCube, HiLightningBolt } from 'react-icons/hi'
 import { trackEvent } from '../hooks/useAnalytics'
-import { GitHubSection } from '../sections/home/GitHubSection'
 import { PersonalProjectsGallery } from '../sections/home/PersonalProjectsGallery'
 import { ExperienceTimeline } from '../sections/portfolio/ExperienceTimeline'
 import { FreelanceProjects } from '../sections/portfolio/FreelanceProjects'
+import { LandingPagesShowcase } from '../sections/portfolio/LandingPagesShowcase'
 
 // Animation variants
 const fadeInUp = {
@@ -148,8 +148,8 @@ const Portfolio = () => {
           {/* Proyectos B2B/Freelance */}
           <FreelanceProjects />
 
-          {/* GitHub y Open Source */}
-          <GitHubSection />
+          {/* Landing Pages */}
+          <LandingPagesShowcase />
 
           {/* Proyectos Personales */}
           <PersonalProjectsGallery />

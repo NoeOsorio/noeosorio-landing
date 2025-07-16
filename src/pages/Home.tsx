@@ -7,6 +7,7 @@ import CTASection from "../sections/home/CTASection";
 import { SEO } from "../components/SEO";
 import { ServicesShowcase } from "../components/home/ServicesShowcase";
 import { trackEvent } from '../hooks/useAnalytics';
+import { GitHubSection } from '../sections/home/GitHubSection'
 // Importaremos las demás secciones cuando las creemos
 
 // Configuraciones de animación reutilizables
@@ -89,9 +90,13 @@ const Home = () => {
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.3 }}>
+        {/* Sección de Industrias */}
         <Industries 
           onIndustryClick={handleIndustryClick}
         />
+
+        {/* GitHub y Open Source */}
+        <GitHubSection />
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.4 }}>
@@ -101,6 +106,7 @@ const Home = () => {
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.5 }}>
+        {/* CTA Section */}
         <CTASection 
           onCTAClick={() => handleCTAClick('bottom')}
         />

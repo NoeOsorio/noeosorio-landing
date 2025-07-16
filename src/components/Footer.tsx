@@ -35,11 +35,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Featured Projects */}
           <div>
-            <h3 className="text-white font-bold mb-6">Servicios</h3>
+            <h3 className="text-white font-bold mb-6">Proyectos Destacados</h3>
             <ul className="space-y-4">
-              {footerLinks.services.map((link) => (
+              {footerLinks.projects.map((link) => (
                 <li key={link.href}>
                   {link.href.startsWith('http') ? (
                     <a

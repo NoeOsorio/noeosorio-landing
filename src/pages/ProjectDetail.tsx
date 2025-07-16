@@ -1,19 +1,9 @@
 import { useParams } from 'react-router-dom'
 import { projects } from '../data/projects'
-import { Technology, technologyColors, technologyIcons } from '../types/portfolio'
 import { HiLockClosed } from 'react-icons/hi'
 import { SEO } from '../components/SEO'
 import LazyImage from '../components/LazyImage'
-
-const TechnologyBadge = ({ tech }: { tech: Technology }) => {
-  const Icon = technologyIcons[tech.icon]
-  return (
-    <span className={`px-3 py-1 rounded-full text-sm flex items-center gap-2 ${technologyColors[tech.category]}`}>
-      <Icon className="w-4 h-4" />
-      {tech.name}
-    </span>
-  )
-}
+import TechnologyBadge from '../components/TechnologyBadge'
 
 const ProjectDetail = () => {
   const { projectId } = useParams()
