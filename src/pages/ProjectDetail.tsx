@@ -3,7 +3,7 @@ import { projects } from '../data/projects'
 import { HiLockClosed } from 'react-icons/hi'
 import { SEO } from '../components/SEO'
 import LazyImage from '../components/LazyImage'
-import TechnologyBadge from '../components/TechnologyBadge'
+import { technologyColors } from '../types/portfolio'
 
 const ProjectDetail = () => {
   const { projectId } = useParams()
@@ -68,7 +68,12 @@ const ProjectDetail = () => {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   {project.technologies.map((tech, i) => (
-                    <TechnologyBadge key={i} tech={tech} />
+                    <span 
+                      key={i} 
+                      className={`px-3 py-1 rounded-full text-sm ${technologyColors[tech.category]}`}
+                    >
+                      {tech.name}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -88,85 +93,70 @@ const ProjectDetail = () => {
         </section>
 
         {/* Project Resources */}
-        <section className="container mx-auto px-4 py-24">
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Screenshots Gallery */}
-            <div className="space-y-8">
-              <h2 className="text-2xl font-bold text-white mb-6">Galería</h2>
-              {project.confidential ? (
-                <div className="bg-zinc-800/50 rounded-xl p-8 text-center">
-                  <HiLockClosed className="w-12 h-12 text-zinc-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    Contenido Confidencial
-                  </h3>
-                  <p className="text-zinc-400">
-                    Debido a acuerdos de confidencialidad, no podemos mostrar capturas de pantalla de este proyecto.
-                  </p>
-                </div>
-              ) : (
+        <section className="py-24">
+          <div className="container mx-auto px-4">
+            <div className="grid md:grid-cols-2 gap-16">
+              {/* Links & Resources */}
+              <div className="space-y-8">
+                <h2 className="text-3xl font-bold text-white">
+                  Enlaces & Recursos
+                </h2>
                 <div className="grid gap-4">
-                  {project.resources.screenshots?.map((screenshot, i) => (
-                    <div className="max-w-xl mx-auto">
-                      <img
-                        key={i}
-                        src={screenshot}
-                        alt={`${project.title} screenshot ${i + 1}`}
-                        className="rounded-lg w-full max-w-xl mx-auto h-[400px] object-contain"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Project Details */}
-            <div className="space-y-12">
-              {/* Key Points */}
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-6">Características Principales</h2>
-                <div className="space-y-6">
-                  {project.keyPoints.map((point, i) => (
-                    <div key={i}>
-                      <h3 className="text-lg font-semibold text-white mb-2">{point.title}</h3>
-                      <p className="text-zinc-400">{point.content}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Timeline */}
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-6">Línea de Tiempo</h2>
-                <div className="space-y-8">
-                  {project.timeline.map((item, i) => (
-                    <div key={i} className="relative pl-8 border-l-2 border-lime-300/30">
-                      <div className="absolute -left-[9px] top-0 w-4 h-4 bg-zinc-900 border-2 border-lime-300 rounded-full" />
-                      <div className="text-lime-300 font-mono mb-2">{item.date}</div>
-                      <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
-                      <p className="text-zinc-400">{item.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Links */}
-              <div className="flex flex-wrap gap-4">
-                {Object.entries(project.links).map(([key, url]) => (
-                  url && (
+                  {project.links.website && (
                     <a
-                      key={key}
-                      href={url}
+                      href={project.links.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg transition-colors"
+                      className="flex items-center justify-between p-4 bg-zinc-800/50 rounded-xl hover:bg-zinc-800 transition-colors group"
                     >
-                      {key === 'website' ? 'Visitar Sitio' :
-                       key === 'github' ? 'Ver Código' :
-                       key === 'playStore' ? 'Google Play' :
-                       key === 'appStore' ? 'App Store' : key}
+                      <div>
+                        <p className="text-white font-medium mb-1">Sitio Web</p>
+                        <p className="text-sm text-zinc-400">{project.links.website}</p>
+                      </div>
+                      <div className="w-10 h-10 flex items-center justify-center bg-lime-300/10 text-lime-300 rounded-lg group-hover:bg-lime-300/20">
+                        <HiLockClosed className="w-5 h-5" />
+                      </div>
                     </a>
-                  )
-                ))}
+                  )}
+                  {project.links.github && (
+                    <a
+                      href={project.links.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-4 bg-zinc-800/50 rounded-xl hover:bg-zinc-800 transition-colors group"
+                    >
+                      <div>
+                        <p className="text-white font-medium mb-1">Repositorio</p>
+                        <p className="text-sm text-zinc-400">{project.links.github}</p>
+                      </div>
+                      <div className="w-10 h-10 flex items-center justify-center bg-lime-300/10 text-lime-300 rounded-lg group-hover:bg-lime-300/20">
+                        <HiLockClosed className="w-5 h-5" />
+                      </div>
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Key Points */}
+              <div className="space-y-8">
+                <h2 className="text-3xl font-bold text-white">
+                  Puntos Clave
+                </h2>
+                <div className="grid gap-4">
+                  {project.keyPoints.map((point, i) => (
+                    <div 
+                      key={i}
+                      className="p-4 bg-zinc-800/50 rounded-xl"
+                    >
+                      <h3 className="text-lg font-medium text-white mb-2">
+                        {point.title}
+                      </h3>
+                      <p className="text-zinc-400">
+                        {point.content}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

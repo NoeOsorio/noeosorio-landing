@@ -1,6 +1,26 @@
 import { IconType } from 'react-icons'
-import { FaReact, FaNodeJs, FaDatabase, FaAws, FaPython } from 'react-icons/fa'
-import { SiFlutter, SiFirebase, SiExpo, SiTailwindcss, SiVercel, SiTypescript, SiRedux, SiGraphql, SiSwagger, SiServerless, SiMongodb, SiGooglecloud, SiCloudflare } from 'react-icons/si'
+import { FaReact, FaNodeJs, FaDatabase, FaAws, FaPython, FaVuejs, FaSass } from 'react-icons/fa'
+import { 
+  SiFlutter, 
+  SiFirebase, 
+  SiExpo, 
+  SiTailwindcss, 
+  SiVercel, 
+  SiTypescript, 
+  SiRedux, 
+  SiGraphql, 
+  SiSwagger, 
+  SiServerless, 
+  SiMongodb, 
+  SiGooglecloud, 
+  SiCloudflare, 
+  SiFramer,
+  SiNextdotjs,
+  SiGreensock,
+  SiStyledcomponents,
+  SiThreedotjs
+} from 'react-icons/si'
+import { HiCode, HiDeviceMobile, HiCog, HiLightningBolt } from 'react-icons/hi'
 
 export type ProjectCategory = 'web' | 'mobile' | 'api' | 'desktop' | 'cli'
 export type TechnologyCategory = 'frontend' | 'backend' | 'mobile' | 'cloud' | 'database'
@@ -19,6 +39,8 @@ export const technologyIcons: Record<string, IconType> = {
   FaDatabase,
   FaAws,
   FaPython,
+  FaVuejs,
+  FaSass,
   SiFlutter,
   SiFirebase,
   SiExpo,
@@ -31,7 +53,16 @@ export const technologyIcons: Record<string, IconType> = {
   SiServerless,
   SiMongodb,
   SiGooglecloud,
-  SiCloudflare
+  SiCloudflare,
+  SiFramer,
+  SiNextdotjs,
+  SiGreensock,
+  SiStyledcomponents,
+  SiThreedotjs,
+  HiCode,
+  HiDeviceMobile,
+  HiCog,
+  HiLightningBolt
 }
 
 export interface Technology {
@@ -56,6 +87,14 @@ export interface ProjectLinks {
   github?: string
   playStore?: string
   appStore?: string
+  npm?: string
+  docs?: string
+}
+
+export interface ProjectStats {
+  stars: string
+  downloads: string
+  contributors: string
 }
 
 export interface ProjectResources {
@@ -81,6 +120,7 @@ export interface Project {
   links: ProjectLinks
   resources: ProjectResources
   confidential?: boolean
+  stats?: ProjectStats
 }
 
 export interface Experience {

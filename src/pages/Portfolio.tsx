@@ -3,10 +3,10 @@ import { SEO } from '../components/SEO'
 import { motion } from 'framer-motion'
 import { HiCode, HiCube, HiLightningBolt } from 'react-icons/hi'
 import { trackEvent } from '../hooks/useAnalytics'
-import { PersonalProjectsGallery } from '../sections/home/PersonalProjectsGallery'
 import { ExperienceTimeline } from '../sections/portfolio/ExperienceTimeline'
-import { FreelanceProjects } from '../sections/portfolio/FreelanceProjects'
+import { B2BProjects } from '../sections/portfolio/B2BProjects'
 import { LandingPagesShowcase } from '../sections/portfolio/LandingPagesShowcase'
+import { PersonalProjects } from '../sections/portfolio/PersonalProjects'
 
 // Animation variants
 const fadeInUp = {
@@ -145,14 +145,14 @@ const Portfolio = () => {
           {/* Experiencia Empresarial */}
           <ExperienceTimeline />
 
-          {/* Proyectos B2B/Freelance */}
-          <FreelanceProjects />
+          {/* Proyectos B2B */}
+          <B2BProjects />
 
           {/* Landing Pages */}
           <LandingPagesShowcase />
 
           {/* Proyectos Personales */}
-          <PersonalProjectsGallery />
+          <PersonalProjects />
 
           {/* CTA Section */}
           <motion.section 

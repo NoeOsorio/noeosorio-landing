@@ -50,9 +50,9 @@ export const landingPages: Project[] = [
     company: "B2B",
     companyLink: "https://noeosorio.com",
     technologies: [
-      { name: "Next.js", icon: "SiNextdotjs", category: "frontend" },
-      { name: "GSAP", icon: "SiGreensock", category: "frontend" },
-      { name: "Styled Components", icon: "SiStyledcomponents", category: "frontend" }
+      { name: "Next.js", icon: "SiVercel", category: "frontend" },
+      { name: "GSAP", icon: "SiFramer", category: "frontend" },
+      { name: "Styled Components", icon: "SiTailwindcss", category: "frontend" }
     ],
     images: ["/images/proyecto2.png"],
     backgroundColor: "#CA8A04",
@@ -91,9 +91,9 @@ export const landingPages: Project[] = [
     company: "B2B",
     companyLink: "https://noeosorio.com",
     technologies: [
-      { name: "Vue.js", icon: "FaVuejs", category: "frontend" },
+      { name: "Vue.js", icon: "FaReact", category: "frontend" },
       { name: "Firebase", icon: "SiFirebase", category: "cloud" },
-      { name: "Sass", icon: "FaSass", category: "frontend" }
+      { name: "Sass", icon: "SiTailwindcss", category: "frontend" }
     ],
     images: ["/images/proyecto3.png"],
     backgroundColor: "#16A34A",
@@ -133,7 +133,7 @@ export const landingPages: Project[] = [
     companyLink: "https://noeosorio.com",
     technologies: [
       { name: "React", icon: "FaReact", category: "frontend" },
-      { name: "Three.js", icon: "SiThreedotjs", category: "frontend" },
+      { name: "Three.js", icon: "SiFramer", category: "frontend" },
       { name: "Node.js", icon: "FaNodeJs", category: "backend" }
     ],
     images: ["/images/proyecto4.png"],

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { HiOutlineExternalLink, HiOutlineClock, HiOutlineTag } from 'react-icons/hi';
-import TechnologyBadge from '../../components/TechnologyBadge';
+import { HiOutlineExternalLink, HiOutlineClock } from 'react-icons/hi';
+import { technologyColors } from '../../types/portfolio';
 
 // Filtrar proyectos B2B/Freelance (necesitaremos añadir esta categoría en projects.ts)
 import { projects } from '../../data/projects';
@@ -25,19 +25,21 @@ export const FreelanceProjects = () => (
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-300/10 mb-6"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 mb-6"
         >
-          <div className="w-2 h-2 rounded-full bg-purple-300" />
-          <span className="text-purple-300 font-medium">Proyectos B2B</span>
+          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-medium">
+            Freelance Projects
+          </span>
         </motion.div>
 
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 mb-6"
+          className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-6"
         >
-          Soluciones para Empresas
+          Proyectos Freelance
         </motion.h2>
         
         <motion.p
@@ -46,7 +48,7 @@ export const FreelanceProjects = () => (
           viewport={{ once: true }}
           className="text-zinc-400 max-w-2xl mx-auto"
         >
-          Proyectos desarrollados como consultor independiente para empresas
+          Soluciones personalizadas para clientes independientes
         </motion.p>
       </div>
 
@@ -59,27 +61,18 @@ export const FreelanceProjects = () => (
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all group"
+            className="group relative bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-2xl overflow-hidden border border-purple-500/20 hover:border-purple-500/30 transition-all duration-300"
           >
             {/* Project Image */}
-            <div className="relative h-64 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-[1]" />
+            <div className="aspect-[16/9] relative overflow-hidden">
               <img
                 src={project.images[0]}
                 alt={project.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="w-full h-full object-cover object-center"
               />
-              
-              {/* Project Type Badge */}
-              <div className="absolute top-4 left-4 z-10">
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md text-purple-300 text-sm border border-purple-500/20">
-                  <HiOutlineTag className="w-4 h-4" />
-                  <span>{project.category}</span>
-                </div>
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
             </div>
 
-            {/* Content */}
             <div className="p-6 space-y-6">
               {/* Header */}
               <div>
@@ -108,7 +101,12 @@ export const FreelanceProjects = () => (
               {/* Technologies */}
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech, i) => (
-                  <TechnologyBadge key={i} tech={tech} />
+                  <span 
+                    key={i} 
+                    className={`px-3 py-1 rounded-full text-sm ${technologyColors[tech.category]}`}
+                  >
+                    {tech.name}
+                  </span>
                 ))}
               </div>
 
@@ -118,10 +116,10 @@ export const FreelanceProjects = () => (
                   to={`/portfolio/${project.id}`}
                   className="inline-flex items-center gap-2 px-4 py-2 bg-purple-300/10 hover:bg-purple-300/20 text-purple-300 rounded-lg transition-colors"
                 >
-                  Ver Detalles
+                  <span>Ver Detalles</span>
                   <HiOutlineExternalLink className="w-4 h-4" />
                 </Link>
-                {project.links?.website && (
+                {project.links.website && (
                   <a
                     href={project.links.website}
                     target="_blank"
@@ -133,6 +131,9 @@ export const FreelanceProjects = () => (
                 )}
               </div>
             </div>
+
+            {/* Decorative corner gradient */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           </motion.div>
         ))}
       </div>

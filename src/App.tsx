@@ -12,6 +12,7 @@ const Services = lazy(() => import('./pages/Services'))
 const Portfolio = lazy(() => import('./pages/Portfolio'))
 const Contact = lazy(() => import('./pages/Contact'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
+const OpenSourceProjectDetail = lazy(() => import('./pages/OpenSourceProjectDetail'))
 const Social = lazy(() => import('./pages/Social'))
 
 const router = createBrowserRouter([
@@ -61,6 +62,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <ProjectDetail />
+          </Suspense>
+        ) 
+      },
+      { 
+        path: "/open-source/:id", 
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <OpenSourceProjectDetail />
           </Suspense>
         ) 
       },

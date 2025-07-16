@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { HiArrowRight } from "react-icons/hi";
 import { projects } from "../../data/projects";
-import TechnologyBadge from "../../components/TechnologyBadge";
+import { technologyColors } from "../../types/portfolio";
 
 const featuredProjects = projects
   .filter((project) => project.featured)
@@ -14,61 +14,50 @@ interface FeaturedProjectsProps {
 
 const FeaturedProjects = ({ onProjectClick }: FeaturedProjectsProps) => {
   return (
-    <section className="py-32 bg-gradient-to-b from-zinc-900/50 to-zinc-900">
+    <section className="py-24 relative">
+      {/* Decorative elements */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px] animate-pulse" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px] animate-pulse" />
+
       <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-24">
+        {/* Section Header */}
+        <div className="text-center mb-24">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
-            <div className="w-2 h-2 bg-lime-300 rounded-full animate-pulse" />
+            <div className="w-2 h-2 bg-lime-300 rounded-full" />
             <p className="text-lime-300 font-medium">Proyectos Destacados</p>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-            Soluciones que <span className="text-lime-300">Transforman</span>{" "}
-            Industrias
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Soluciones que{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-300">
+              Generan Impacto
+            </span>
           </h2>
-          <p className="text-xl text-zinc-400 leading-relaxed">
-            Desarrollando aplicaciones innovadoras que impulsan el crecimiento y
-            la eficiencia operativa.
+          <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
+            Descubre cómo ayudamos a empresas a alcanzar sus objetivos a través de
+            soluciones tecnológicas innovadoras.
           </p>
         </div>
 
-        {/* Projects Grid */}
-        <div className="space-y-32 max-w-6xl mx-auto">
-          {featuredProjects.map((project, index) => (
+        {/* Projects */}
+        <div className="space-y-32">
+          {featuredProjects.map((project) => (
             <div
               key={project.id}
-              className={`flex flex-col md:flex-row gap-12 items-center ${
-                index % 2 === 1 ? "md:flex-row-reverse" : ""
-              }`}
+              className="flex flex-col md:flex-row items-center gap-16"
             >
               {/* Project Image */}
-              <div className="w-full md:w-3/5">
-                <div className="relative group">
-                  <div className="absolute -inset-2 bg-gradient-to-r from-lime-300 to-cyan-300 rounded-xl opacity-20 group-hover:opacity-30 blur transition duration-500" />
-                  <div className="relative aspect-[16/9] rounded-lg overflow-hidden z-10">
-                    <div className="absolute inset-0 p-8 bg-zinc-900">
-                      <img
-                        src={project.images[0]}
-                        alt={project.title}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
-                        <Link
-                          to={`/portfolio/${project.id}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onProjectClick?.(project.id);
-                          }}
-                          className="group inline-flex items-center gap-2 text-lime-300 hover:text-lime-400 transition-colors "
-                        >
-                          Ver Caso de Estudio
-                          <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+              <div className="w-full md:w-3/5 relative">
+                <div className="aspect-[4/3] bg-zinc-800/20 backdrop-blur-sm rounded-2xl overflow-hidden relative border border-zinc-700/50 shadow-2xl shadow-lime-900/20">
+                  {/* Efecto de brillo superior */}
+                  <div className="absolute -inset-[40%] bg-lime-300/10 blur-3xl rounded-full" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-lime-300/10 via-transparent to-zinc-900/40" />
+                  {/* Efecto de viñeta */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 via-transparent to-zinc-900/40" />
+                  <img
+                    src={project.images[0]}
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
                 </div>
               </div>
 
@@ -79,10 +68,15 @@ const FeaturedProjects = ({ onProjectClick }: FeaturedProjectsProps) => {
                 </h3>
                 <p className="text-lg text-zinc-400">{project.description}</p>
 
-                {/* Technologies con TechnologyBadge */}
+                {/* Technologies */}
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.slice(0, 4).map((tech, i) => (
-                    <TechnologyBadge key={i} tech={tech} />
+                    <span 
+                      key={i} 
+                      className={`px-3 py-1 rounded-full text-sm ${technologyColors[tech.category]}`}
+                    >
+                      {tech.name}
+                    </span>
                   ))}
                 </div>
 
@@ -122,11 +116,11 @@ const FeaturedProjects = ({ onProjectClick }: FeaturedProjectsProps) => {
         <div className="text-center mt-24">
           <Link
             to="/portfolio"
-            onClick={() => onProjectClick?.("view_all")}
-            className="relative z-30 group inline-flex items-center gap-2 px-8 py-4 bg-lime-300 text-zinc-900 rounded-lg font-medium hover:bg-lime-400 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-all duration-300"
+            onClick={() => onProjectClick && onProjectClick("all")}
           >
-            Explorar Más Proyectos
-            <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+            Ver Todos los Proyectos
+            <HiArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </div>

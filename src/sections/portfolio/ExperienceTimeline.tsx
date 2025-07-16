@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { workProjects } from '../../data/projects';
 import { HiOutlineBriefcase, HiOutlineCalendar } from 'react-icons/hi';
-import TechnologyBadge from '../../components/TechnologyBadge';
+import { technologyColors } from '../../types/portfolio';
 
 const timelineVariant = {
   hidden: { opacity: 0 },
@@ -30,19 +30,21 @@ export const ExperienceTimeline = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-300/10 mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 mb-6"
           >
-            <div className="w-2 h-2 rounded-full bg-blue-300" />
-            <span className="text-blue-300 font-medium">Experiencia Profesional</span>
+            <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 font-medium">
+              Experiencia Profesional
+            </span>
           </motion.div>
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-indigo-300 mb-6"
+            className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 mb-6"
           >
-            Trayectoria Empresarial
+            Trayectoria Profesional
           </motion.h2>
           
           <motion.p
@@ -51,7 +53,7 @@ export const ExperienceTimeline = () => {
             viewport={{ once: true }}
             className="text-zinc-400 max-w-2xl mx-auto"
           >
-            Mi experiencia trabajando con empresas líderes en tecnología
+            Experiencia en empresas líderes desarrollando soluciones innovadoras
           </motion.p>
         </div>
 
@@ -61,43 +63,39 @@ export const ExperienceTimeline = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto space-y-12"
         >
           {sortedProjects.map((project) => (
             <motion.div
               key={project.id}
               variants={itemVariant}
-              className="relative pl-8 pb-16 last:pb-0"
+              className="relative bg-gradient-to-br from-blue-500/10 to-indigo-500/10 backdrop-blur-xl rounded-2xl overflow-hidden border border-blue-500/20 hover:border-blue-500/30 transition-all duration-300"
             >
-              {/* Timeline line */}
-              <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500/50 to-indigo-500/50" />
-              
-              {/* Timeline dot */}
-              <div className="absolute left-0 top-0 w-2 h-2 rounded-full bg-blue-500 -translate-x-1/2" />
-
-              {/* Content */}
-              <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 md:p-8 hover:border-white/20 transition-all">
-                {/* Company and Date */}
-                <div className="flex flex-wrap items-center gap-4 mb-4">
-                  <h3 className="text-2xl font-bold text-white">{project.company}</h3>
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-300/10 text-blue-300 text-sm">
-                    <HiOutlineBriefcase className="w-4 h-4" />
-                    <span>{project.role}</span>
-                  </div>
-                  {project.timeline && project.timeline[0] && (
-                    <div className="flex items-center gap-2 text-zinc-400 text-sm">
-                      <HiOutlineCalendar className="w-4 h-4" />
-                      <span>{project.timeline[0].date}</span>
+              <div className="p-8">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                      {project.role}
+                    </h3>
+                    <div className="flex items-center gap-2 text-zinc-400">
+                      <span className="text-blue-400">{project.company}</span>
+                      <span>•</span>
+                      {/* <span>{project.location}</span> */}
                     </div>
-                  )}
+                  </div>
+                  <div className="flex items-center gap-2 text-zinc-400">
+                    <HiOutlineCalendar className="w-5 h-5" />
+                    <span>{project.timeline[0].date}</span>
+                  </div>
                 </div>
 
                 {/* Description */}
-                <p className="text-zinc-400 mb-6">
+                <p className="text-zinc-400 mb-8">
                   {project.description}
                 </p>
 
-                {/* Key Achievements */}
+                {/* Key Points */}
                 <div className="space-y-4 mb-6">
                   {project.keyPoints.map((point, i) => (
                     <div key={i} className="bg-white/5 rounded-lg p-4">
@@ -110,7 +108,12 @@ export const ExperienceTimeline = () => {
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.map((tech, i) => (
-                    <TechnologyBadge key={i} tech={tech} />
+                    <span 
+                      key={i} 
+                      className={`px-3 py-1 rounded-full text-sm ${technologyColors[tech.category]}`}
+                    >
+                      {tech.name}
+                    </span>
                   ))}
                 </div>
 
