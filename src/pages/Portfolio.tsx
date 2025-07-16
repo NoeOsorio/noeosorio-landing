@@ -1,10 +1,12 @@
-import { workProjects, personalProjects } from '../data/projects'
+import { workProjects } from '../data/projects'
 import { Technology, technologyColors, technologyIcons } from '../types/portfolio'
 import { Link, useNavigate } from 'react-router-dom'
 import { SEO } from '../components/SEO'
 import { motion } from 'framer-motion'
 import { HiCode, HiCube, HiLightningBolt } from 'react-icons/hi'
 import { trackEvent } from '../hooks/useAnalytics'
+import { GitHubSection } from '../sections/home/GitHubSection'
+import { PersonalProjectsGallery } from '../sections/home/PersonalProjectsGallery'
 
 // Configuraciones de animación
 const fadeInUp = {
@@ -286,73 +288,11 @@ const Portfolio = () => {
             </div>
           </motion.section>
 
-          {/* Personal Projects */}
-          <motion.section 
-            {...staggerContainer}
-            className="py-24"
-          >
-            <div className="container mx-auto px-4">
-              <motion.h2 
-                {...fadeInUp}
-                className="text-3xl font-bold text-white mb-16"
-              >
-                Proyectos Personales
-              </motion.h2>
+          {/* GitHub Section */}
+          <GitHubSection />
 
-              <motion.div 
-                variants={staggerContainer}
-                className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-              >
-                {personalProjects.map((project, index) => (
-                  <motion.div
-                    key={index}
-                    variants={cardVariant}
-                    whileHover={{ y: -5 }}
-                    className="bg-zinc-800/50 rounded-xl overflow-hidden hover:bg-zinc-800 transition-colors"
-                  >
-                    <img 
-                      src={project.images[0]} 
-                      alt={project.title}
-                      className="w-full aspect-video object-cover"
-                    />
-                    <div className="p-6 space-y-4">
-                      <h3 className="text-xl font-bold text-white">{project.title}</h3>
-                      <p className="text-zinc-400">{project.description}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech, i) => (
-                          <TechnologyBadge 
-                            key={i} 
-                            tech={tech}
-                            onClick={() => handleTechnologyFilter(tech)}
-                          />
-                        ))}
-                      </div>
-                      <Link 
-                        to={`/portfolio/${project.id}`}
-                        onClick={() => handleProjectClick(project.id, 'personal')}
-                        className="inline-flex items-center text-lime-300 hover:text-lime-400"
-                      >
-                        Ver Proyecto
-                        <svg 
-                          className="w-4 h-4 ml-2" 
-                          fill="none" 
-                          stroke="currentColor" 
-                          viewBox="0 0 24 24"
-                        >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" 
-                          />
-                        </svg>
-                      </Link>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </motion.section>
+          {/* Personal Projects */}
+          <PersonalProjectsGallery />
 
           {/* CTA Section */}
           <motion.section 
