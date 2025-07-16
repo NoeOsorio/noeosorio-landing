@@ -6,8 +6,7 @@ const navigation = [
   { name: 'Inicio', href: '/' },
   { name: 'Portafolio', href: '/portfolio' },
   { name: 'Servicios', href: '/services' },
-  { name: 'Acerca de', href: '/about' },
-  { name: 'Contacto', href: '/contact' }
+  { name: 'Acerca de', href: '/about' }
 ]
 
 const Navbar = () => {
@@ -49,12 +48,12 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
-            <a
-              href="/contact"
+            <Link
+              to="/contact"
               className="px-4 py-2 bg-lime-300 text-zinc-900 rounded-lg text-sm font-medium hover:bg-lime-400 transition-colors"
             >
               Contactar
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -101,13 +100,13 @@ const Navbar = () => {
                   {item.name}
                 </Link>
               ))}
-              <a
-                href="/contact"
+              <Link
+                to="/contact"
                 onClick={() => setIsMenuOpen(false)}
                 className="px-4 py-2 bg-lime-300 text-zinc-900 rounded-lg text-sm font-medium hover:bg-lime-400 transition-colors text-center"
               >
                 Contactar
-              </a>
+              </Link>
             </div>
           </div>
         )}
