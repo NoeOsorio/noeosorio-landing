@@ -6,7 +6,6 @@ import { StartupBundle } from "../components/services/StartupBundle";
 import { servicesData } from "../data/services";
 import { motion } from "framer-motion";
 import { AddonCard } from "../components/services/AddonCard";
-import { UseCasesSection } from "../sections/services/UseCasesSection";
 import { ProcessSection } from "../sections/services/ProcessSection";
 import { SakuraKodeSection } from "../sections/services/SakuraKodeSection";
 import { trackEvent } from '../hooks/useAnalytics';
@@ -165,7 +164,7 @@ const AddonsSection = () => (
   </motion.section>
 );
 
-const CTASection = ({ children }: { children: React.ReactNode }) => (
+const CTASection = () => (
   <motion.section {...fadeInUp} className="py-24">
     <div className="container mx-auto px-4">
       <motion.div
@@ -179,7 +178,21 @@ const CTASection = ({ children }: { children: React.ReactNode }) => (
           Agenda una consulta gratuita y diseñemos la mejor estrategia para tu
           aplicación.
         </p>
-        {children}
+        <motion.a
+          href="https://calendly.com/noeosorio/tech-business-consultant"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackEvent('consultation_request', {
+            source: 'services_page',
+            cta_location: 'bottom_cta'
+          })}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="inline-block px-8 py-4 bg-lime-300 hover:bg-lime-400 
+                   text-zinc-900 rounded-lg font-medium transition-colors"
+        >
+          Agendar Consulta
+        </motion.a>
       </motion.div>
     </div>
   </motion.section>
@@ -204,13 +217,6 @@ const Services = () => {
     trackEvent('financing_option_click', {
       plan_name: planName,
       source: 'services_page'
-    });
-  };
-
-  const handleCTAClick = (location: string) => {
-    trackEvent('consultation_request', {
-      source: 'services_page',
-      cta_location: location
     });
   };
 
@@ -258,7 +264,6 @@ const Services = () => {
           onBundleClick={handleStartupBundleClick}
         />
         <ProcessSection />
-        <UseCasesSection services={servicesData.allServices} />
         <FinancingSection>
           {servicesData.financingOptions.map((option, index) => (
             <FinancingCard 
@@ -270,17 +275,7 @@ const Services = () => {
           ))}
         </FinancingSection>
         <AddonsSection />
-        <CTASection>
-          <motion.button
-            onClick={() => handleCTAClick('bottom_cta')}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-block px-8 py-4 bg-lime-300 hover:bg-lime-400 
-                     text-zinc-900 rounded-lg font-medium transition-colors"
-          >
-            Agendar Consulta
-          </motion.button>
-        </CTASection>
+        <CTASection />
       </div>
     </>
   );

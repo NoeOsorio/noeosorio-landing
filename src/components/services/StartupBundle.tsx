@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { HiLightningBolt, HiChartBar, HiCreditCard } from 'react-icons/hi';
 import { servicesData } from '../../data/services';
 
@@ -43,11 +42,13 @@ export const StartupBundle = ({ data, onBundleClick }: StartupBundleProps) => {
             </div>
             
             <div className="text-center mt-12">
-              <Link
-                to={`/services/${data.id}`}
+              <a
+                href="https://calendly.com/noeosorio/tech-business-consultant"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-colors"
               >
-                <span>Ver Detalles y Cotizar</span>
+                <span>Agendar Consulta</span>
                 <svg 
                   className="w-5 h-5" 
                   fill="none" 
@@ -61,7 +62,7 @@ export const StartupBundle = ({ data, onBundleClick }: StartupBundleProps) => {
                     d="M17 8l4 4m0 0l-4 4m4-4H3" 
                   />
                 </svg>
-              </Link>
+              </a>
             </div>
           </motion.div>
 
