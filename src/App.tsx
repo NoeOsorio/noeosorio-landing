@@ -4,6 +4,8 @@ import Layout from './components/Layout'
 import ScrollToTop from './components/ScrollToTop'
 import LoadingScreen from './components/LoadingScreen'
 import PrivacyPolicy from './pages/PrivacyPolicy'
+import B2BProjectDetail from './pages/B2BProjectDetail'
+import LandingProjectDetail from './pages/LandingProjectDetail'
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'))
@@ -90,6 +92,22 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingScreen />}>
             <Social />
+          </Suspense>
+        )
+      },
+      {
+        path: "/b2b/:projectId",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <B2BProjectDetail />
+          </Suspense>
+        )
+      },
+      {
+        path: "/landing/:projectId",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <LandingProjectDetail />
           </Suspense>
         )
       }

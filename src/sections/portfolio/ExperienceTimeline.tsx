@@ -116,6 +116,8 @@ export const ExperienceTimeline = () => {
                     </span>
                   ))}
                 </div>
+                <div className="flex flex-row gap-2 justify-between">
+             
 
                 {/* Company Link */}
                 {project.companyLink && (
@@ -129,6 +131,15 @@ export const ExperienceTimeline = () => {
                     <HiOutlineBriefcase className="w-4 h-4" />
                   </a>
                 )}
+
+                {/* Link To Project */}
+                <a
+                  href={`/portfolio/${project.id}`}
+                  className="inline-flex items-center gap-2 mt-6 text-blue-300 hover:text-blue-400 transition-colors"
+                >
+                  Ver Proyecto
+                </a>
+                </div>
               </div>
             </motion.div>
           ))}

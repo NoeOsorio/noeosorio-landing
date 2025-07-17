@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { landingPages } from '../../data/landingPages';
 import { HiOutlineExternalLink, HiOutlineCode } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 // import TechnologyBadge from '../../components/TechnologyBadge';
 
 const cardVariant = {
@@ -108,26 +109,25 @@ export const LandingPagesShowcase = () => (
               </div>
 
               {/* Action Links */}
-              <div className="flex items-center gap-4 pt-4 border-t border-pink-500/20">
-                <motion.a
-                  href={project.links.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white rounded-lg transition-all"
-                >
-                  <span>Ver Demo</span>
-                  <HiOutlineExternalLink className="w-4 h-4" />
-                </motion.a>
-                <a
-                  href="#"
-                  className="text-zinc-400 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-400 hover:to-purple-400 transition-colors inline-flex items-center gap-1"
-                >
-                  <HiOutlineCode className="w-4 h-4" />
-                  <span>Detalles</span>
-                </a>
-              </div>
+              <div className="flex items-center gap-4">
+                  <motion.a
+                    href={project.links?.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-400 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-400 hover:to-purple-400 transition-colors inline-flex items-center gap-1"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <span>Demo</span>
+                    <HiOutlineExternalLink className="w-4 h-4" />
+                  </motion.a>
+                  <Link
+                    to={`/landing/${project.id}`}
+                    className="text-zinc-400 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-pink-400 hover:to-purple-400 transition-colors inline-flex items-center gap-1"
+                  >
+                    <HiOutlineCode className="w-4 h-4" />
+                    <span>Detalles</span>
+                  </Link>
+                </div>
             </div>
           </motion.div>
         ))}

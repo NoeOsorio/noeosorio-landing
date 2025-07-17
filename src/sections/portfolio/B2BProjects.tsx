@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { HiOutlineExternalLink, HiOutlineCode } from 'react-icons/hi';
 import { Project } from '../../types/portfolio';
+import { Link } from 'react-router-dom';
 
 const b2bProjects: Project[] = [
   {
@@ -307,26 +308,25 @@ export const B2BProjects = () => (
               </div>
 
               {/* Action Links */}
-              <div className="flex items-center gap-4 pt-4 border-t border-blue-500/20">
-                <motion.a
-                  href={project.links.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-lg transition-all"
-                >
-                  <span>Ver Demo</span>
-                  <HiOutlineExternalLink className="w-4 h-4" />
-                </motion.a>
-                <a
-                  href="#"
-                  className="text-zinc-400 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-400 hover:to-indigo-400 transition-colors inline-flex items-center gap-1"
-                >
-                  <HiOutlineCode className="w-4 h-4" />
-                  <span>Detalles</span>
-                </a>
-              </div>
+              <div className="flex items-center gap-4">
+                  <motion.a
+                    href={project.links?.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-400 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-400 hover:to-indigo-400 transition-colors inline-flex items-center gap-1"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <span>Demo</span>
+                    <HiOutlineExternalLink className="w-4 h-4" />
+                  </motion.a>
+                  <Link
+                    to={`/b2b/${project.id}`}
+                    className="text-zinc-400 hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-400 hover:to-indigo-400 transition-colors inline-flex items-center gap-1"
+                  >
+                    <HiOutlineCode className="w-4 h-4" />
+                    <span>Detalles</span>
+                  </Link>
+                </div>
             </div>
           </motion.div>
         ))}
