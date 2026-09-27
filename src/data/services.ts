@@ -46,8 +46,6 @@ export const mainServices = [
       'Control total con métricas en tiempo real',
       'Soporte dedicado por 2 meses'
     ],
-    price: 'Desde $6,500 USD',
-    timeline: '6-10 semanas',
     color: 'from-purple-500 to-blue-500'
   },
   {
@@ -78,8 +76,6 @@ export const mainServices = [
       'Publicación en App/Play Store',
       'Soporte técnico por 2 meses'
     ],
-    price: 'Desde $8,500 USD',
-    timeline: '8-12 semanas',
     color: 'from-lime-500 to-emerald-500'
   },
   {
@@ -110,11 +106,8 @@ export const mainServices = [
       'Optimización con IA',
       'Soporte técnico por 2 meses'
     ],
-    price: 'Desde $7,500 USD',
-    timeline: '6-10 semanas',
     color: 'from-blue-500 to-indigo-500'
-  },
-  // ... otros servicios principales
+  }
 ];
 
 export const financingOptions = [
@@ -208,32 +201,26 @@ export const startupBundle = {
 export const addons = [
   {
     title: "Creación de microservicios o backend",
-    price: "Desde $3,500 USD",
     icon: HiServer
   },
   {
     title: "Integración de API de pagos",
-    price: "Desde $2,000 USD",
     icon: HiCreditCard
   },
   {
     title: "Integración de LLM (Modelos de IA)",
-    price: "Desde $3,500 USD",
     icon: HiChip
   },
   {
     title: "Rediseño UI/UX para tu app web",
-    price: "Desde $2,500 USD",
     icon: HiColorSwatch
   },
   {
     title: "Rediseño de app mobile",
-    price: "Desde $3,000 USD",
     icon: HiDeviceMobile
   },
   {
     title: "Publicación y optimización en tiendas",
-    price: "Desde $1,500 USD",
     icon: HiCloud
   }
 ];

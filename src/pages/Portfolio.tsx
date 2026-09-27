@@ -1,47 +1,28 @@
-import { workProjects, personalProjects } from '../data/projects'
-import { Technology, technologyColors, technologyIcons } from '../types/portfolio'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { SEO } from '../components/SEO'
 import { motion } from 'framer-motion'
 import { HiCode, HiCube, HiLightningBolt } from 'react-icons/hi'
 import { trackEvent } from '../hooks/useAnalytics'
+import { ExperienceTimeline } from '../sections/portfolio/ExperienceTimeline'
+import { B2BProjects } from '../sections/portfolio/B2BProjects'
+import { LandingPagesShowcase } from '../sections/portfolio/LandingPagesShowcase'
+import { PersonalProjects } from '../sections/portfolio/PersonalProjects'
 
-// Configuraciones de animación
+// Animation variants
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
   transition: { duration: 0.5 }
-}
-
-const staggerContainer = {
-  initial: { opacity: 0 },
-  whileInView: { opacity: 1 },
-  viewport: { once: true },
-  transition: { staggerChildren: 0.1 }
-}
-
-const cardVariant = {
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true }
-}
-
-const TechnologyBadge = ({ tech, onClick }: { tech: Technology; onClick?: () => void }) => {
-  const Icon = technologyIcons[tech.icon]
-  return (
-    <motion.span 
-      whileHover={{ scale: 1.05 }}
-      onClick={onClick}
-      className={`px-3 py-1 rounded-full text-sm flex items-center gap-2 ${technologyColors[tech.category]}`}
-    >
-      <Icon className="w-4 h-4" />
-      {tech.name}
-    </motion.span>
-  )
-}
+};
 
 const stats = [
+  {
+    label: 'Años de Experiencia',
+    value: '5+',
+    icon: HiLightningBolt,
+    color: 'from-orange-500 to-red-500'
+  },
   {
     label: 'Proyectos Completados',
     value: '50+',
@@ -53,33 +34,11 @@ const stats = [
     value: '15+',
     icon: HiCube,
     color: 'from-lime-500 to-emerald-500'
-  },
-  {
-    label: 'Años de Experiencia',
-    value: '5+',
-    icon: HiLightningBolt,
-    color: 'from-orange-500 to-red-500'
   }
-]
+];
 
 const Portfolio = () => {
   const navigate = useNavigate()
-
-  const handleProjectClick = (projectId: string, projectType: string) => {
-    trackEvent('project_click', {
-      project_id: projectId,
-      project_type: projectType,
-      source: 'portfolio_page'
-    });
-  };
-
-  const handleTechnologyFilter = (tech: Technology) => {
-    trackEvent('technology_filter', {
-      technology: tech.name,
-      category: tech.category,
-      source: 'portfolio_page'
-    });
-  };
 
   const handleCTAClick = () => {
     trackEvent('portfolio_cta_click', {
@@ -102,33 +61,31 @@ const Portfolio = () => {
       
       <div className="relative min-h-screen bg-zinc-900 overflow-hidden">
         {/* Background animado */}
-
-          <div className="absolute inset-0 bg-gradient-to-b from-lime-500/5 via-transparent to-transparent" />
-          <motion.div 
-            className="absolute top-0 left-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px]"
-            animate={{ 
-              scale: [1, 1.2, 1],
-              opacity: [0.2, 0.3, 0.2] 
-            }}
-            transition={{ 
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div 
-            className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px]"
-            animate={{ 
-              scale: [1.2, 1, 1.2],
-              opacity: [0.3, 0.2, 0.3] 
-            }}
-            transition={{ 
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-
+        <div className="absolute inset-0 bg-gradient-to-b from-lime-500/5 via-transparent to-transparent" />
+        <motion.div 
+          className="absolute top-0 left-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px]"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.3, 0.2] 
+          }}
+          transition={{ 
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px]"
+          animate={{ 
+            scale: [1.2, 1, 1.2],
+            opacity: [0.3, 0.2, 0.3] 
+          }}
+          transition={{ 
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
 
         <div className="relative">
           {/* Hero Section */}
@@ -156,8 +113,7 @@ const Portfolio = () => {
                 </h1>
                 
                 <p className="text-xl text-zinc-400 mb-12 max-w-2xl mx-auto">
-                  Una colección de proyectos que demuestran mi pasión por crear soluciones 
-                  innovadoras y experiencias de usuario excepcionales.
+                  Explora mi trayectoria profesional, proyectos personales y contribuciones al código abierto.
                 </p>
 
                 {/* Stats Grid */}
@@ -186,173 +142,17 @@ const Portfolio = () => {
             </div>
           </motion.section>
 
-          {/* Work Projects */}
-          <motion.section 
-            {...staggerContainer}
-            className="py-24"
-          >
-            <div className="container mx-auto px-4">
-              <motion.h2 
-                {...fadeInUp}
-                className="text-3xl font-bold text-white mb-16"
-              >
-                Proyectos Destacados
-              </motion.h2>
+          {/* Experiencia Empresarial */}
+          <ExperienceTimeline />
 
-              <motion.div 
-                variants={staggerContainer}
-                className="grid gap-12"
-              >
-                {workProjects.map((project) => (
-                  <motion.div
-                    key={project.id}
-                    variants={cardVariant}
-                    whileHover={{ y: -5 }}
-                    className="group"
-                  >
-                    <div className="grid md:grid-cols-2 gap-12 items-center">
-                      {/* Project Image */}
-                      <div className="relative aspect-[16/9] max-h-[400px] bg-zinc-900 rounded-xl overflow-hidden">
-                        <img 
-                          src={project.images[0]} 
-                          alt={project.title}
-                          className="absolute inset-0 w-full h-full object-contain object-center max-w-2xl mx-auto"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent" />
-                      </div>
+          {/* Proyectos B2B */}
+          <B2BProjects />
 
-                      {/* Project Info */}
-                      <div>
-                        <div className="space-y-6">
-                          <div>
-                            <p className="text-lime-300 mb-2">{project.role}</p>
-                            <h3 className="text-3xl font-bold text-white mb-4">
-                              {project.title}
-                            </h3>
-                            <p className="text-zinc-400">
-                              {project.description}
-                            </p>
-                          </div>
+          {/* Landing Pages */}
+          <LandingPagesShowcase />
 
-                          <div className="flex flex-wrap gap-2">
-                            {project.technologies.map((tech, i) => (
-                              <TechnologyBadge 
-                                key={i} 
-                                tech={tech} 
-                                onClick={() => handleTechnologyFilter(tech)}
-                              />
-                            ))}
-                          </div>
-
-                          <div className="space-y-4">
-                            {project.keyPoints.map((point, i) => (
-                              <div key={i}>
-                                <h4 className="text-white font-medium mb-2">
-                                  {point.title}
-                                </h4>
-                                <p className="text-zinc-400 text-sm">
-                                  {point.content}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-
-                          <Link 
-                            to={`/portfolio/${project.id}`}
-                            onClick={() => handleProjectClick(project.id, 'work')}
-                            className="inline-flex items-center text-lime-300 hover:text-lime-400 transition-colors"
-                          >
-                            Ver Proyecto
-                            <svg 
-                              className="w-4 h-4 ml-2" 
-                              fill="none" 
-                              stroke="currentColor" 
-                              viewBox="0 0 24 24"
-                            >
-                              <path 
-                                strokeLinecap="round" 
-                                strokeLinejoin="round" 
-                                strokeWidth={2} 
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" 
-                              />
-                            </svg>
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </motion.section>
-
-          {/* Personal Projects */}
-          <motion.section 
-            {...staggerContainer}
-            className="py-24"
-          >
-            <div className="container mx-auto px-4">
-              <motion.h2 
-                {...fadeInUp}
-                className="text-3xl font-bold text-white mb-16"
-              >
-                Proyectos Personales
-              </motion.h2>
-
-              <motion.div 
-                variants={staggerContainer}
-                className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-              >
-                {personalProjects.map((project, index) => (
-                  <motion.div
-                    key={index}
-                    variants={cardVariant}
-                    whileHover={{ y: -5 }}
-                    className="bg-zinc-800/50 rounded-xl overflow-hidden hover:bg-zinc-800 transition-colors"
-                  >
-                    <img 
-                      src={project.images[0]} 
-                      alt={project.title}
-                      className="w-full aspect-video object-cover"
-                    />
-                    <div className="p-6 space-y-4">
-                      <h3 className="text-xl font-bold text-white">{project.title}</h3>
-                      <p className="text-zinc-400">{project.description}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech, i) => (
-                          <TechnologyBadge 
-                            key={i} 
-                            tech={tech}
-                            onClick={() => handleTechnologyFilter(tech)}
-                          />
-                        ))}
-                      </div>
-                      <Link 
-                        to={`/portfolio/${project.id}`}
-                        onClick={() => handleProjectClick(project.id, 'personal')}
-                        className="inline-flex items-center text-lime-300 hover:text-lime-400"
-                      >
-                        Ver Proyecto
-                        <svg 
-                          className="w-4 h-4 ml-2" 
-                          fill="none" 
-                          stroke="currentColor" 
-                          viewBox="0 0 24 24"
-                        >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M14 5l7 7m0 0l-7 7m7-7H3" 
-                          />
-                        </svg>
-                      </Link>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </motion.section>
+          {/* Proyectos Personales */}
+          <PersonalProjects />
 
           {/* CTA Section */}
           <motion.section 

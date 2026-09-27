@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { IconType } from 'react-icons';
 
@@ -8,21 +7,16 @@ interface ServiceCardProps {
   title: string;
   description: string;
   features: string[];
-  price?: string;
-  timeline?: string;
   color: string;
   index: number;
   onServiceClick?: () => void;
 }
 
 export const ServiceCard = ({ 
-  id,
   icon: Icon,
   title,
   description,
   features,
-  price,
-  timeline,
   color,
   index,
   onServiceClick
@@ -67,20 +61,15 @@ export const ServiceCard = ({
       </div>
     </div>
     
-    {(price && timeline) && (
-      <div className="mt-auto">
-        <div className="space-y-2 mb-6">
-          <p className="text-xl font-bold text-white">{price}</p>
-          <p className="text-sm text-zinc-500">Tiempo estimado: {timeline}</p>
-        </div>
-        
-        <Link
-          to={`/services/${id}`}
-          className="block w-full py-3 px-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium text-center transition-colors"
-        >
-          Ver Detalles y Cotizar
-        </Link>
-      </div>
-    )}
+    <div className="mt-6">
+      <a
+        href="https://calendly.com/noeosorio/tech-business-consultant"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full py-3 px-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium text-center transition-colors"
+      >
+        Agendar Consulta
+      </a>
+    </div>
   </motion.div>
 ); 

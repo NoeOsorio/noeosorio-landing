@@ -3,12 +3,11 @@ import { IconType } from 'react-icons';
 
 interface AddonCardProps {
   title: string;
-  price: string;
   icon: IconType;
   index: number;
 }
 
-export const AddonCard = ({ title, price, icon: Icon, index }: AddonCardProps) => (
+export const AddonCard = ({ title, icon: Icon, index }: AddonCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -18,11 +17,8 @@ export const AddonCard = ({ title, price, icon: Icon, index }: AddonCardProps) =
     <div className="p-3 rounded-xl bg-lime-300/10 text-lime-300 w-fit mb-4 group-hover:bg-lime-300/20 transition-colors">
       <Icon className="w-6 h-6" />
     </div>
-    <h3 className="text-lg font-medium text-white mb-2">
+    <h3 className="text-lg font-medium text-white">
       {title}
     </h3>
-    <p className="text-lime-300 font-medium">
-      {price}
-    </p>
   </motion.div>
 ); 

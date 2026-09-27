@@ -178,7 +178,7 @@ export const projects: Project[] = [
         category: "cloud"
       }
     ],
-    images: ["https://fstack.tech/_astro/logo_blanco.DxPX-sKd_Z2drN1k.svg"],
+    images: ["https://fstack.tech/_image?href=%2F_astro%2Flogo_blanco.DxPX-sKd.svg&w=257&h=46&f=svg"],
     backgroundColor: "#9E9E9E",
     keyPoints: [
       {
@@ -218,7 +218,7 @@ export const projects: Project[] = [
     },
     confidential: true,
     resources: {
-      logo: "https://fstack.tech/_astro/logo_blanco.DxPX-sKd_Z2drN1k.svg"
+      logo: "https://fstack.tech/_image?href=%2F_astro%2Flogo_blanco.DxPX-sKd.svg&w=257&h=46&f=svg"
     }
   },
   {
@@ -241,7 +241,7 @@ export const projects: Project[] = [
       },
       { 
         name: "MongoDB", 
-        icon: "FaDatabase",
+        icon: "SiMongodb",
         category: "database"
       },
       { 
@@ -320,7 +320,7 @@ export const projects: Project[] = [
       },
       { 
         name: "Google Cloud", 
-        icon: "FaAws",
+        icon: "SiGooglecloud",
         category: "cloud"
       }
     ],
@@ -396,7 +396,7 @@ export const projects: Project[] = [
       },
       { 
         name: "Google Cloud", 
-        icon: "FaAws",
+        icon: "SiGooglecloud",
         category: "cloud"
       }
     ],
@@ -517,7 +517,7 @@ export const projects: Project[] = [
       { name: "Flutter", icon: "SiFlutter", category: "mobile" },
       { name: "Firebase", icon: "SiFirebase", category: "cloud" },
       { name: "Node.js", icon: "FaNodeJs", category: "backend" },
-      { name: "Google Cloud", icon: "FaAws", category: "cloud" }
+      { name: "Google Cloud", icon: "SiGooglecloud", category: "cloud" }
     ],
     images: [
       "https://play-lh.googleusercontent.com/0eQVNR5fnbzfrXhcmb3mXQgwUj5TmLOXfbbJ8bygoM4mWp8fJp4_rRdDNqlEPwSsIw=s360-rw"

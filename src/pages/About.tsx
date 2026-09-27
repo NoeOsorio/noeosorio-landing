@@ -343,9 +343,9 @@ const About = () => {
                     {industries.map((industry, i) => (
                       <div 
                         key={i} 
-                        className={`p-4 rounded-xl border border-zinc-800 hover:border-lime-300/50 transition-colors ${industry.color.replace('text', 'bg').replace('/10', '/5')}`}
+                        className={`p-4 rounded-xl ${industry.color}`}
                       >
-                        <h3 className={`font-medium mb-2 ${industry.color.replace('bg', 'text')}`}>
+                        <h3 className={`font-medium mb-2 ${industry.color.split(' ')[0]}`}>
                           {industry.name}
                         </h3>
                         <p className="text-zinc-400 text-sm">

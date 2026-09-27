@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { IconType } from 'react-icons';
 
@@ -73,13 +72,15 @@ export const FinancingCard = ({
       ))}
     </div>
 
-    <Link
-      to="/contact"
+    <a
+      href="https://calendly.com/noeosorio/tech-business-consultant"
+      target="_blank"
+      rel="noopener noreferrer"
       className={`mt-8 inline-flex items-center text-sm font-medium ${
         highlight ? 'text-lime-300' : 'text-zinc-400'
       } hover:text-lime-400 transition-colors`}
     >
-      Conocer más
+      Agendar Consulta
       <svg 
         className="w-4 h-4 ml-2" 
         fill="none" 
@@ -93,6 +94,6 @@ export const FinancingCard = ({
           d="M9 5l7 7-7 7" 
         />
       </svg>
-    </Link>
+    </a>
   </motion.div>
 ); 
