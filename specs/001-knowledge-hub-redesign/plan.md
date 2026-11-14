@@ -77,8 +77,11 @@ No violations; no complexity to justify.
 - The domain noeosorio.com and its Firebase project keep working; the old site stays live until
   Noe approves the new one.
 - Old links people may have saved (portfolio, services, contact) still land somewhere useful.
-- Noe's other properties are untouched (simulations.noeosorio.com, research.noeosorio.com): this
-  plan only changes the `noeosorio-web` hosting site.
+- Noe's other properties are untouched. Checked on 2026-11-14 with `dig`: simulations.noeosorio.com
+  points to Cloudflare Pages (`simulations-d97.pages.dev`) and research.noeosorio.com to Railway
+  (`ebt5j3j9.up.railway.app`); only the apex noeosorio.com and www point to Firebase Hosting
+  (151.101.x.195), so a deploy of the `noeosorio-web` site cannot affect them. The Firebase CLI is
+  not installed on this Mac yet; the hosting site list is checked when it is, before any deploy.
 
 ## Every file touched
 
@@ -138,6 +141,10 @@ crawlers are treated as a second surface and verified (SC-004).
 5. **Verification** (independent reviewers): quickstart steps 1 to 5, screenshots against Paper,
    Lighthouse. Fixes go back to slice 3 or 4.
 6. **Preview and ship** (with Noe's yes at each step): preview channel, his review, production.
+7. **Keys cleanup** (after production): confirm nothing reads the old Firebase web config or
+   `VITE_API_URL`; ask Noe before deleting `.env.local` in the main checkout (it is his file); run
+   `~/Dev/AI/maiden-research-main/scripts/rotate-secret.sh --auditar` for this project; restrict or
+   retire the unused Firebase web key in the console and note it in NOE-558.
 
 ## Execution
 
