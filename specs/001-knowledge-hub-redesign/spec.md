@@ -24,7 +24,17 @@ Projects Noe approved for the site: Maiden OS, Essay Studio, Whiteboard, Telar, 
 - Q: Does the essays section ship now? → A: No. It is added in a later spec when Noe has his first essay.
 - Q: How much work history goes in About? → A: His story plus companies and years (Smartkode, Finloop, Clip, Osmind, Apex Systems, Porter), the master's, and teaching since 2020.
 - Q: Does the podcast go in? → A: Not now. Qué Dirían and the first-job podcast did not continue; a podcast is added later only if Noe starts one tied to his brand.
-- Q: Analytics? → A: Privacy-friendly analytics that count visits without cookies, so there is no cookie banner. It is a new service and needs Noe's approval in the plan.
+- Q: Analytics? → A: Firebase Analytics, for real analytics, with a real consent banner (Noe, 2026-11-14; replaces the earlier cookie-less choice).
+- Q: Static pages? → A: Only with evidence of a 3x to 10x improvement. Measured: same page and design, largest content visible 5.30 s to 1.65 s, JavaScript 323 KB to 0 KB, total weight 367 KB to 57 KB, score 78 to 99 (research.md R2).
+- Q: Redesign now? → A: No. First the restructuring of what exists today. Nothing of the redesign is approved until Noe has seen it in full detail in Paper.
+- Q: Logo? → A: SVG.
+- Q: Project visuals? → A: We capture them, and present them in a new way: an in-browser demo of each app with mock data, prebuilt and optimized, that feels like using the app instead of looking at a photo.
+- Q: The project named «Maiden, Noe Osorio»? → A: Maiden OS (or just Maiden).
+
+## Delivery phases
+
+- **Phase A, restructuring (this spec's first deliverable)**: same look as today (the Paper file «noeosorio.com, sitio actual (antes)» is the visual reference), rebuilt as static pages, with everything broken fixed: links, real 404, per-page link previews, image weight, Firebase Analytics behind a real consent banner, redirects. [NEEDS CLARIFICATION: does Phase A also replace the invented copy (numbers, «we», prices) with real content in the same layout, or does copy wait for Phase B?]
+- **Phase B, redesign**: the hub described below (projects with in-browser demos, curated videos, Now, About), designed in Paper in full detail and approved by Noe before any code.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -50,7 +60,7 @@ A visitor opens Projects and finds the eight approved projects, each with what i
 
 **Why this priority**: his projects are the proof the brand rests on.
 
-**Independent Test**: open every project page; every link resolves; every image loads; private projects are shown with visuals and no repo link.
+**Independent Test**: open every project page; every link resolves; each project can be tried through an in-browser demo with mock data; private projects show no repo link.
 
 **Acceptance Scenarios**:
 
@@ -124,7 +134,7 @@ A visitor who wants to talk to Noe finds his email and his social profiles (YouT
 - A video removed from YouTube: the link check flags it and it is taken out instead of showing a broken embed.
 - A page with no image of its own: uses a generated preview card in the brand style, never a blank or the home image.
 - A visitor with reduced motion enabled: no animation plays.
-- A visitor with a tracker blocker: the site works the same.
+- A visitor who rejects analytics or blocks trackers: nothing is tracked and the site works the same.
 - An empty section: shows a short, useful empty state, never placeholder text.
 
 ## Requirements *(mandatory)*
@@ -145,7 +155,7 @@ A visitor who wants to talk to Noe finds his email and his social profiles (YouT
 - **FR-012**: Each page MUST serve its own title, description, canonical address and preview image in the HTML a link preview or crawler receives.
 - **FR-013**: The visual identity MUST use Noe's brandbook (hexagon monogram, lime #D6F35C, petrol #175462 and #052D37, white) and follow the approved Paper design.
 - **FR-014**: The site MUST NOT contain: invented metrics, an agency voice, service packages or prices, the SakuraKode promo, "available for roles" messaging, confidentiality placeholders, broken images, fake app store links, vendor names, or the middle dot character.
-- **FR-015**: Visits MUST be counted with privacy-friendly analytics that set no cookies and collect no personal data, so no cookie banner is shown; the privacy page MUST explain it and be linked from the footer.
+- **FR-015**: Visits MUST be measured with Firebase Analytics only after the visitor accepts; Accept and Reject MUST be equally visible; the privacy page MUST be linked from the banner and the footer.
 - **FR-016**: Contact MUST be by email and social links; no contact form is required.
 
 ### Key Entities

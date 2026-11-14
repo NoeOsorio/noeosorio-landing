@@ -10,7 +10,7 @@ Replace the invented agency site with Noe's real knowledge hub: Home, Projects (
 approved), a curated video library with takeaways, Now, About with his verified story, Privacy and a
 real 404. The site is rebuilt as static HTML per page from typed content files, which removes the
 root cause of the soft 404s, the shared metadata and the content drift. Design is done in Paper and
-approved before code. Visits are counted without cookies, so there is no banner.
+approved before code. Visits are measured with Firebase Analytics after the visitor accepts a real consent banner.
 
 ## Root cause and why this attacks it
 
@@ -49,7 +49,7 @@ desktop, tablet and phone
 
 **Performance Goals**: home page on mobile scores at least 90 in performance, accessibility and SEO
 
-**Constraints**: no cookies, no secrets, no vendor names in visible text, works with JavaScript
+**Constraints**: analytics only after consent, no secrets in files, no vendor names in visible text, works with JavaScript
 disabled except search filtering
 
 **Scale/Scope**: about 8 page types; 8 projects; tens of videos now, designed for 1000
@@ -117,8 +117,7 @@ crawlers are treated as a second surface and verified (SC-004).
 
 ## Safety and approvals needed from Noe
 
-- **New service**: GoatCounter for cookie-less analytics (free). He creates the account; nothing
-  personal is collected.
+- **Analytics**: Firebase Analytics (already in use), now only after consent.
 - **Preview deploy**: a temporary Firebase preview URL on the internet, only with his yes.
 - **Production deploy**: replaces the live noeosorio.com, only with his yes after he reviews the
   preview.
@@ -126,25 +125,35 @@ crawlers are treated as a second surface and verified (SC-004).
   projects (Maiden OS, Telar, Whiteboard) or his OK to capture them from the running apps.
 - No money is spent in this plan.
 
-## Delivery order (each slice works end to end before the next)
+## Delivery order
 
-1. **Design in Paper** (Opus with the Paper tools, then two review rounds at most): design brief
-   from the brandbook and the Porter direction cleaned of its rule violations; Home, Projects, one
-   project, Videos, one video, Now, About, 404, at desktop and phone. **Gate: Noe approves the
-   designs.**
-2. **Content** (Sonnet, reviewed by Opus): the eight project files with copy from the verified
-   profile and real visuals; the video shortlist with takeaways that Noe approves; About and Now;
-   site settings.
-3. **Site build** (Sonnet): Astro skeleton, layout and metadata, all pages from the approved
-   design, video search island, preview images, 404.
-4. **Hosting** (Sonnet): `firebase.json` redirects and headers, sitemap, robots, analytics snippet.
-5. **Verification** (independent reviewers): quickstart steps 1 to 5, screenshots against Paper,
-   Lighthouse. Fixes go back to slice 3 or 4.
-6. **Preview and ship** (with Noe's yes at each step): preview channel, his review, production.
-7. **Keys cleanup** (after production): confirm nothing reads the old Firebase web config or
-   `VITE_API_URL`; ask Noe before deleting `.env.local` in the main checkout (it is his file); run
-   `~/Dev/AI/maiden-research-main/scripts/rotate-secret.sh --auditar` for this project; restrict or
-   retire the unused Firebase web key in the console and note it in NOE-558.
+**Phase A, restructuring (same look as today)**
+
+1. **Evidence first** (done): same home page measured both ways; static is 3.2x faster to show
+   content, 6.4x lighter and ships no JavaScript to read the page (research.md R2).
+2. **Rebuild as static pages with the current look**: every live page (the 20 mapped in Paper
+   «antes») rendered as its own HTML file, matching the current design; Paper «antes» is the
+   reference and reviewers compare against it.
+3. **Fix what is broken**: footer links, real 404, 301 redirects, per-page title, description and
+   preview image, images converted and sized, Firebase Analytics behind a real consent banner,
+   sitemap and robots.
+4. **Verify**: crawl, Lighthouse on every page (target 95+ on mobile), screenshots against Paper
+   «antes», independent reviewers.
+5. **Preview and ship** (Noe's yes at each step).
+
+**Phase B, redesign (nothing built until Noe approves it in Paper)**
+
+6. **Design in Paper in full detail**: every page at desktop and phone, including the in-browser
+   app demos (each project usable with mock data, prebuilt and light), the curated videos, Now and
+   About. Two review rounds at most, then Noe decides.
+7. **Build the approved design** on the Phase A foundation, then verify and ship as above.
+
+**After shipping**
+
+8. **Keys cleanup**: confirm nothing reads the old `.env.local` variables (the Firebase web config
+   comes from Hosting's `/__/firebase/init.json`); ask Noe before deleting the file; run
+   `~/Dev/AI/maiden-research-main/scripts/rotate-secret.sh --auditar`; restrict the Firebase web
+   key to the noeosorio.com domains in the console; note it in NOE-558.
 
 ## Execution
 

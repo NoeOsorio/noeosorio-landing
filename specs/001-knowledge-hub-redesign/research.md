@@ -34,6 +34,29 @@ copy was written to look like a company, not taken from Noe's real work.
   - Patch the current app (fix footer links, add an error route, add meta per route): leaves the
     soft 404 and the shared head for crawlers, so it hides the symptom.
 
+### Evidence (measured 2026-11-14, Lighthouse 12.1 mobile, median of 3 runs each)
+
+Same home page, same design and CSS, served the same way locally with compression. The only
+difference is how the HTML is produced: the current published build (client-rendered) versus a
+static HTML snapshot of the same page.
+
+| Metric | Current site | Same page, static | Change |
+|---|---|---|---|
+| Performance score | 78 | 99 | |
+| Largest content visible | 5.30 s | 1.65 s | 3.2x faster |
+| Time to interactive | 5.31 s | 1.65 s | 3.2x faster |
+| JavaScript transferred | 323 KB | 0 KB | none needed to read the page |
+| Total transferred | 367 KB | 57 KB | 6.4x lighter |
+| Requests | 23 | 11 | 2.1x fewer |
+
+Live site for reference (same tool, production): home 78 (largest content 5.1 s), portfolio 91,
+about 89; each page ships about 300 KB of JavaScript, 124 KB of it unused.
+
+Caveat: the static snapshot has no interactivity; a real build adds a few kilobytes for the mobile
+menu and the cookie consent, still far from 323 KB. Fonts still load from Google in both; self-hosting
+them would improve the static version further. Per-page link previews and a real 404 are yes or no
+properties the current architecture cannot provide.
+
 ## R3. Keep or replace the current code
 
 - **Decision**: replace the application code in the same repository (`NoeOsorio/noeosorio-landing`)
@@ -57,18 +80,14 @@ copy was written to look like a company, not taken from Noe's real work.
 - **Needs Noe**: a Firebase preview deploy exposes a temporary URL on the internet and a production
   deploy replaces the live site; both need his explicit yes at that moment.
 
-## R5. Analytics without cookies
+## R5. Analytics
 
-- **Decision (recommended)**: GoatCounter, hosted, free for personal sites.
-- **Rationale**: counts page views without cookies and without personal data, so no consent banner
-  is needed; open source; a single script tag; a public or private dashboard.
-- **Alternatives considered**:
-  - Cloudflare Web Analytics: also free and cookie-less, but needs a Cloudflare account and its
-    dashboard lives inside Cloudflare.
-  - Plausible: excellent, but paid (around 9 USD a month).
-  - Umami Cloud: free tier, but heavier setup.
-  - Keep Firebase Analytics: sets cookies and needs a real consent banner (rejected by Noe).
-- **Needs Noe**: creating the GoatCounter account (about 3 minutes) and approving the new service.
+- **Decision (Noe, 2026-11-14)**: keep Firebase Analytics for real analytics, with a real consent
+  banner: Accept and Reject equally visible, nothing tracked until Accept, privacy page linked.
+- **Rationale**: Noe wants full analytics of how the site performs and accepts the banner.
+- **Note**: the Firebase web config is served by Firebase Hosting itself at
+  `/__/firebase/init.json`, so the site does not need it in a `.env` file.
+- **Rejected**: GoatCounter and other cookie-less tools (Noe prefers Firebase).
 
 ## R6. Videos
 
