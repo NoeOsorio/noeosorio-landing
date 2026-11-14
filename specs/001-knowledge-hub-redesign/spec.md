@@ -27,13 +27,14 @@ Projects Noe approved for the site: Maiden OS, Essay Studio, Whiteboard, Telar, 
 - Q: Analytics? → A: Firebase Analytics, for real analytics, with a real consent banner (Noe, 2026-11-14; replaces the earlier cookie-less choice).
 - Q: Static pages? → A: Only with evidence of a 3x to 10x improvement. Measured: same page and design, largest content visible 5.30 s to 1.65 s, JavaScript 323 KB to 0 KB, total weight 367 KB to 57 KB, score 78 to 99 (research.md R2).
 - Q: Redesign now? → A: No. First the restructuring of what exists today. Nothing of the redesign is approved until Noe has seen it in full detail in Paper.
+- Q: Does Phase A change the copy too? → A: Yes. Real copy in the same layout; the result is shown in Paper first.
 - Q: Logo? → A: SVG.
 - Q: Project visuals? → A: We capture them, and present them in a new way: an in-browser demo of each app with mock data, prebuilt and optimized, that feels like using the app instead of looking at a photo.
 - Q: The project named «Maiden, Noe Osorio»? → A: Maiden OS (or just Maiden).
 
 ## Delivery phases
 
-- **Phase A, restructuring (this spec's first deliverable)**: same look as today (the Paper file «noeosorio.com, sitio actual (antes)» is the visual reference), rebuilt as static pages, with everything broken fixed: links, real 404, per-page link previews, image weight, Firebase Analytics behind a real consent banner, redirects. [NEEDS CLARIFICATION: does Phase A also replace the invented copy (numbers, «we», prices) with real content in the same layout, or does copy wait for Phase B?]
+- **Phase A, restructuring (this spec's first deliverable)**: same look as today (the Paper file «noeosorio.com, sitio actual (antes)» is the visual reference), rebuilt as static pages, with everything broken fixed: links, real 404, per-page link previews, image weight, Firebase Analytics behind a real consent banner, redirects. Phase A also replaces the invented copy (numbers, «we», prices, outdated roles) with real content in English, inside the same layout; pages that only exist to sell (services and their prices) are retired and redirected. The Phase A pages with their new copy are shown in Paper and approved by Noe before code.
 - **Phase B, redesign**: the hub described below (projects with in-browser demos, curated videos, Now, About), designed in Paper in full detail and approved by Noe before any code.
 
 ## User Scenarios & Testing *(mandatory)*

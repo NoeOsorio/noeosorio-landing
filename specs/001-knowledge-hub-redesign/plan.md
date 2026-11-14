@@ -141,6 +141,22 @@ crawlers are treated as a second surface and verified (SC-004).
    «antes», independent reviewers.
 5. **Preview and ship** (Noe's yes at each step).
 
+**Phase A content map (same layout, real copy in English)**
+
+| Page today | Phase A | Copy changes |
+|---|---|---|
+| Home | Stays | Hero says who Noe is; the stat row becomes three real facts; the four service cards show four of his projects; the education block shows what he really did (Qué Dirían, Sakura Kode Academy, livestreams) without counters; the industry cards become the fields he worked in (health, fintech, infrastructure, education) without counts; featured projects become three of his approved projects with real screenshots; the closing call becomes his email and channels |
+| Portafolio | Becomes Projects | The eight approved projects in the same zig-zag layout |
+| Project detail (8 old case studies) | Replaced by the 8 approved projects in the same template | Real description, what it does, stack, timeline and working links; screenshots we capture (live demos come in Phase B) |
+| Servicios and its 4 detail pages | Retired, 301 to Home | Noe does not sell packages |
+| Acerca de | Stays | His story, verified work history with Porter, real stack, teaching without counters |
+| Contacto | Stays, simpler | Email and channels; the reasons cards and the form go (they assume clients and job offers) |
+| Social | Stays | Name with accent, Product Engineer, plus YouTube |
+| Privacidad | Stays | Rewritten for Firebase Analytics with consent |
+| 404 | New, in the current style | A way home |
+
+Each page is shown in Paper (a «Fase A» page next to «antes») with its final copy before any code.
+
 **Phase B, redesign (nothing built until Noe approves it in Paper)**
 
 6. **Design in Paper in full detail**: every page at desktop and phone, including the in-browser
