@@ -62,8 +62,15 @@ const Footer = () => {
         </div>
 
         {/* Footer bottom */}
-        <div className="mt-16 pt-8 border-t border-zinc-800">
+        <div className="mt-16 pt-8 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-4">
           <p className="text-zinc-400">© 2026 Noé Osorio</p>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event('cookie-settings'))}
+            className="text-zinc-400 hover:text-lime-300 transition-colors underline underline-offset-4"
+          >
+            Cookie settings
+          </button>
         </div>
       </div>
     </footer>

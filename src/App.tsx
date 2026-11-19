@@ -1,20 +1,16 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import Layout from './components/Layout'
 import ScrollToTop from './components/ScrollToTop'
 import LoadingScreen from './components/LoadingScreen'
 import PrivacyPolicy from './pages/PrivacyPolicy'
-import B2BProjectDetail from './pages/B2BProjectDetail'
-import LandingProjectDetail from './pages/LandingProjectDetail'
+import NotFound from './pages/NotFound'
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'))
 const About = lazy(() => import('./pages/About'))
-const Services = lazy(() => import('./pages/Services'))
 const Portfolio = lazy(() => import('./pages/Portfolio'))
 const Contact = lazy(() => import('./pages/Contact'))
-const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
-const OpenSourceProjectDetail = lazy(() => import('./pages/OpenSourceProjectDetail'))
 const Social = lazy(() => import('./pages/Social'))
 const EssayPage = lazy(() => import('./pages/essay/EssayPage'))
 
@@ -57,11 +53,7 @@ const router = createBrowserRouter([
       },
       { 
         path: "/services", 
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <Services />
-          </Suspense>
-        ) 
+        element: <Navigate to="/portfolio" replace /> 
       },
       { 
         path: "/portfolio", 
@@ -73,19 +65,11 @@ const router = createBrowserRouter([
       },
       { 
         path: "/portfolio/:projectId", 
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <ProjectDetail />
-          </Suspense>
-        ) 
+        element: <Navigate to="/portfolio" replace /> 
       },
       { 
         path: "/open-source/:id", 
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <OpenSourceProjectDetail />
-          </Suspense>
-        ) 
+        element: <Navigate to="/portfolio" replace /> 
       },
       { 
         path: "/contact", 
@@ -109,20 +93,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/b2b/:projectId",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <B2BProjectDetail />
-          </Suspense>
-        )
+        element: <Navigate to="/portfolio" replace />
       },
       {
         path: "/landing/:projectId",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <LandingProjectDetail />
-          </Suspense>
-        )
-      }
+        element: <Navigate to="/portfolio" replace />
+      },
+      { path: "*", element: <NotFound /> }
     ]
   }
 ])

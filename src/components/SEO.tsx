@@ -39,7 +39,7 @@ export const SEO = ({
       { property: 'og:url', content: url },
       { property: 'og:type', content: type },
       { property: 'og:site_name', content: 'Noé Osorio' },
-      { property: 'og:locale', content: 'es_MX' },
+      { property: 'og:locale', content: 'en_US' },
 
       // Twitter
       { name: 'twitter:card', content: 'summary_large_image' },
