@@ -16,8 +16,20 @@ const Contact = lazy(() => import('./pages/Contact'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const OpenSourceProjectDetail = lazy(() => import('./pages/OpenSourceProjectDetail'))
 const Social = lazy(() => import('./pages/Social'))
+const EssayPage = lazy(() => import('./pages/essay/EssayPage'))
 
 const router = createBrowserRouter([
+  {
+    path: "/essay",
+    element: (
+      <>
+        <ScrollToTop />
+        <Suspense fallback={<LoadingScreen />}>
+          <EssayPage />
+        </Suspense>
+      </>
+    )
+  },
   {
     path: "/",
     element: (

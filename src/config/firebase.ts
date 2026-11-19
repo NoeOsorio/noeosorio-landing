@@ -12,7 +12,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 // Initialize Analytics and export it
 export const analytics = isSupported().then(yes => yes ? getAnalytics(app) : null); 
