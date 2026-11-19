@@ -45,8 +45,8 @@ const FeaturedProjects = ({ onProjectClick }: FeaturedProjectsProps) => {
   return (
     <section className="py-24 relative">
       {/* Decorative elements */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px] animate-pulse" />
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px] animate-pulse" />
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px]" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px]" />
 
       <div className="container mx-auto px-4">
         {/* Section Header */}
@@ -76,7 +76,7 @@ const FeaturedProjects = ({ onProjectClick }: FeaturedProjectsProps) => {
               {/* Project Image: only when a real screenshot exists */}
               {project.image && (
                 <div className="w-full md:w-3/5 relative">
-                  <div className="aspect-[4/3] bg-zinc-800/20 backdrop-blur-sm rounded-2xl overflow-hidden relative border border-zinc-700/50 shadow-2xl shadow-lime-900/20">
+                  <div className="aspect-[4/3] bg-zinc-800/20 rounded-2xl overflow-hidden relative border border-zinc-700/50 shadow-2xl shadow-lime-900/20">
                     <div className="absolute -inset-[40%] bg-lime-300/10 blur-3xl rounded-full" />
                     <div className="absolute inset-0 bg-gradient-to-br from-lime-300/10 via-transparent to-zinc-900/40" />
                     <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 via-transparent to-zinc-900/40" />

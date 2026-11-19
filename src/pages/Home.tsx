@@ -8,21 +8,6 @@ import { SEO } from "../components/SEO";
 import { ServicesShowcase } from "../components/home/ServicesShowcase";
 import { trackEvent } from '../hooks/useAnalytics';
 
-// Configuraciones de animación reutilizables
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.5 },
-};
-
-const stagger = {
-  initial: { opacity: 0 },
-  whileInView: { opacity: 1 },
-  viewport: { once: true },
-  transition: { staggerChildren: 0.2 },
-};
-
 const Home = () => {
   const handleHeroClick = (action: string) => {
     trackEvent('hero_interaction', {
@@ -70,65 +55,38 @@ const Home = () => {
         onLearnMoreClick={() => handleHeroClick('learn_more')}
       />
 
-      <motion.div {...stagger} className="relative z-10">
+      <motion.div className="relative z-10">
         <ServicesShowcase />
       </motion.div>
 
-      <motion.div {...fadeInUp} transition={{ delay: 0.2 }}>
+      <div>
         <EducationPreview 
           onCourseClick={handleEducationClick}
         />
-      </motion.div>
+      </div>
 
-      <motion.div {...fadeInUp} transition={{ delay: 0.3 }}>
+      <div>
         <Industries />
-      </motion.div>
+      </div>
 
-      <motion.div {...fadeInUp} transition={{ delay: 0.4 }}>
+      <div>
         <FeaturedProjects 
           onProjectClick={handleProjectView}
         />
-      </motion.div>
+      </div>
 
-      <motion.div {...fadeInUp} transition={{ delay: 0.5 }}>
+      <div>
         <CTASection 
           onCTAClick={() => handleCTAClick('bottom')}
         />
-      </motion.div>
+      </div>
 
-      {/* Background decorativo animado */}
-      <motion.div
-        className="fixed inset-0 pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
+      {/* Ambient light. Static on purpose: a looping blur this large repaints the whole page and flickers while scrolling. */}
+      <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute inset-0 bg-gradient-to-b from-lime-500/5 via-transparent to-transparent" />
-        <motion.div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px]"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.2, 0.3, 0.2],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px]"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.2, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      </motion.div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-lime-500/20 rounded-full filter blur-[128px] opacity-25" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full filter blur-[128px] opacity-25" />
+      </div>
     </motion.div>
   );
 };

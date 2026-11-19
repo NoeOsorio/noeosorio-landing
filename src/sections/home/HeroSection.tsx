@@ -131,17 +131,6 @@ export const HeroSection = ({ onGetStartedClick, onLearnMoreClick }: HeroSection
       </div>
     </div>
 
-    {/* Scroll Indicator mejorado */}
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.6 }}
-      className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
-    >
-      <div className="w-6 h-10 border-2 border-lime-300/30 rounded-full flex items-start justify-center p-2">
-        <div className="w-1 h-2 bg-lime-300/50 rounded-full animate-scroll" />
-      </div>
-    </motion.div>
   </section>
 );
 

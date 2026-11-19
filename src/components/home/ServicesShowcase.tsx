@@ -40,7 +40,7 @@ const built = [
 ];
 
 const cardClass =
-  'group relative p-8 rounded-2xl bg-zinc-800/50 backdrop-blur-xl border border-zinc-700/50 transition-all overflow-hidden';
+  'group relative p-8 rounded-2xl bg-zinc-800/50 border border-zinc-700/50 transition-all overflow-hidden';
 
 export const ServicesShowcase = () => {
   const handleClick = (name: string) => {
@@ -52,9 +52,6 @@ export const ServicesShowcase = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
             className="text-3xl md:text-4xl font-bold text-white mb-6"
           >
             Things I've{' '}
@@ -63,10 +60,6 @@ export const ServicesShowcase = () => {
             </span>
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
             className="text-xl text-zinc-400"
           >
             Tools I use every day, made with AI and real safeguards.

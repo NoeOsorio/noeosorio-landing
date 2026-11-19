@@ -73,7 +73,7 @@ const EducationPreview = ({ onCourseClick }: EducationPreviewProps) => {
               {items.map((item) => (
                 <div
                   key={item.title}
-                  className="group p-8 bg-zinc-800/50 backdrop-blur-sm rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all hover:bg-zinc-800/70"
+                  className="group p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all hover:bg-zinc-800/70"
                 >
                   <div className="flex gap-8">
                     <div className="p-4 bg-lime-300/10 rounded-lg h-fit group-hover:bg-lime-300/20 transition-colors">
