@@ -87,7 +87,9 @@ export default function EssayPage() {
     try {
       await joinWaitlist(email, lang);
       setStatus("done");
-    } catch {
+    } catch (error) {
+      // The reason only, never the email.
+      console.error("waitlist failed:", (error as { code?: string; message?: string })?.code ?? (error as Error)?.message);
       setStatus("failed");
     }
   };
