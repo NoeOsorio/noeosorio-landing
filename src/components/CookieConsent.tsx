@@ -33,7 +33,7 @@ export const CookieConsent = () => {
                 This site uses cookies to improve your experience. By continuing to browse,
                 you accept the{' '}
                 <Link
-                  to="/contact"
+                  to="/privacy-policy"
                   className="text-lime-300 hover:text-lime-400 underline"
                 >
                   privacy policy
