@@ -7,8 +7,6 @@ import CTASection from "../sections/home/CTASection";
 import { SEO } from "../components/SEO";
 import { ServicesShowcase } from "../components/home/ServicesShowcase";
 import { trackEvent } from '../hooks/useAnalytics';
-import { GitHubSection } from '../sections/home/GitHubSection'
-// Importaremos las demás secciones cuando las creemos
 
 // Configuraciones de animación reutilizables
 const fadeInUp = {
@@ -47,13 +45,6 @@ const Home = () => {
     });
   };
 
-  const handleIndustryClick = (industry: string) => {
-    trackEvent('industry_click', {
-      industry,
-      source: 'home_page'
-    });
-  };
-
   const handleCTAClick = (location: string) => {
     trackEvent('home_cta_click', {
       location,
@@ -64,11 +55,11 @@ const Home = () => {
   return (
     <motion.div initial="initial" animate="animate" className="relative">
       <SEO
-        title="Noé Osorio | Desarrollo de Software Premium & Soluciones Empresariales"
-        description="Especialista en desarrollo de aplicaciones web, móviles y automatización empresarial. +5 años transformando ideas en soluciones digitales escalables."
+        title="Noé Osorio | Product Engineer in New York"
+        description="I build AI you can trust, and AI that makes you think. Tools made with AI, projects and videos from a Mexican engineer in New York."
         image="https://noeosorio.com/og-image.png"
         url="https://noeosorio.com"
-        keywords="desarrollo web, aplicaciones móviles, automatización empresarial, desarrollo de software, MVP startup, React, Node.js, AWS"
+        keywords="Noé Osorio, product engineer, AI, software engineer, New York, Essay Studio, Maiden OS"
         type="website"
         author="Noé Osorio"
         twitterHandle="@noeosorio.dev"
@@ -90,13 +81,7 @@ const Home = () => {
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.3 }}>
-        {/* Sección de Industrias */}
-        <Industries 
-          onIndustryClick={handleIndustryClick}
-        />
-
-        {/* GitHub y Open Source */}
-        <GitHubSection />
+        <Industries />
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.4 }}>
@@ -106,7 +91,6 @@ const Home = () => {
       </motion.div>
 
       <motion.div {...fadeInUp} transition={{ delay: 0.5 }}>
-        {/* CTA Section */}
         <CTASection 
           onCTAClick={() => handleCTAClick('bottom')}
         />

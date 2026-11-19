@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { HiArrowRight, HiCode, HiLightningBolt } from 'react-icons/hi';
+import { HiArrowRight, HiCode, HiPlay } from 'react-icons/hi';
 import SocialLinks from '../../components/SocialLinks'
+import { siteLinks } from '../../data/siteLinks'
 
 interface HeroSectionProps {
   onGetStartedClick?: () => void;
@@ -37,7 +38,7 @@ export const HeroSection = ({ onGetStartedClick, onLearnMoreClick }: HeroSection
         >
           <div className="w-2 h-2 bg-lime-300 rounded-full" />
           <p className="text-lime-300 font-medium">
-            Senior Software Engineer & Tech Consultant
+            Product Engineer at Porter, New York
           </p>
         </motion.div>
 
@@ -48,10 +49,11 @@ export const HeroSection = ({ onGetStartedClick, onLearnMoreClick }: HeroSection
           transition={{ delay: 0.1 }}
           className="text-4xl md:text-7xl font-bold text-white mb-8"
         >
-          Potenciamos tu Negocio con{' '}
+          I build AI you can trust, and{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-300">
-            Tecnología de Impacto
+            AI that makes you think
           </span>
+          .
         </motion.h1>
 
         {/* Description */}
@@ -61,9 +63,8 @@ export const HeroSection = ({ onGetStartedClick, onLearnMoreClick }: HeroSection
           transition={{ delay: 0.2 }}
           className="text-xl md:text-2xl text-zinc-400 mb-12 max-w-3xl mx-auto leading-relaxed"
         >
-          Experto en desarrollo de software y consultoría tecnológica. 
-          Transformamos desafíos empresariales en soluciones digitales innovadoras 
-          que generan resultados medibles.
+          I'm Noé, a Mexican engineer in New York. I build my own tools with AI,
+          study organizational psychology, and share what I learn along the way.
         </motion.p>
 
         {/* CTAs */}
@@ -74,45 +75,45 @@ export const HeroSection = ({ onGetStartedClick, onLearnMoreClick }: HeroSection
           className="flex flex-col sm:flex-row items-center justify-center gap-6"
         >
           <Link
-            to="/contact"
+            to="/portfolio"
             onClick={onGetStartedClick}
             className="group inline-flex items-center gap-3 px-8 py-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-all"
           >
-            <HiLightningBolt className="w-5 h-5" />
-            <span>Iniciar Proyecto</span>
+            <HiCode className="w-5 h-5" />
+            <span>See my projects</span>
             <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
           </Link>
 
-          <Link
-            to="/services"
+          <a
+            href={siteLinks.youtube}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={onLearnMoreClick}
             className="group inline-flex items-center gap-3 px-8 py-4 bg-zinc-800/50 hover:bg-zinc-800 text-white rounded-lg font-medium transition-all"
           >
-            <HiCode className="w-5 h-5" />
-            <span>Explorar Servicios</span>
+            <HiPlay className="w-5 h-5" />
+            <span>Watch my videos</span>
             <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-          </Link>
+          </a>
         </motion.div>
 
-        {/* Quick Stats con animación mejorada */}
+        {/* Facts */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="grid grid-cols-2 md:grid-cols-3 gap-8 mt-20 max-w-3xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 max-w-3xl mx-auto"
         >
-          <div className="group">
-            <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-300 mb-2">50+</p>
-            <p className="text-zinc-400 group-hover:text-zinc-300 transition-colors">Proyectos Exitosos</p>
-          </div>
-          <div className="group">
-            <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-300 mb-2">8+</p>
-            <p className="text-zinc-400 group-hover:text-zinc-300 transition-colors">Años de Experiencia</p>
-          </div>
-          <div className="col-span-2 md:col-span-1 group">
-            <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-300 mb-2">100%</p>
-            <p className="text-zinc-400 group-hover:text-zinc-300 transition-colors">Código Optimizado</p>
-          </div>
+          {[
+            { value: 'Since 2018', label: 'Shipping software' },
+            { value: 'Porter', label: 'Product Engineer in New York' },
+            { value: 'UDLAP', label: "Master's in organizational psychology" },
+          ].map((fact) => (
+            <div key={fact.value} className="group">
+              <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-300 mb-2">{fact.value}</p>
+              <p className="text-zinc-400 group-hover:text-zinc-300 transition-colors">{fact.label}</p>
+            </div>
+          ))}
         </motion.div>
 
         {/* Social Links */}

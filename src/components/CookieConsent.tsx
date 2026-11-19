@@ -30,15 +30,15 @@ export const CookieConsent = () => {
           <div className="container mx-auto max-w-4xl flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-zinc-400 text-sm">
               <p>
-                Este sitio utiliza cookies para mejorar tu experiencia. Al continuar navegando, 
-                aceptas nuestra{' '}
-                <Link 
-                  to="/contact" 
+                This site uses cookies to improve your experience. By continuing to browse,
+                you accept the{' '}
+                <Link
+                  to="/contact"
                   className="text-lime-300 hover:text-lime-400 underline"
                 >
-                  política de privacidad
+                  privacy policy
                 </Link>
-                {' '}y el uso de cookies.
+                {' '}and the use of cookies.
               </p>
             </div>
             <div className="flex gap-4">
@@ -46,7 +46,7 @@ export const CookieConsent = () => {
                 onClick={handleAccept}
                 className="px-6 py-2 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-colors"
               >
-                Aceptar
+                Accept
               </button>
             </div>
           </div>

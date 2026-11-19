@@ -1,12 +1,41 @@
 import { Link } from "react-router-dom";
 import { HiArrowRight } from "react-icons/hi";
-import { projects } from "../../data/projects";
-import { technologyColors } from "../../types/portfolio";
 
-const featuredProjects = projects
-  .filter((project) => project.featured)
-  .sort((a, b) => a.priority - b.priority)
-  .slice(0, 3);
+interface HomeProject {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  link: { label: string; href: string };
+  // Real screenshot path; rows without one render text only.
+  image?: string;
+}
+
+const featuredProjects: HomeProject[] = [
+  {
+    id: "essay-studio",
+    title: "Essay Studio",
+    description:
+      "A desktop app where four AI agents (evidence, systems, practice, objections) challenge your essay. The score comes from concrete findings, not from asking a model.",
+    tags: ["Rust", "Tauri", "Next.js", "TypeScript"],
+    link: { label: "Open on GitHub", href: "https://github.com/NoeOsorio/essay-studio" },
+  },
+  {
+    id: "porter-galaxy",
+    title: "Porter Galaxy",
+    description: "A Kubernetes cluster shown as a living 3D galaxy.",
+    tags: ["Go", "Three.js", "Kubernetes", "Helm"],
+    link: { label: "Open on GitHub", href: "https://github.com/NoeOsorio/porter-galaxy" },
+  },
+  {
+    id: "sim-world",
+    title: "Sim World",
+    description:
+      "Life simulations in the browser, from the primordial soup to families with personalities.",
+    tags: ["TypeScript"],
+    link: { label: "Try it live", href: "https://simulations.noeosorio.com" },
+  },
+];
 
 interface FeaturedProjectsProps {
   onProjectClick?: (projectId: string) => void;
@@ -24,89 +53,70 @@ const FeaturedProjects = ({ onProjectClick }: FeaturedProjectsProps) => {
         <div className="text-center mb-24">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
             <div className="w-2 h-2 bg-lime-300 rounded-full" />
-            <p className="text-lime-300 font-medium">Proyectos Destacados</p>
+            <p className="text-lime-300 font-medium">Projects</p>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Soluciones que{" "}
+            Built to be{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-emerald-300">
-              Generan Impacto
+              used
             </span>
           </h2>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-            Descubre cómo ayudamos a empresas a alcanzar sus objetivos a través de
-            soluciones tecnológicas innovadoras.
+            Three of my projects, what they do and how they are made.
           </p>
         </div>
 
         {/* Projects */}
-        <div className="space-y-32">
+        <div className="space-y-32 max-w-6xl mx-auto">
           {featuredProjects.map((project) => (
             <div
               key={project.id}
               className="flex flex-col md:flex-row items-center gap-16"
             >
-              {/* Project Image */}
-              <div className="w-full md:w-3/5 relative">
-                <div className="aspect-[4/3] bg-zinc-800/20 backdrop-blur-sm rounded-2xl overflow-hidden relative border border-zinc-700/50 shadow-2xl shadow-lime-900/20">
-                  {/* Efecto de brillo superior */}
-                  <div className="absolute -inset-[40%] bg-lime-300/10 blur-3xl rounded-full" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-lime-300/10 via-transparent to-zinc-900/40" />
-                  {/* Efecto de viñeta */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 via-transparent to-zinc-900/40" />
-                  <img
-                    src={project.images[0]}
-                    alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover object-center"
-                  />
+              {/* Project Image: only when a real screenshot exists */}
+              {project.image && (
+                <div className="w-full md:w-3/5 relative">
+                  <div className="aspect-[4/3] bg-zinc-800/20 backdrop-blur-sm rounded-2xl overflow-hidden relative border border-zinc-700/50 shadow-2xl shadow-lime-900/20">
+                    <div className="absolute -inset-[40%] bg-lime-300/10 blur-3xl rounded-full" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-lime-300/10 via-transparent to-zinc-900/40" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 via-transparent to-zinc-900/40" />
+                    <img
+                      src={project.image}
+                      alt={`${project.title} screenshot`}
+                      className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Project Info */}
-              <div className="w-full md:w-2/5 space-y-6">
-                <h3 className="text-3xl font-bold text-white">
-                  {project.title}
-                </h3>
+              <div className={`w-full space-y-6 ${project.image ? "md:w-2/5" : ""}`}>
+                <h3 className="text-3xl font-bold text-white">{project.title}</h3>
                 <p className="text-lg text-zinc-400">{project.description}</p>
 
-                {/* Technologies */}
                 <div className="flex flex-wrap gap-2">
-                  {project.technologies.slice(0, 4).map((tech, i) => (
-                    <span 
-                      key={i} 
-                      className={`px-3 py-1 rounded-full text-sm ${technologyColors[tech.category]}`}
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 rounded-full text-sm bg-zinc-800 text-zinc-300"
                     >
-                      {tech.name}
+                      {tag}
                     </span>
                   ))}
                 </div>
 
-                {/* Links */}
-                <div className="flex items-center gap-4 pt-4">
-                  {project.links.website && (
-                    <a
-                      href={project.links.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="relative z-30 inline-flex items-center gap-2 text-lime-300 hover:text-lime-400 transition-colors"
-                    >
-                      Visitar Sitio
-                      <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-                    </a>
-                  )}
+                <div className="pt-4">
+                  <a
+                    href={project.link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => onProjectClick?.(project.id)}
+                    className="group relative z-30 inline-flex items-center gap-2 text-lime-300 hover:text-lime-400 transition-colors"
+                  >
+                    {project.link.label}
+                    <HiArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                  </a>
                 </div>
-
-                {/* Key Points */}
-                <ul className="space-y-3 pt-4">
-                  {project.keyPoints.slice(0, 2).map((point, i) => (
-                    <li
-                      key={i}
-                      className="flex items-start gap-3 text-zinc-300"
-                    >
-                      <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
-                      <span>{point.content}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           ))}
@@ -117,10 +127,10 @@ const FeaturedProjects = ({ onProjectClick }: FeaturedProjectsProps) => {
           <Link
             to="/portfolio"
             className="inline-flex items-center gap-2 px-6 py-3 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-all duration-300"
-            onClick={() => onProjectClick && onProjectClick("all")}
+            onClick={() => onProjectClick?.("all")}
           >
-            Ver Todos los Proyectos
-            <HiArrowRight className="w-5 h-5" />
+            See all projects
+            <HiArrowRight className="w-5 h-5" aria-hidden="true" />
           </Link>
         </div>
       </div>

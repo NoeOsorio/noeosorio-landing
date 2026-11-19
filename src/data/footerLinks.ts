@@ -1,8 +1,17 @@
+// href is optional: projects without a page yet render as plain text.
 export const footerLinks = {
+  site: [
+    { title: 'Projects', href: '/portfolio' },
+    { title: 'About', href: '/about' },
+    { title: 'Contact', href: '/contact' }
+  ],
   projects: [
-    { title: 'Osmind EHR', href: '/portfolio/osmind' },
-    { title: 'Clip Logistics', href: '/portfolio/clip' },
-    { title: 'Full/Stack Frontend', href: '/portfolio/fstack' },
-    { title: 'Finloop Admin', href: '/portfolio/finloop' }
+    { title: 'Maiden OS' },
+    { title: 'Essay Studio', href: '/essay' },
+    { title: 'Whiteboard' },
+    { title: 'Telar' }
   ]
-}; 
+} as {
+  site: { title: string; href: string }[]
+  projects: { title: string; href?: string }[]
+};
