@@ -5,12 +5,15 @@ export const useDocumentMeta = (props: {
   description?: string
   image?: string
   url?: string
+  keywords?: string
+  meta?: unknown[]
 }) => {
   useEffect(() => {
     document.title = props.title || 'Noé Osorio | Senior Software Engineer & Cloud Architect'
     
     const meta = {
       description: props.description,
+      keywords: props.keywords,
       'og:title': props.title,
       'og:description': props.description,
       'og:image': props.image,
@@ -27,4 +30,4 @@ export const useDocumentMeta = (props: {
       }
     })
   }, [props])
-} 
+}

@@ -1,0 +1,165 @@
+<title>Whiteboard Layers</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Caveat:wght@700&family=Geist:wght@400;500;600&display=swap">
+
+<!-- ============================================================
+     EDIT HERE. Every word on the page comes from this block.
+     Change a text, reload, and the 3D model rebuilds itself.
+     In the sheet lines, {curly braces} mark what is written in the column's color.
+     ============================================================ -->
+<script>
+const CONTENT = {
+  captions: [
+    { title: "Whiteboard", text: "A whiteboard that listens while you talk and draws your notes live." },
+    { title: "You talk.", text: "Everything said is kept on the side, with its time." },
+    { title: "It draws.", text: "Each idea lands on the sheet as a handwritten note or a sketch." }
+  ],
+  app: {
+    back: "Clases",
+    className: "Microeconomía: oferta y demanda",
+    listening: "Escuchando",
+    clock: "4:59",
+    pause: "Pausa",
+    end: "Terminar",
+    sheets: "Hojas",
+    saidTitle: "Lo que se dijo",
+    said: [
+      { time: "4:12", text: "Cuando algo sube de precio, ¿qué hacen ustedes? Pues compran menos, ¿no?" },
+      { time: "4:31", text: "Del otro lado, el que vende quiere producir más si le pagan mejor." },
+      { time: "4:40", text: "Ahora, si le suben los costos, con el mismo precio va a ofrecer menos." },
+      { time: "4:52", text: "Entonces el precio no lo pone nadie: sale de donde se cruzan las dos curvas." }
+    ],
+    sheet: {
+      title: "¿Quién decide el precio?",
+      columns: [
+        { name: "Demanda", lines: ["Si sube el precio, {se compra menos}", "Si más gente lo quiere, {la curva se mueve}"] },
+        { name: "Oferta", lines: ["Si sube el precio, {se produce más}", "Si suben los costos, {se ofrece menos}"] }
+      ],
+      summary: "El precio sale de donde se cruzan",
+      pending: "Falta ver: {¿y si el gobierno pone un precio tope?}"
+    }
+  }
+};
+</script>
+
+<style>
+  /* Layout: one pinned stage; the app sits in 3D on the right, one caption at a time on the left. */
+  :root {
+    color-scheme: dark;
+    --night: #0E0D0B; --ink: #F4EEE4; --light-a: rgba(255,233,77,.13); --light-b: rgba(47,91,234,.20);
+    --ground: #F2F0EA; --paper: #FBFAF6; --app-ink: #1B1B19; --pencil: #6B6A64; --faint: #8A8A86;
+    --c0: #2F5BEA; --m0: #C9D8FF; --c1: #119A5B; --m1: #A9F0C8; --c2: #7A5AF8; --m2: #DDD4FF; --m3: #FBE08F;
+    --ui: "Geist", system-ui, sans-serif; --hand: "Caveat", "Bradley Hand", cursive;
+  }
+  .window { --bg: var(--ground); --edge: #C9C5BA; --r: 22px; }
+  .sheet { --bg: #fff; --edge: #D6D3CA; --r: 26px; background-image: radial-gradient(rgba(17,17,17,.16) 1.1px, transparent 1.3px); background-size: 22px 22px; background-color: #fff; }
+  .panel { --bg: var(--paper); --edge: #D6D3CA; --r: 20px; }
+  .btn { --r: 12px; height: 38px; display: flex; align-items: center; gap: 8px; padding: 0 14px; font: 500 14px var(--ui); color: var(--app-ink); white-space: nowrap; }
+  .btn.soft { --bg: #E9E7E0; --edge: #CFCBC0; } .btn.line { --bg: #fff; --edge: #D2CEC3; box-shadow: inset 0 0 0 1px rgba(27,27,25,.09); } .btn.dark { --bg: var(--app-ink); --edge: #000; color: var(--paper); }
+  .btn svg { width: 15px; height: 15px; flex: none; }
+  .name { font: 500 15px var(--ui); color: var(--app-ink); white-space: nowrap; height: 38px; display: flex; align-items: center; }
+  .pill { --bg: #FDE2E2; --edge: #E7BFBF; --r: 999px; height: 32px; padding: 0 14px 0 12px; display: flex; align-items: center; gap: 8px; font: 600 13.5px var(--ui); color: #B4262B; white-space: nowrap; }
+  .pill i { width: 9px; height: 9px; border-radius: 50%; background: #E5484D; box-shadow: 0 0 0 4px rgba(229,72,77,.22); }
+  .hand { font-family: var(--hand); font-weight: 700; color: var(--app-ink); line-height: 1.12; }
+  .hand em { font-style: normal; color: var(--c); }
+  .t { font-size: 56px; white-space: nowrap; }
+  .h { font-size: 46px; color: var(--c); white-space: nowrap; }
+  .h::after, .mark::after { content: ""; display: block; height: 9px; margin-top: -2px; border-radius: 5px; background: var(--m); }
+  .l { font-size: 36px; }
+  .sum { font-size: 42px; white-space: nowrap; --m: var(--m3); }
+  .pend { font-size: 38px; white-space: nowrap; --c: var(--c2); --m: var(--m2); }
+  .rule { width: 3px; border-radius: 2px; --bg: var(--app-ink); }
+  .said-h { font: 600 16px var(--ui); color: var(--app-ink); }
+  .row { --r: 14px; display: flex; gap: 12px; padding: 12px 14px; font: 400 14.5px/1.5 var(--ui); color: #2E2E2B; }
+  .row time { font: 500 11.5px/22px var(--ui); color: var(--faint); flex: none; width: 30px; }
+  .row.now { --bg: #FFF0CC; --edge: #E3CE96; color: var(--app-ink); font-weight: 500; }
+</style>
+
+<script src="layers-engine-v2.js"></script>
+<script>
+(() => {
+  const A = CONTENT.app, S = A.sheet, { esc } = Layers;
+  const ink = (s, c) => esc(s).replace(/\{([^}]*)\}/g, `<em>$1</em>`);
+  const ICON = {
+    back: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5L5.5 8l4.5 4.5"/></svg>',
+    next: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5L10.5 8 6 12.5"/></svg>',
+    mic: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="6" y="2" width="4" height="7.5" rx="2"/><path d="M3.8 8a4.2 4.2 0 008.4 0M8 12.2V14"/></svg>',
+    pause: '<svg viewBox="0 0 16 16" fill="currentColor"><rect x="4.5" y="3.5" width="2.4" height="9" rx=".8"/><rect x="9.1" y="3.5" width="2.4" height="9" rx=".8"/></svg>',
+    stop: '<svg viewBox="0 0 16 16" fill="currentColor"><rect x="4" y="4" width="8" height="8" rx="2"/></svg>',
+    goggles: '<svg viewBox="0 0 180 120" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8v100h156" stroke="#1B1B19" stroke-width="6"/><path d="M34 22c18 44 62 70 126 76" stroke="#2F5BEA" stroke-width="6"/><path d="M34 98c50-6 96-30 126-78" stroke="#119A5B" stroke-width="6"/><circle cx="93" cy="66" r="9" fill="#FBE08F" stroke="#1B1B19" stroke-width="5"/></svg>',
+    shield: '<svg viewBox="0 0 60 60" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="30" cy="30" r="24" fill="#fff" stroke="#1B1B19" stroke-width="5"/><path d="M22 24c0-5 4-8 8-8s8 3 8 8c0 6-8 6-8 13" stroke="#7A5AF8" stroke-width="5.5"/><circle cx="30" cy="45" r="1.5" stroke="#7A5AF8" stroke-width="5"/></svg>'
+  };
+
+  const M = Layers.create({
+    captions: [
+      Object.assign({ show: [[-1, 0.12], [0.92, 2]] }, CONTENT.captions[0]),
+      Object.assign({ show: [[0.24, 0.45]] }, CONTENT.captions[1]),
+      Object.assign({ show: [[0.50, 0.89]] }, CONTENT.captions[2])
+    ],
+    // Camera stops: scroll position, tilt, turn, zoom, and the point of the app it looks at.
+    cam: [
+      { p: 0.00, rx: 16, rz: 0,   s: 1.00, fx: 0,    fy: 0 },
+      { p: 0.08, rx: 16, rz: 0,   s: 1.00, fx: 0,    fy: 0 },
+      { p: 0.28, rx: 56, rz: -36, s: 0.66, fx: 0,    fy: 0 },
+      { p: 0.40, rx: 50, rz: -42, s: 0.86, fx: 380,  fy: -150 },
+      { p: 0.46, rx: 50, rz: -42, s: 0.86, fx: 380,  fy: -120 },
+      { p: 0.54, rx: 50, rz: -28, s: 0.72, fx: -150, fy: -90 },
+      { p: 0.66, rx: 50, rz: -28, s: 0.72, fx: -150, fy: -30 },
+      { p: 0.78, rx: 50, rz: -30, s: 0.72, fx: -150, fy: 30 },
+      { p: 0.88, rx: 54, rz: -34, s: 0.68, fx: 0,    fy: 0 },
+      { p: 1.00, rx: 14, rz: 0,   s: 1.00, fx: 0,    fy: 0 }
+    ],
+    explode: [0.08, 0.28, 0.88, 0.98],
+    onMeasure: layout
+  });
+  const P = M.piece;
+
+  P("window", "", { x: 0, y: 0, w: 1440, h: 900, z: 0, thick: 16 });
+  const left = [
+    P("btn soft", ICON.back + esc(A.back), { y: 14, z: 70, thick: 4 }),
+    P("name", esc(A.className), { y: 14, z: 70 }),
+    P("pill", `<i></i>${esc(A.listening)}&nbsp; ${esc(A.clock)}`, { y: 17, z: 96, thick: 4 })
+  ];
+  const right = [
+    P("btn soft", ICON.mic, { y: 14, z: 70, thick: 4 }),
+    P("btn line", ICON.pause + esc(A.pause), { y: 14, z: 70, thick: 4 }),
+    P("btn dark", ICON.stop + esc(A.end), { y: 14, z: 70, thick: 4 })
+  ];
+  P("sheet", "", { x: 10, y: 64, w: 1050, h: 826, z: 150, thick: 8, shadow: true });
+  P("btn line", ICON.back + esc(A.sheets) + ICON.next, { x: 912, y: 84, z: 178, thick: 4, shadow: true, under: 150 });
+  P("hand t", esc(S.title), { x: 70, y: 124, z: 162 });
+
+  // Sheet: each column heading and each line is its own piece, written in turn.
+  const colX = [70, 590], cols = S.columns.map((c, i) => ({
+    head: P("hand h", esc(c.name), { x: colX[i], z: 164 }),
+    lines: c.lines.map((t, j) => P("hand l", ink(t), { x: colX[i], w: 430, z: 164, write: [0.50 + (i * 2 + j) * 0.035, 0.56 + (i * 2 + j) * 0.035] }))
+  }));
+  cols.forEach((c, i) => { [c.head, ...c.lines].forEach(q => { q.el.style.setProperty("--c", `var(--c${i})`); q.el.style.setProperty("--m", `var(--m${i})`); }); });
+  const rule = P("rule", "", { x: 540, z: 162 });
+  const goggles = P("", ICON.goggles, { x: 80, w: 180, h: 120, z: 172, enter: [0.66, 0.72], from: { z: 220, s: 0.7, r: -10 }, arc: 60 });
+  const sum = P("hand sum mark", esc(S.summary), { x: 300, z: 164, write: [0.70, 0.77] });
+  const shield = P("", ICON.shield, { x: 96, w: 60, h: 60, z: 172, enter: [0.76, 0.81], from: { z: 220, s: 0.7, r: 12 }, arc: 60 });
+  const pend = P("hand pend mark", ink(S.pending), { x: 170, z: 164, write: [0.79, 0.86] });
+
+  // Side panel: what was said. The first row is there from the start; the rest arrive as you scroll.
+  P("panel", "", { x: 1072, y: 64, w: 358, h: 826, z: 230, thick: 8, shadow: true });
+  P("said-h", esc(A.saidTitle), { x: 1100, y: 96, z: 242 });
+  const rows = A.said.map((r, i) => P("row" + (i === A.said.length - 1 ? " now" : ""), `<time>${esc(r.time)}</time><span>${esc(r.text)}</span>`, Object.assign(
+    { x: 1086, w: 330, z: 244 + (i === A.said.length - 1 ? 22 : 0) },
+    i === A.said.length - 1 ? { thick: 4, shadow: true, under: 230 } : {},
+    i > 0 ? { enter: [0.30 + (i - 1) * 0.045, 0.37 + (i - 1) * 0.045], from: { y: 60, z: 160, s: 0.94 }, arc: 40 } : {})));
+
+  // Everything is placed from its real size, so longer or shorter text never overlaps.
+  function layout() {
+    let x = 20; left.forEach(q => { q.el.style.left = x + "px"; x += q.el.offsetWidth + 14; });
+    x = 1420; [...right].reverse().forEach(q => { x -= q.el.offsetWidth; q.el.style.left = x + "px"; x -= 10; });
+    let bottom = 0; const top = 218;
+    cols.forEach(c => { let y = top; [c.head, ...c.lines].forEach((q, j) => { q.el.style.top = y + "px"; y += q.el.offsetHeight + (j === 0 ? 22 : 14); }); bottom = Math.max(bottom, y); });
+    rule.el.style.top = (top + 6) + "px"; rule.el.style.height = (bottom - top - 24) + "px";
+    const y2 = bottom + 46; goggles.el.style.top = y2 + "px"; sum.el.style.top = (y2 + 34) + "px";
+    const y3 = y2 + 166; shield.el.style.top = y3 + "px"; pend.el.style.top = (y3 + 4) + "px";
+    let ry = 138; rows.forEach(q => { q.el.style.top = ry + "px"; ry += q.el.offsetHeight + 6; });
+  }
+  M.start();
+})();
+</script>

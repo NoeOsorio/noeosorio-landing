@@ -1,625 +1,213 @@
-import { Technology, technologyColors, technologyIcons, Experience } from '../types/portfolio'
-import { useState } from 'react'
+import { HiMail } from 'react-icons/hi'
 import { SEO } from '../components/SEO'
+import { siteLinks } from '../data/siteLinks'
 
-const TechnologyBadge = ({ tech }: { tech: Technology }) => {
-  const Icon = technologyIcons[tech.icon]
-  return (
-    <span className={`px-3 py-1 rounded-full text-sm flex items-center gap-2 ${technologyColors[tech.category]}`}>
-      <Icon className="w-4 h-4" />
-      {tech.name}
-    </span>
-  )
-}
-
-const technologies: Technology[] = [
-  // Frontend
-  { name: "React", icon: "FaReact", category: "frontend" },
-  { name: "Next.js", icon: "SiVercel", category: "frontend" },
-  { name: "TypeScript", icon: "SiTypescript", category: "frontend" },
-  { name: "Tailwind", icon: "SiTailwindcss", category: "frontend" },
-  { name: "Redux", icon: "SiRedux", category: "frontend" },
-
-  // Backend
-  { name: "Node.js", icon: "FaNodeJs", category: "backend" },
-  { name: "Python", icon: "FaPython", category: "backend" },
-  { name: "GraphQL", icon: "SiGraphql", category: "backend" },
-  { name: "REST APIs", icon: "SiSwagger", category: "backend" },
-  { name: "Serverless", icon: "SiServerless", category: "backend" },
-
-  // Mobile
-  { name: "React Native", icon: "FaReact", category: "mobile" },
-  { name: "Flutter", icon: "SiFlutter", category: "mobile" },
-  { name: "Expo", icon: "SiExpo", category: "mobile" },
-
-  // Database & Cloud
-  { name: "MongoDB", icon: "SiMongodb", category: "database" },
-  { name: "PostgreSQL", icon: "FaDatabase", category: "database" },
-  { name: "Firebase", icon: "SiFirebase", category: "cloud" },
-  { name: "AWS", icon: "FaAws", category: "cloud" },
-  { name: "Google Cloud", icon: "SiGooglecloud", category: "cloud" },
-  { name: "Cloudflare", icon: "SiCloudflare", category: "cloud" },
-  { name: "Vercel", icon: "SiVercel", category: "cloud" }
+const caresAbout = [
+  { title: 'AI you can trust', text: 'Agents with permission levels, human approval and spending limits.' },
+  { title: 'AI that makes you think', text: 'Tools that question you and help you learn, instead of doing the thinking for you.' },
+  { title: 'Teams and people', text: 'How teams hire, collaborate and grow. The subject of my master\'s.' },
+  { title: 'Learning in public', text: 'I share what I build and what I learn, on video and in workshops.' },
 ]
 
-const industries = [
-  { 
-    name: "Educación", 
-    color: "text-blue-300 bg-blue-300/10",
-    description: "Democratizando el conocimiento tecnológico a través de mentoría y contenido educativo"
-  },
-  { 
-    name: "Salud", 
-    color: "text-emerald-300 bg-emerald-300/10",
-    description: "Desarrollando soluciones HIPAA-compliant que mejoran la atención médica"
-  },
-  { 
-    name: "Finanzas", 
-    color: "text-amber-300 bg-amber-300/10",
-    description: "Construyendo sistemas seguros y escalables para procesamiento de pagos"
-  },
-  { 
-    name: "Business", 
-    color: "text-purple-300 bg-purple-300/10",
-    description: "Optimizando operaciones empresariales mediante automatización inteligente"
-  }
+const tags = ['Product engineering', 'AI agents', 'Web and mobile', 'Infrastructure', 'Organizational psychology']
+
+const stack = [
+  { group: 'Frontend', items: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS'] },
+  { group: 'Backend', items: ['Node.js', 'Python', 'FastAPI', 'Go', 'PostgreSQL'] },
+  { group: 'Mobile and desktop', items: ['Swift', 'Flutter', 'React Native', 'Tauri with Rust'] },
+  { group: 'Cloud and infrastructure', items: ['AWS', 'Firebase', 'Docker', 'Kubernetes', 'Helm'] },
 ]
 
-const recentExperience = [
+const experience = [
   {
-    role: "Senior Consultant – Software Engineer",
-    company: "Wellmark (Apex Systems)",
-    location: "Des Moines, Iowa (Remoto)",
-    period: "2024 - Presente",
-    description: "Liderando iniciativas de modernización cloud y desarrollo de APIs empresariales.",
-    achievements: [
-      "Migración y modernización de servicios AWS con 99.9% de disponibilidad",
-      "Desarrollo de APIs robustas con TypeScript y Node.js para procesamiento de claims",
-      "Implementación de sistemas de seguridad WAFv2 y monitoreo avanzado",
-      "Optimización de costos cloud reduciendo gastos operativos en un 30%"
-    ],
-    tags: ["AWS", "TypeScript", "Node.js", "Microservicios"]
+    company: 'Porter', place: 'New York', role: 'Product Engineer', years: '2026 to today',
+    text: 'Product engineering for a platform that runs apps on your own cloud.',
+    tags: [],
   },
   {
-    role: "Software Engineer",
-    company: "Osmind",
-    location: "San Francisco, CA (Remoto)",
-    period: "2022 - 2023",
-    description: "Desarrollo de soluciones healthcare-tech enfocadas en salud mental.",
-    achievements: [
-      "Sistema de programación in-house con 98% de uptime y +10k citas mensuales",
-      "Implementación de sistemas HIPAA-compliant para facturación y manejo de datos sensibles",
-      "Reducción de 85% en tasas de error en procesamiento de pagos",
-      "Arquitectura de microservicios para escalabilidad y mantenibilidad"
-    ],
-    tags: ["React", "Node.js", "AWS", "HIPAA"]
+    company: 'Apex Systems', place: 'Iowa', role: 'Software Engineer', years: '2024 to 2026',
+    text: 'Microservices with AWS Lambda and API Gateway in Node.js.',
+    tags: ['AWS Lambda', 'API Gateway', 'Node.js'],
   },
   {
-    role: "Software Engineer",
-    company: "Clip",
-    location: "Ciudad de México",
-    period: "2021 - 2022",
-    description: "Desarrollo de soluciones de logística y pagos para e-commerce.",
-    achievements: [
-      "Automatización de servicios logísticos procesando +50k órdenes diarias",
-      "Reducción del 60% en tiempos de procesamiento de pagos",
-      "Integración con Amazon Seller API para sincronización en tiempo real",
-      "Implementación de CI/CD reduciendo tiempo de deploy en un 70%"
-    ],
-    tags: ["React", "Node.js", "AWS", "Microservicios"]
-  }
+    company: 'Osmind', place: 'San Francisco', role: 'Software Engineer', years: '2022 to 2023',
+    text: 'Led the web app for mental health providers in React and TypeScript, launched self-scheduling in React Native, and worked on insurance billing under HIPAA.',
+    tags: ['React', 'TypeScript', 'React Native'],
+  },
+  {
+    company: 'Clip', place: 'Mexico City', role: 'Software Engineer', years: '2021 to 2022',
+    text: 'Microservices for the Amazon Seller API, a TypeScript microservice template with Clean Architecture, and CI/CD with Jenkins and CloudFormation.',
+    tags: ['TypeScript', 'Jenkins', 'CloudFormation'],
+  },
+  {
+    company: 'Finloop', place: 'Puebla', role: 'Full Stack Engineer', years: '2020 to 2021',
+    text: 'Admin apps in React and Redux, and serverless functions with automated deploys.',
+    tags: ['React', 'Redux'],
+  },
+  {
+    company: 'Smartkode', place: 'Puebla', role: 'Tech Lead', years: '2018 to 2020',
+    text: 'Led the web team for an insurance company and the mobile team in Flutter.',
+    tags: ['Flutter'],
+  },
 ]
 
-const pastExperience = [
+const teaching = [
   {
-    role: "Front-End Team Lead",
-    company: "Full Stack",
-    location: "Puebla, MX",
-    period: "Ago 2021 – Jun 2022",
-    description: "Liderazgo de equipos frontend y mentoría de desarrolladores junior.",
-    achievements: [
-      "Mentoría a más de 10 desarrolladores junior, ayudándoles a conseguir roles en las principales empresas tech de México",
-      "Dirección de equipos frontend y UX/UI para sistemas en industrias de cuidado de adultos mayores y medicina veterinaria",
-      "Implementación de metodologías ágiles y mejores prácticas de desarrollo",
-      "Balance entre soluciones innovadoras y diseño centrado en el usuario"
-    ],
-    tags: ["React", "UX/UI", "Team Leadership", "Mentoring"]
+    name: 'Qué Dirían',
+    text: 'A debate podcast with my friend Edgar Mora. Two seasons, from 2020 to 2021, giving serious thought to fun questions.',
   },
   {
-    role: "Frontend Engineer",
-    company: "Finloop",
-    location: "Puebla, MX",
-    period: "Ago 2020 – Nov 2021",
-    description: "Desarrollo frontend y optimización de rendimiento para aplicaciones financieras.",
-    achievements: [
-      "Mejora del rendimiento frontend integrando MongoDB con React, aumentando 4x la capacidad de tráfico",
-      "Automatización de pipelines de deployment para aplicaciones React en AWS S3",
-      "Reducción de tiempos de deployment a minutos",
-      "Implementación de mejores prácticas de desarrollo y testing"
-    ],
-    tags: ["React", "MongoDB", "AWS", "CI/CD"]
+    name: 'Sakura Kode Academy',
+    text: 'My coding school in Puebla. In 2024 it ran live workshops on programming basics and on Git and GitHub.',
   },
   {
-    role: "Tech Lead",
-    company: "SmartKode",
-    location: "Puebla, MX",
-    period: "Oct 2018 – Abr 2020",
-    description: "Liderazgo técnico en proyectos de transformación digital.",
-    achievements: [
-      "Migración exitosa de aplicación crítica de Ionic a Flutter",
-      "Obtención de tres contratos adicionales debido a la calidad del trabajo",
-      "Digitalización de flujos de trabajo manuales para correduría de seguros",
-      "Implementación de funciones avanzadas de reportes para insights accionables"
-    ],
-    tags: ["Flutter", "Ionic", "Digital Transformation", "Leadership"]
-  }
+    name: 'YouTube',
+    text: 'Videos and livestreams on building software, finding your first job and moving to New York.',
+  },
 ]
 
-const ExperienceCard = ({ experience }: { experience: Experience }) => {
-  return (
-    <div 
-      className="group relative bg-zinc-900/30 p-8 rounded-xl hover:bg-zinc-800/50 transition-all duration-300"
-    >
-      <div className="absolute top-0 left-0 w-2 h-full bg-lime-300/20 rounded-l-xl group-hover:bg-lime-300/40 transition-colors" />
-      
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h3 className="text-2xl font-semibold text-white mb-1">{experience.role}</h3>
-            <div className="flex items-center gap-2 text-zinc-400">
-              <span className="text-lime-300">{experience.company}</span>
-              <span>•</span>
-              <span>{experience.location}</span>
-            </div>
-          </div>
-          <p className="text-zinc-400 font-mono bg-zinc-800/50 px-3 py-1 rounded-full text-sm">
-            {experience.period}
-          </p>
-        </div>
-
-        {/* Description */}
-        <p className="text-zinc-300">{experience.description}</p>
-
-        {/* Achievements */}
-        <div className="space-y-3">
-          <h4 className="text-lg font-medium text-white">Logros Principales</h4>
-          <ul className="space-y-2">
-            {experience.achievements.map((achievement: string, i: number) => (
-              <li key={i} className="text-zinc-300 flex items-start gap-3">
-                <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2" />
-                <span>{achievement}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 pt-4">
-          {experience.tags.map((tag: string, i: number) => (
-            <span 
-              key={i} 
-              className="px-3 py-1 bg-zinc-800/50 text-zinc-300 rounded-full text-sm"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const ExperienceSection = () => {
-  const [showAllExperience, setShowAllExperience] = useState(false)
-
-  return (
-    <section className="container mx-auto px-4 py-24">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
-            <div className="w-2 h-2 bg-lime-300 rounded-full" />
-            <p className="text-lime-300 font-medium">Trayectoria Profesional</p>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white">
-            Experiencia Destacada
-          </h2>
-        </div>
-
-        <div className="space-y-12">
-          {recentExperience.map((exp, index) => (
-            <ExperienceCard key={index} experience={exp} />
-          ))}
-
-          {showAllExperience && (
-            <>
-              <div className="relative py-8">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-zinc-800"></div>
-                </div>
-                <div className="relative flex justify-center">
-                  <span className="bg-zinc-900 px-4 text-sm text-zinc-400">
-                    Experiencia Anterior
-                  </span>
-                </div>
-              </div>
-
-              {pastExperience.map((exp, index) => (
-                <ExperienceCard key={index} experience={exp} />
-              ))}
-            </>
-          )}
-
-          <div className="text-center pt-8">
-            <button
-              onClick={() => setShowAllExperience(!showAllExperience)}
-              className="px-6 py-3 bg-zinc-800/50 hover:bg-zinc-800 text-zinc-300 rounded-lg transition-colors"
-            >
-              {showAllExperience ? 'Mostrar Menos' : 'Ver Más Experiencia'}
-              <svg
-                className={`inline-block ml-2 w-4 h-4 transform transition-transform ${
-                  showAllExperience ? 'rotate-180' : ''
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
+const pill = 'px-3 py-1 bg-zinc-800 text-zinc-300 rounded-full text-sm'
 
 const About = () => {
   return (
     <>
-      <SEO 
-        title="About | Noé Osorio - Software Engineer"
-        description="Con más de 5 años de experiencia en desarrollo de software, especializado en arquitecturas cloud y desarrollo full-stack."
-        image="https://noeosorio.com/about-og.png"
+      <SEO
+        title="About | Noé Osorio"
+        description="Mexican engineer in New York. Product Engineer at Porter, building tools with AI and making videos about what I learn."
+        image="https://noeosorio.com/og-image.png"
         url="https://noeosorio.com/about"
       />
       <div className="min-h-screen">
-        {/* Hero Section Mejorado */}
-        <section className="relative container mx-auto px-4 pt-16 pb-32">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-fixed opacity-5" />
-          <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-16 items-center">
-              {/* Imagen Personal */}
-              <div className="relative order-2 md:order-1 mx-auto w-full max-w-2xl">
-                <div className="aspect-[5/6] bg-zinc-800/20 backdrop-blur-sm rounded-2xl overflow-hidden relative border border-zinc-700/50 shadow-2xl shadow-lime-900/20">
-                  {/* Efecto de brillo superior */}
-                  <div className="absolute -inset-[40%] bg-lime-300/10 blur-3xl rounded-full" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-lime-300/10 via-transparent to-zinc-900/40" />
-                  {/* Efecto de viñeta */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 via-transparent to-zinc-900/40" />
-                  <img
-                    src="/profile-photo.png"
-                    alt="Foto de perfil"
-                    className="absolute inset-0 w-full h-full object-cover object-center"
-                  />
-                </div>
-                <div className="absolute -bottom-8 left-8 right-8 bg-zinc-800/90 backdrop-blur-sm p-4 rounded-xl border border-zinc-700/50">
-                  <div className="flex items-center gap-4">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                    <p className="text-zinc-300 text-sm">
-                      Disponible para roles de Tech Lead y Senior Software Engineer
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contenido Principal */}
-              <div className="order-1 md:order-2 space-y-8">
-                <div className="space-y-2">
-                  <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-                    Noe Osorio
-                  </h1>
-                  <p className="text-xl text-lime-300 font-medium">
-                    Senior Software Engineer & Tech Educator
-                  </p>
-                </div>
-
-                <p className="text-xl text-zinc-400 leading-relaxed">
-                  +5 años transformando ideas en soluciones tecnológicas escalables. 
-                  Especializado en arquitecturas cloud-native y desarrollo full-stack, 
-                  con un fuerte compromiso en mentorear a la próxima generación de 
-                  desarrolladores.
-                </p>
-
-                {/* Industrias con descripciones */}
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold text-white">Áreas de Impacto</h2>
-                  <div className="grid gap-4">
-                    {industries.map((industry, i) => (
-                      <div 
-                        key={i} 
-                        className={`p-4 rounded-xl ${industry.color}`}
-                      >
-                        <h3 className={`font-medium mb-2 ${industry.color.split(' ')[0]}`}>
-                          {industry.name}
-                        </h3>
-                        <p className="text-zinc-400 text-sm">
-                          {industry.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Keywords para SEO y reclutadores */}
-                <div className="flex flex-wrap gap-2 pt-4">
-                  {[
-                    "Software Architecture",
-                    "Team Leadership",
-                    "Cloud Solutions",
-                    "Tech Mentorship",
-                    "Agile Development",
-                    "System Design"
-                  ].map((keyword, i) => (
-                    <span key={i} className="px-3 py-1 bg-zinc-800/50 rounded-full text-sm text-zinc-400">
-                      {keyword}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Tech Stack Section */}
-        <section className="bg-zinc-900/50 py-24">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-16 text-center">
-              Tech Stack
-            </h2>
-            
-            <div className="grid gap-16">
-              {/* Frontend */}
-              <div className="space-y-6">
-                <h3 className="text-2xl font-semibold text-white">Frontend Development</h3>
-                <div className="flex flex-wrap gap-2">
-                  {technologies
-                    .filter(tech => tech.category === 'frontend')
-                    .map((tech, i) => (
-                      <TechnologyBadge key={i} tech={tech} />
-                    ))}
-                </div>
-              </div>
-
-              {/* Backend */}
-              <div className="space-y-6">
-                <h3 className="text-2xl font-semibold text-white">Backend & APIs</h3>
-                <div className="flex flex-wrap gap-2">
-                  {technologies
-                    .filter(tech => tech.category === 'backend')
-                    .map((tech, i) => (
-                      <TechnologyBadge key={i} tech={tech} />
-                    ))}
-                </div>
-              </div>
-
-              {/* Mobile */}
-              <div className="space-y-6">
-                <h3 className="text-2xl font-semibold text-white">Mobile Development</h3>
-                <div className="flex flex-wrap gap-2">
-                  {technologies
-                    .filter(tech => tech.category === 'mobile')
-                    .map((tech, i) => (
-                      <TechnologyBadge key={i} tech={tech} />
-                    ))}
-                </div>
-              </div>
-
-              {/* Cloud & DevOps */}
-              <div className="space-y-6">
-                <h3 className="text-2xl font-semibold text-white">Cloud & Infrastructure</h3>
-                <div className="flex flex-wrap gap-2">
-                  {technologies
-                    .filter(tech => tech.category === 'cloud' || tech.category === 'database')
-                    .map((tech, i) => (
-                      <TechnologyBadge key={i} tech={tech} />
-                    ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Experience Section */}
-        <ExperienceSection />
-
-        {/* Education as Service Section */}
-        <section id="education" className="bg-zinc-900/50 py-32">
-          <div className="container mx-auto px-4">
-            {/* Header */}
-            <div className="max-w-3xl mx-auto text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime-300/10 rounded-full mb-6">
-                <div className="w-2 h-2 bg-lime-300 rounded-full" />
-                <p className="text-lime-300 font-medium">Education & Innovation</p>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                Transformando la Educación a través de la Tecnología
-              </h2>
-              <p className="text-xl text-zinc-400 leading-relaxed">
-                Combinando educación, tecnología e innovación para crear experiencias de 
-                aprendizaje significativas y accesibles.
+        {/* Hero */}
+        <section className="container mx-auto px-4 pt-16 pb-24">
+          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+            <div className="relative max-w-md mx-auto lg:mx-0 w-full">
+              <img
+                src="/profile-photo.png"
+                alt="Noé Osorio"
+                className="w-full aspect-square object-cover rounded-2xl border border-zinc-700/50"
+              />
+              <p className="absolute bottom-4 left-4 px-4 py-2 bg-zinc-900 text-lime-300 text-sm font-medium rounded-full border border-zinc-700/50">
+                Living in New York
               </p>
             </div>
 
-            {/* Main Content */}
-            <div className="max-w-5xl mx-auto">
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-                {[
-                  { number: "100k+", label: "Views en Contenido" },
-                  { number: "200+", label: "Estudiantes" },
-                  { number: "50+", label: "Mentorías" },
-                  { number: "400%", label: "Mejora en Productividad" }
-                ].map((stat, i) => (
-                  <div key={i} className="p-6 bg-zinc-800/30 rounded-xl text-center">
-                    <p className="text-2xl font-bold text-lime-300 mb-1">{stat.number}</p>
-                    <p className="text-sm text-zinc-400">{stat.label}</p>
-                  </div>
-                ))}
+            <div className="space-y-8">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Noé Osorio</h1>
+                <p className="text-xl text-lime-300 mb-6">Product Engineer at Porter</p>
+                <p className="text-xl text-zinc-400 leading-relaxed">
+                  I'm a Mexican engineer in New York. By day I build product at Porter. The rest of the time I build my own tools with AI, study a master's in organizational psychology, and make videos about what I learn.
+                </p>
               </div>
 
-              {/* Experience Cards */}
-              <div className="grid md:grid-cols-3 gap-8">
-                {/* AI Education */}
-                <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
-                  <div className="space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 bg-lime-300/10 rounded-lg">
-                        <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-white">AI in Education Instructor</h3>
-                        <p className="text-zinc-400">Instituto Tecnológico Superior de Salina Cruz</p>
-                      </div>
-                    </div>
-                    <ul className="space-y-3">
-                      {[
-                        "Workshops sobre integración de IA en metodologías educativas",
-                        "Implementación de ChatGPT y Copilot en procesos educativos",
-                        "Automatización de creación y evaluación de exámenes"
-                      ].map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 text-zinc-300">
-                          <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* SaaS Development */}
-                <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
-                  <div className="space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 bg-lime-300/10 rounded-lg">
-                        <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-white">SaaS Developer & Educator</h3>
-                        <p className="text-zinc-400">Independent</p>
-                      </div>
-                    </div>
-                    <ul className="space-y-3">
-                      {[
-                        "Desarrollo de soluciones open-source con JavaScript y TypeScript",
-                        "Automatización de flujos de contenido con IA",
-                        "Herramientas de automatización Python para optimización de contenido"
-                      ].map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 text-zinc-300">
-                          <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Academic Advisor */}
-                <div className="group relative bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 p-8 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
-                  <div className="space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 bg-lime-300/10 rounded-lg">
-                        <svg className="w-6 h-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" 
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-semibold text-white">Academic Advisor</h3>
-                        <p className="text-zinc-400">Instituto Tecnológico Superior de Tepeaca</p>
-                      </div>
-                    </div>
-                    <ul className="space-y-3">
-                      {[
-                        "Workshop de desarrollo web con React para estudiantes de Ing. en TI",
-                        "Participación en cuadro de expertos para mejora curricular",
-                        "Evaluación de desempeño académico y docente"
-                      ].map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 text-zinc-300">
-                          <span className="w-1.5 h-1.5 bg-lime-300 rounded-full mt-2 shrink-0" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {/* Areas of Expertise */}
-              <div className="mt-16">
-                <h3 className="text-xl font-semibold text-white mb-6">Áreas de Expertise</h3>
-                <div className="flex flex-wrap gap-3">
-                  {[
-                    "AI en Educación",
-                    "Automatización",
-                    "Open Source",
-                    "Mentoría Tech",
-                    "Innovación Educativa",
-                    "Content Creation",
-                    "Workshop Facilitation",
-                    "Educational Technology"
-                  ].map((tag, i) => (
-                    <span 
-                      key={i} 
-                      className="px-4 py-2 bg-zinc-800/50 text-zinc-300 rounded-full text-sm hover:bg-zinc-800 hover:text-lime-300 transition-colors cursor-default"
-                    >
-                      {tag}
-                    </span>
+              <div>
+                <h2 className="text-2xl font-semibold text-white mb-4">What I care about</h2>
+                <ul className="space-y-4">
+                  {caresAbout.map((item) => (
+                    <li key={item.title}>
+                      <p className="text-white font-medium">{item.title}</p>
+                      <p className="text-zinc-400">{item.text}</p>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
-              {/* Quote */}
-              <div className="mt-16 p-8 bg-gradient-to-br from-lime-300/5 to-transparent rounded-xl border border-lime-300/10">
-                <blockquote className="text-xl text-zinc-300 italic text-center">
-                  "La combinación de tecnología y educación no solo democratiza el conocimiento, 
-                  sino que crea nuevas formas de aprender y crecer profesionalmente."
-                </blockquote>
-              </div>
+              <ul className="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <li key={tag} className={pill}>{tag}</li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="container mx-auto px-4 py-24">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              ¿Listo para Innovar Juntos?
+        {/* Tech stack */}
+        <section className="container mx-auto px-4 pb-24">
+          <div className="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {stack.map((group) => (
+              <div key={group.group} className="p-6 bg-zinc-800/50 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
+                <h3 className="text-lg font-semibold text-white mb-4">{group.group}</h3>
+                <ul className="flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <li key={item} className={pill}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Experience */}
+        <section className="container mx-auto px-4 pb-24">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-16">
+              <p className="inline-block px-4 py-2 bg-lime-300/10 rounded-full text-lime-300 font-medium mb-6">Experience</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-white">
+                Where I've <span className="text-lime-300">worked</span>
+              </h2>
+            </div>
+            <ul className="space-y-6">
+              {experience.map((job) => (
+                <li key={job.company} className="p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-3">
+                    <h3 className="text-2xl font-semibold text-white">{job.company}, {job.place}</h3>
+                    <p className="text-zinc-400">{job.years}</p>
+                  </div>
+                  <p className="text-lime-300 mb-3">{job.role}</p>
+                  <p className="text-zinc-400 leading-relaxed">{job.text}</p>
+                  {job.tags.length > 0 && (
+                    <ul className="flex flex-wrap gap-2 mt-4">
+                      {job.tags.map((tag) => (
+                        <li key={tag} className={pill}>{tag}</li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* Teaching */}
+        <section className="container mx-auto px-4 pb-24">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-16">
+              <p className="inline-block px-4 py-2 bg-lime-300/10 rounded-full text-lime-300 font-medium mb-6">Teaching</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Learning out loud <span className="text-lime-300">since 2020</span>
+              </h2>
+              <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
+                I like explaining what I learn. These are the places where I have done it.
+              </p>
+            </div>
+            <ul className="grid md:grid-cols-3 gap-6 mb-12">
+              {teaching.map((item) => (
+                <li key={item.name} className="p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all">
+                  <h3 className="text-xl font-semibold text-white mb-3">{item.name}</h3>
+                  <p className="text-zinc-400 leading-relaxed">{item.text}</p>
+                </li>
+              ))}
+            </ul>
+            <blockquote className="text-2xl text-center text-zinc-300 italic">
+              "Don't create for the algorithm. Create to leave a mark."
+            </blockquote>
+          </div>
+        </section>
+
+        {/* Closing call */}
+        <section className="container mx-auto px-4 pb-32">
+          <div className="max-w-3xl mx-auto text-center p-12 bg-gradient-to-br from-lime-300/10 to-transparent rounded-xl border border-zinc-700/50">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Want to <span className="text-lime-300">talk</span>?
             </h2>
-            <p className="text-xl text-zinc-400 mb-8">
-              Ya sea que busques transformar tu negocio con tecnología o mejorar tus 
-              habilidades como desarrollador, estoy aquí para ayudarte.
-            </p>
+            <p className="text-xl text-zinc-400 mb-8">I read every email.</p>
             <a
-              href="https://calendly.com/noeosorio/tech-business-consultant"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-8 py-4 bg-lime-300 hover:bg-lime-400 text-zinc-900 rounded-lg font-medium transition-all duration-300"
+              href={`mailto:${siteLinks.email}`}
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-lime-300 to-emerald-300 text-zinc-900 rounded-lg font-medium hover:from-lime-400 hover:to-emerald-400 transition-all duration-300"
             >
-              Agendar una Llamada
+              <HiMail className="w-5 h-5" aria-hidden="true" />
+              Email me
             </a>
           </div>
         </section>
@@ -628,4 +216,4 @@ const About = () => {
   )
 }
 
-export default About 
+export default About

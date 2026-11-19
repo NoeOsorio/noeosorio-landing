@@ -1,0 +1,172 @@
+<title>Maiden OS Layers</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Geist:wght@400;500;600&display=swap">
+
+<!-- ============================================================
+     EDIT HERE. Every word on the page comes from this block.
+     Change a text, reload, and the 3D model rebuilds itself.
+     ============================================================ -->
+<script>
+const AVATAR = "data:image/jpeg;base64,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";
+const CONTENT = {
+  captions: [
+    { title: "Maiden OS", text: "My personal AI operating system. It works from Telegram, my Mac and my iPhone, with permission levels and spending limits." },
+    { title: "You ask.", text: "In plain words, the way you would ask a person." },
+    { title: "She answers with the work done.", text: "A table, a study guide or an audio you can open right there." },
+    { title: "She keeps track.", text: "What is waiting on you, reminders and homework stay in one panel." }
+  ],
+  app: {
+    name: "Maiden", status: "Aquí contigo", pending: "Pendientes", pendingCount: "1",
+    audio: { title: "Neuroplasticidad para el camino", length: "6 min" },
+    guide: { title: "Guía de estudio: neuroplasticidad", text: "Qué es, qué la ayuda (sueño, repaso espaciado) y qué la frena.", read: "Leer", meta: "5 min de lectura, 4 fuentes" },
+    question: "¿Cómo pongo una tabla de operacionalización de variables en APA 7?",
+    answer: ["Así se presenta en APA 7: el número en negritas, el nombre en cursivas y la tabla sin líneas verticales.", "¿Quieres que la arme con tus variables de la tesis?"],
+    table: {
+      title: "Tabla 1. Operacionalización de variables",
+      head: ["Variable", "Definición conceptual (con cita)"],
+      rows: [
+        ["Liderazgo transformacional", "Capacidad del líder de inspirar y motivar al equipo más allá del interés propio (Bass y Riggio, 2006)"],
+        ["Compromiso organizacional", "Vínculo psicológico del empleado con la organización (Meyer y Allen, 1991)"],
+        ["Desempeño laboral", "Conductas que contribuyen a las metas de la organización (Campbell, 1990)"]
+      ],
+      expand: "Ampliar", copy: "Copiar"
+    },
+    composer: "Escríbele a Maiden…",
+    greeting: { title: "Buenas tardes, Noe", text: "Yo empezaría por lo que te espera: son unos 20 min. Tu tarea de Estadística vence hoy." },
+    cards: [
+      { tone: "wait", title: "Te espera", count: "1", items: [{ text: "Revisa los gastos de los 2 meses", note: "Te toma unos 20 min" }] },
+      { tone: "remind", title: "Recordatorios", count: "2", items: [{ text: "ir por la camisa", note: "hoy a las 6:00 p.m." }, { text: "tomar agua", note: "todos los días, la próxima mañana a las 10:00 a.m." }] },
+      { tone: "tasks", title: "Tareas", count: "3", items: [{ text: "Ejercicios de regresión lineal", note: "Estadística", due: "Vence hoy" }, { text: "Ensayo sobre liderazgo situacional", note: "Liderazgo", due: "Mañana" }, { text: "Caso práctico: flujo de efectivo", note: "Finanzas", due: "Domingo 1" }] },
+      { tone: "day", title: "Tu día", items: [{ note: "Lo que termines y lo que yo haga por ti aparece aquí, con su hora." }] },
+      { tone: "file", title: "Tu archivo", items: [] }
+    ]
+  }
+};
+</script>
+
+<style>
+  /* Layout: one pinned stage; the app sits in 3D on the right, one caption at a time on the left. */
+  :root {
+    color-scheme: dark;
+    --night: #0E0D0B; --ink: #F4EEE4; --light-a: rgba(140,110,240,.20); --light-b: rgba(240,82,139,.14);
+    --app-bg: #F4F3F8; --app-ink: #1C1B22; --app-2: #5F5D6B; --violet: #6A4DF0;
+    --ui: "Geist", system-ui, sans-serif;
+  }
+  .piece { font-family: var(--ui); color: var(--app-ink); }
+  .window { --bg: var(--app-bg); --edge: #C9C7D3; --r: 22px; }
+  .dots { display: flex; gap: 9px; } .dots i { width: 13px; height: 13px; border-radius: 50%; background: #DCDAE3; }
+  .chip { --bg: #fff; --edge: #CFC9EA; --r: 999px; display: flex; align-items: center; gap: 10px; padding: 5px 18px 5px 5px; box-shadow: inset 0 0 0 1.5px #D9D2F7; }
+  .chip img, .greet img { width: 42px; height: 42px; border-radius: 50%; display: block; flex: none; }
+  .chip b { display: block; font: 600 16px/1.15 var(--ui); } .chip span { font: 400 12.5px var(--ui); color: var(--app-2); display: flex; align-items: center; gap: 5px; } .chip span i { width: 7px; height: 7px; border-radius: 50%; background: #3B9BF0; }
+  .round { --bg: #E9E6F6; --edge: #C9C3E4; --r: 999px; width: 46px; height: 46px; display: grid; place-items: center; color: var(--app-ink); }
+  .round svg, .cta svg { width: 19px; height: 19px; }
+  .cta { --bg: var(--violet); --edge: #4A32B8; --r: 999px; height: 46px; padding: 0 16px; display: flex; align-items: center; gap: 9px; font: 600 15px var(--ui); color: #fff; white-space: nowrap; }
+  .cta u { text-decoration: none; background: rgba(255,255,255,.28); border-radius: 999px; min-width: 22px; height: 22px; display: grid; place-items: center; font-size: 12.5px; }
+  .card { --r: 18px; padding: 16px 18px; }
+  .audio { --bg: #FBE9EE; --edge: #E3BFCB; } .audio b, .guide b { display: block; font: 600 15.5px var(--ui); margin-bottom: 12px; }
+  .audio .play { display: flex; align-items: center; gap: 12px; font: 600 12.5px var(--ui); color: #D6336C; }
+  .audio .play i { width: 42px; height: 42px; border-radius: 50%; background: #F0528B; display: grid; place-items: center; }
+  .audio .play i::after { content: ""; border: 8px solid transparent; border-left: 12px solid #fff; margin-left: 9px; }
+  .wave { display: flex; align-items: center; gap: 3px; } .wave s { width: 3px; border-radius: 2px; background: #F0528B; }
+  .guide { --bg: #E4F1F8; --edge: #B9D3E1; } .guide b { margin-bottom: 4px; } .guide p { font: 400 13px/1.45 var(--ui); color: var(--app-2); margin: 0 0 12px; }
+  .guide .foot, .table .foot { display: flex; align-items: center; gap: 12px; font: 600 12.5px var(--ui); color: #1D6F9C; }
+  .mini { height: 30px; padding: 0 13px; border-radius: 999px; display: inline-flex; align-items: center; font: 600 13.5px var(--ui); background: #2FA8E0; color: #fff; }
+  .mini.ghost { background: #D5E6EF; color: #1D6F9C; }
+  .bubble { --r: 22px; padding: 13px 20px; font: 400 17px/1.5 var(--ui); }
+  .bubble.me { --bg: var(--violet); --edge: #4A32B8; color: #fff; white-space: nowrap; }
+  .bubble.her { --bg: #E6E5EB; --edge: #C6C4CE; } .bubble p { margin: 0; } .bubble p + p { margin-top: 1.2em; }
+  .table { --bg: #E8EEF2; --edge: #B9CBD6; box-shadow: inset 0 0 0 1.5px #C6DDE9; }
+  .table b { display: block; font: 600 15px var(--ui); margin-bottom: 10px; }
+  .table .tr { display: flex; gap: 14px; padding: 8px 8px; font: 400 12.5px/1.4 var(--ui); } .table .tr span:first-child { flex: none; width: 128px; }
+  .table .tr.th { background: #D3E6F0; border-radius: 8px; font-weight: 600; color: #145A82; } .table .tr:nth-child(odd):not(.th) { background: rgba(255,255,255,.5); border-radius: 8px; }
+  .table .foot { margin-top: 12px; }
+  .field { --bg: #fff; --edge: #CFCDD8; --r: 999px; height: 50px; padding: 0 20px; display: flex; align-items: center; font: 400 16px var(--ui); color: #9A98A6; box-shadow: inset 0 0 0 1.5px #E2E0EA; }
+  .round.plain { --bg: #fff; --edge: #CFCDD8; box-shadow: inset 0 0 0 1.5px #E2E0EA; }
+  .side { --bg: #E7E5F3; --edge: #C3C0D6; --r: 22px; background: linear-gradient(180deg, #E9E6F6, #E2EAF2); }
+  .greet { display: flex; gap: 12px; } .greet b { display: block; font: 600 17px var(--ui); margin-bottom: 3px; } .greet p { margin: 0; font: 400 13.5px/1.4 var(--ui); color: var(--app-2); }
+  .pc { --r: 20px; padding: 15px 16px; }
+  .pc h3 { margin: 0; display: flex; align-items: center; gap: 10px; font: 600 16px var(--ui); }
+  .pc h3 i { width: 26px; height: 26px; border-radius: 50%; background: var(--dot); flex: none; }
+  .pc h3 u { text-decoration: none; font-size: 12px; background: rgba(255,255,255,.6); border-radius: 999px; min-width: 22px; height: 20px; display: grid; place-items: center; }
+  .pc .it { display: flex; gap: 10px; margin-top: 11px; font: 500 14px/1.3 var(--ui); }
+  .pc .it::before { content: ""; width: 15px; height: 15px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px rgba(28,27,34,.45); flex: none; margin-top: 2px; }
+  .pc .it.bare::before { display: none; }
+  .pc .it small { display: block; font: 400 12px var(--ui); color: var(--app-2); margin-top: 2px; }
+  .pc .it em { margin-left: auto; font: 600 12px var(--ui); font-style: normal; color: #D9363E; white-space: nowrap; }
+  .pc.wait { --bg: #D8D1F6; --edge: #B4A9E4; --dot: #6A4DF0; color: #3B2A9B; } .pc.remind { --bg: #F0E3C8; --edge: #D3C29C; --dot: #E8A53A; }
+  .pc.tasks { --bg: #DADCEC; --edge: #B7BAD0; --dot: #4C63D2; } .pc.day { --bg: #F3D6DA; --edge: #D9B2B8; --dot: #EE5C6C; } .pc.file { --bg: #CFE3EA; --edge: #A9C6D0; --dot: #2E97B8; }
+</style>
+
+<script src="layers-engine-v2.js"></script>
+<script>
+(() => {
+  const A = CONTENT.app, { esc } = Layers;
+  const ICON = {
+    globe: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.2"/><ellipse cx="10" cy="10" rx="3.1" ry="7.2"/><path d="M3 10h14"/></svg>',
+    list: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="5" cy="6" r="1.8"/><circle cx="5" cy="14" r="1.8"/><path d="M10 6h7M10 14h7"/></svg>',
+    plus: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4.5v11M4.5 10h11"/></svg>',
+    mic: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="7.6" y="2.6" width="4.8" height="9.4" rx="2.4" fill="currentColor"/><path d="M4.8 10a5.2 5.2 0 0010.4 0M10 15.4v2.2"/></svg>'
+  };
+  const wave = [8, 16, 22, 12, 18, 26, 14, 20, 10, 24, 16, 12, 20, 8].map(h => `<s style="height:${h}px"></s>`).join("");
+
+  const M = Layers.create({
+    captions: [
+      Object.assign({ show: [[-1, 0.12], [0.93, 2]] }, CONTENT.captions[0]),
+      Object.assign({ show: [[0.27, 0.42]] }, CONTENT.captions[1]),
+      Object.assign({ show: [[0.46, 0.66]] }, CONTENT.captions[2]),
+      Object.assign({ show: [[0.70, 0.89]] }, CONTENT.captions[3])
+    ],
+    // Camera stops: scroll position, tilt, turn, zoom, and the point of the app it looks at.
+    cam: [
+      { p: 0.00, rx: 16, rz: 0,   s: 1.00, fx: 0,    fy: 0 },
+      { p: 0.08, rx: 16, rz: 0,   s: 1.00, fx: 0,    fy: 0 },
+      { p: 0.28, rx: 56, rz: -36, s: 0.66, fx: 0,    fy: 0 },
+      { p: 0.40, rx: 50, rz: -28, s: 0.76, fx: -120, fy: -20 },
+      { p: 0.52, rx: 50, rz: -28, s: 0.78, fx: -180, fy: 60 },
+      { p: 0.64, rx: 50, rz: -30, s: 0.78, fx: -200, fy: 120 },
+      { p: 0.74, rx: 50, rz: -42, s: 0.84, fx: 380,  fy: -80 },
+      { p: 0.84, rx: 50, rz: -42, s: 0.84, fx: 380,  fy: 20 },
+      { p: 0.90, rx: 54, rz: -34, s: 0.68, fx: 0,    fy: 0 },
+      { p: 1.00, rx: 14, rz: 0,   s: 1.00, fx: 0,    fy: 0 }
+    ],
+    explode: [0.08, 0.28, 0.90, 0.99],
+    onMeasure: layout
+  });
+  const P = M.piece;
+
+  P("window", "", { x: 0, y: 0, w: 1440, h: 900, z: 0, thick: 16 });
+  P("dots", "<i></i><i></i><i></i>", { x: 20, y: 14, z: 30 });
+  P("chip", `<img src="${AVATAR}" alt=""><div><b>${esc(A.name)}</b><span><i></i>${esc(A.status)}</span></div>`, { x: 20, y: 38, z: 44, thick: 6, shadow: true });
+  const right = [
+    P("round", ICON.globe, { y: 40, z: 40, thick: 4 }),
+    P("cta", ICON.list + esc(A.pending) + `<u>${esc(A.pendingCount)}</u>`, { y: 40, z: 48, thick: 6, shadow: true })
+  ];
+  P("card audio", `<b>${esc(A.audio.title)}</b><div class="play"><i></i><div class="wave">${wave}</div>${esc(A.audio.length)}</div>`, { x: 36, y: 108, w: 330, z: 60, thick: 6, shadow: true });
+  P("card guide", `<b>${esc(A.guide.title)}</b><p>${esc(A.guide.text)}</p><div class="foot"><span class="mini">${esc(A.guide.read)}</span>${esc(A.guide.meta)}</div>`, { x: 382, y: 108, w: 370, z: 60, thick: 6, shadow: true });
+  // The question leaves the text field; the answer and the table arrive after it.
+  const ask = P("bubble me", esc(A.question), { z: 70, thick: 6, shadow: true, enter: [0.32, 0.40], from: { x: -420, y: 520, z: -60, s: 0.8 }, arc: 90 });
+  const ans = P("bubble her", A.answer.map(t => `<p>${esc(t)}</p>`).join(""), { x: 36, w: 700, z: 64, thick: 6, shadow: true, enter: [0.46, 0.53], from: { y: 50, z: 150, s: 0.94 }, arc: 40 });
+  const T = A.table;
+  const table = P("card table", `<b>${esc(T.title)}</b><div class="tr th"><span>${esc(T.head[0])}</span><span>${esc(T.head[1])}</span></div>` + T.rows.map(r => `<div class="tr"><span>${esc(r[0])}</span><span>${esc(r[1])}</span></div>`).join("") + `<div class="foot"><span class="mini">${esc(T.expand)}</span><span class="mini ghost">${esc(T.copy)}</span></div>`, { x: 36, w: 470, z: 84, thick: 6, shadow: true, enter: [0.55, 0.63], from: { y: 70, z: 220, s: 0.9 }, arc: 60 });
+  P("round plain", ICON.plus, { x: 24, y: 836, z: 44, thick: 4 });
+  P("field", esc(A.composer), { x: 82, y: 834, w: 884, z: 44, thick: 4 });
+  P("round plain", ICON.mic, { x: 978, y: 836, z: 44, thick: 4 });
+
+  // Side panel: each card is its own layer, stepped in depth.
+  P("side", "", { x: 1052, y: 10, w: 378, h: 880, z: 130, thick: 8, shadow: true });
+  P("greet", `<img src="${AVATAR}" alt=""><div><b>${esc(A.greeting.title)}</b><p>${esc(A.greeting.text)}</p></div>`, { x: 1070, y: 34, w: 340, z: 144 });
+  const cards = A.cards.map((c, i) => P("pc " + c.tone, `<h3><i></i>${esc(c.title)}${c.count ? `<u>${esc(c.count)}</u>` : ""}</h3>` + c.items.map(it => `<div class="it${it.text ? "" : " bare"}"><div>${it.text ? esc(it.text) : ""}<small>${esc(it.note || "")}</small></div>${it.due ? `<em>${esc(it.due)}</em>` : ""}</div>`).join(""), { x: 1066, w: 350, z: 160 + i * 8, thick: 6, shadow: true, under: 130 }));
+
+  // Everything is placed from its real size, so longer or shorter text never overlaps.
+  function layout() {
+    let x = 1030; [...right].reverse().forEach(q => { x -= q.el.offsetWidth; q.el.style.left = x + "px"; x -= 12; });
+    let y = 108 + Math.max(...[...M.rig.querySelectorAll(".audio, .guide")].map(e => e.offsetHeight)) + 22;
+    ask.el.style.left = (1030 - ask.el.offsetWidth) + "px"; ask.el.style.top = y + "px"; y += ask.el.offsetHeight + 22;
+    ans.el.style.top = y + "px"; y += ans.el.offsetHeight + 18;
+    table.el.style.top = y + "px";
+    let cy = 34 + M.rig.querySelector(".greet").offsetHeight + 22;
+    cards.forEach(q => { q.el.style.top = cy + "px"; cy += q.el.offsetHeight + 12; });
+  }
+  M.start();
+})();
+</script>

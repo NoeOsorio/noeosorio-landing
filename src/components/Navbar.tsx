@@ -3,10 +3,10 @@ import { Link, useLocation } from 'react-router-dom'
 import Logo from './Logo'
 
 const navigation = [
-  { name: 'Inicio', href: '/' },
-  { name: 'Portafolio', href: '/portfolio' },
-  { name: 'Servicios', href: '/services' },
-  { name: 'Acerca de', href: '/about' }
+  { name: 'Home', href: '/' },
+  { name: 'Projects', href: '/portfolio' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' }
 ]
 
 const Navbar = () => {
@@ -52,14 +52,14 @@ const Navbar = () => {
               to="/contact"
               className="px-4 py-2 bg-lime-300 text-zinc-900 rounded-lg text-sm font-medium hover:bg-lime-400 transition-colors"
             >
-              Contactar
+              Say hi
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Abrir menú de navegación"
+            aria-label="Open navigation menu"
             aria-expanded={isMenuOpen}
             className="md:hidden p-2 text-zinc-400 hover:text-white"
           >
@@ -77,7 +77,7 @@ const Navbar = () => {
               />
             </svg>
             <span className="sr-only">
-              {isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+              {isMenuOpen ? 'Close menu' : 'Open menu'}
             </span>
           </button>
         </div>
@@ -105,7 +105,7 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
                 className="px-4 py-2 bg-lime-300 text-zinc-900 rounded-lg text-sm font-medium hover:bg-lime-400 transition-colors text-center"
               >
-                Contactar
+                Say hi
               </Link>
             </div>
           </div>
