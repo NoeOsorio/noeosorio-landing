@@ -270,7 +270,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     timeout(reduce ? 0 : 900, () => {
       const human = !viaKeys && travel > 400
       box.innerHTML = human ? '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FF9A8B" stroke-width="2.4" stroke-linecap="round"><path d="M4 4 L12 12 M12 4 L4 12"/></svg>'
-        : '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="${LIME}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5 L7.5 13 L14.5 5"/></svg>'
+        : `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="${LIME}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5 L7.5 13 L14.5 5"/></svg>`
       msg.textContent = human ? RB.failed : RB.passed; msg.className = 'msg ' + (human ? 'bad' : 'good')
       box.disabled = false
       timeout(reduce ? 0 : 500, () => runTerm(human ? RB.failedSub : ''))
