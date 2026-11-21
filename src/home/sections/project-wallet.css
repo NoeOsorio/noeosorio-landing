@@ -1,11 +1,9 @@
 
 .home-wallet{
     color-scheme: dark;
-    --night: #0E0D0B; --ink: #F4EEE4; --ink-2: rgba(244,238,228,.72); --ink-3: rgba(244,238,228,.5);
-    --glass: rgba(255,248,236,.07); --glass-line: rgba(255,248,236,.14); --lime: #D6F35C;
-    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-    --body: "Geist", system-ui, -apple-system, sans-serif;
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1); --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+    --ink-2: rgba(244,238,228,.72); --ink-3: rgba(244,238,228,.5);
+    --glass: rgba(255,248,236,.07); --glass-line: rgba(255,248,236,.14);
+    --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
   }
 
 /* The prototype was drawn on browser defaults; the site's reset sets border-box and block svgs. Put them back for this section. */

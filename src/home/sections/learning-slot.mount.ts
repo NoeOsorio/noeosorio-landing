@@ -1,12 +1,12 @@
 import type { Mount } from '../useMount'
 import type { LearningContent, LearningVideo } from '../data/learning'
+import { esc } from '../dom'
+import { HOT, HOT_RGB, LED, LIME_RGB } from '../brand'
 
 const E = 'cubic-bezier(0.23, 1, 0.32, 1)'
 const GRID = 15
 const KEYS = ['build', 'life', 'career', 'podcast', 'taco']
 
-const esc = (s: string | number) =>
-  String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] as string)
 const fmtLen = (s: number) => {
   const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), ss = String(s % 60).padStart(2, '0')
   return h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`
@@ -109,12 +109,17 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
     for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) {
       const on = m[y * GRID + x]
       if (!on && !dim) continue
-      ctx.fillStyle = on ? (rnd() < 0.07 + glow ? '#F2FFD2' : '#9FD043') : 'rgba(214,243,92,.07)'
+      ctx.fillStyle = on ? (rnd() < 0.07 + glow ? HOT : LED) : `rgba(${LIME_RGB},.07)`
       ctx.beginPath(); ctx.roundRect(x0 + x * cell + g / 2, y0 + y * cell + g / 2, s, s, s * 0.22); ctx.fill()
     }
   }
-  const dpr = Math.min(2, devicePixelRatio || 1)
-  const sizeCanvas = (cv: HTMLCanvasElement, w: number, h: number) => { cv.width = w * dpr; cv.height = h * dpr; const x = cv.getContext('2d') as Ctx; x.setTransform(dpr, 0, 0, dpr, 0, 0); return x }
+  // Resizing a canvas wipes it and reallocates its buffer, so that only happens when the size or the pixel ratio really changed.
+  const sized = new WeakMap<HTMLCanvasElement, { w: number; h: number; dpr: number }>()
+  const sizeCanvas = (cv: HTMLCanvasElement, w: number, h: number) => {
+    const dpr = Math.min(2, devicePixelRatio || 1), x = cv.getContext('2d') as Ctx, was = sized.get(cv)
+    if (was && was.w === w && was.h === h && was.dpr === dpr) { x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h); return x }
+    cv.width = w * dpr; cv.height = h * dpr; sized.set(cv, { w, h, dpr }); x.setTransform(dpr, 0, 0, dpr, 0, 0); return x
+  }
 
   // Draws a dot board. hot(x, y) can light some dots brighter, for the shimmer and the blink.
   function ledText(ctx: Ctx, W: number, H: number, cell: number, tm: TextMask, offset: number, align: string, hot: ((x: number, y: number) => boolean) | null, lit = true) {
@@ -127,7 +132,7 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
       if (offset) tx = ((tx % (tm.w + cols)) + tm.w + cols) % (tm.w + cols)
       const ty = y - top
       const on = lit && tx >= 0 && tx < tm.w && ty >= 0 && ty < tm.h && tm.m[ty * tm.w + tx]
-      ctx.fillStyle = on ? (hot && hot(x, y) ? '#F2FFD2' : '#9FD043') : 'rgba(214,243,92,.06)'
+      ctx.fillStyle = on ? (hot && hot(x, y) ? HOT : LED) : `rgba(${LIME_RGB},.06)`
       ctx.beginPath(); ctx.roundRect(ox + x * cell + g / 2, oy + y * cell + g / 2, s, s, s * 0.22); ctx.fill()
     }
   }
@@ -171,20 +176,27 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
 
   // ---------- Ticket ----------
   const ticket = $<HTMLElement>('.ticket')
-  let current: LearningVideo | null = null
+  let current: LearningVideo | null = null, currentJackpot = false
+  // The strip prints what the reels landed on: the topic on the left, how long the video is on the right.
+  // On a resize only this canvas is drawn again; the ticket itself is a live region and is never rebuilt.
+  function drawStrip() {
+    const st = ticket.querySelector('.strip') as HTMLCanvasElement | null
+    if (!st || !current) return
+    const v = current, W = st.clientWidth || 480, cell = Math.max(3, Math.min(5, Math.floor(W / 80))), H = cell * 11, x = sizeCanvas(st, W, H)
+    st.style.height = H + 'px'
+    const label = textMask(currentJackpot ? 'JACKPOT' : C.cats[v.cat]), len = textMask(fmtLen(v.len))
+    ledText(x, W, H, cell, label, 0, 'left', null)
+    const cols = Math.floor(W / cell), rows = Math.floor(H / cell), g = Math.max(1, cell * 0.22), s = cell - g, top = Math.floor((rows - 7) / 2), ox = (W - cols * cell) / 2, oy = (H - rows * cell) / 2
+    for (let y = 0; y < 7; y++) for (let xx = 0; xx < len.w; xx++) if (len.m[y * len.w + xx]) { x.fillStyle = HOT; x.beginPath(); x.roundRect(ox + (cols - len.w - 2 + xx) * cell + g / 2, oy + (top + y) * cell + g / 2, s, s, s * 0.22); x.fill() }
+  }
   function printTicket(v: LearningVideo, jackpot: boolean, animate = true) {
     ticket.innerHTML = `<canvas class="strip" aria-hidden="true"></canvas><h3>${esc(v.title)}</h3><div class="meta"><span>${esc(fmtDate(v.date))}</span></div>
       ${jackpot ? `<p class="jp">${esc(C.jackpot)}</p>` : ''}<div class="row"><a class="watch" href="${esc(url(v.id))}" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z"/></svg>${esc(C.watch)}</a><button class="again" type="button">${esc(C.again)}</button></div>`
-    const st = ticket.querySelector('.strip') as HTMLCanvasElement, W = st.clientWidth || 480, cell = Math.max(3, Math.min(5, Math.floor(W / 80))), H = cell * 11, x = sizeCanvas(st, W, H)
-    st.style.height = H + 'px'
-    // The strip prints what the reels landed on: the topic on the left, how long the video is on the right.
-    const label = textMask(jackpot ? 'JACKPOT' : C.cats[v.cat]), len = textMask(fmtLen(v.len))
-    ledText(x, W, H, cell, label, 0, 'left', null)
-    const cols = Math.floor(W / cell), rows = Math.floor(H / cell), g = Math.max(1, cell * 0.22), s = cell - g, top = Math.floor((rows - 7) / 2), ox = (W - cols * cell) / 2, oy = (H - rows * cell) / 2
-    for (let y = 0; y < 7; y++) for (let xx = 0; xx < len.w; xx++) if (len.m[y * len.w + xx]) { x.fillStyle = '#F2FFD2'; x.beginPath(); x.roundRect(ox + (cols - len.w - 2 + xx) * cell + g / 2, oy + (top + y) * cell + g / 2, s, s, s * 0.22); x.fill() }
+    current = v; currentJackpot = jackpot
+    drawStrip()
     ticket.querySelector('.again')!.addEventListener('click', () => { pullLever() }, { signal })
     if (animate && !reduce) ticket.animate([{ clipPath: 'inset(0 0 100% 0)', transform: 'translateY(-14px)' }, { clipPath: 'inset(0 0 0 0)', transform: 'none' }], { duration: 700, easing: 'steps(12, end)' })
-    current = v; markList()
+    markList()
   }
 
   // ---------- Pull ----------
@@ -211,7 +223,7 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
       if (reels.every((R) => R.done)) {
         spinning = false; ticket.getAnimations().forEach((a) => a.cancel()); printTicket(v, jackpot)
         say(jackpot ? C.jackpotSign : C.cats[v.cat], 'blink', jackpot ? 3200 : 2000)
-        if (jackpot) reelsBox.animate([{ boxShadow: 'inset 0 0 0 1px rgba(242,255,210,.9), inset 0 0 60px rgba(214,243,92,.35)' }, { boxShadow: 'inset 0 0 0 1px rgba(214,243,92,.28), inset 0 0 40px rgba(214,243,92,.06)' }], { duration: 300, iterations: 5, easing: 'ease' })
+        if (jackpot) reelsBox.animate([{ boxShadow: `inset 0 0 0 1px rgba(${HOT_RGB},.9), inset 0 0 60px rgba(${LIME_RGB},.35)` }, { boxShadow: `inset 0 0 0 1px rgba(${LIME_RGB},.28), inset 0 0 40px rgba(${LIME_RGB},.06)` }], { duration: 300, iterations: 5, easing: 'ease' })
         return
       }
       raf(step)
@@ -248,6 +260,10 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
     if (Math.abs(moved) < 6) pullLever()
     else release(moved > (track.clientHeight - 10) * 0.55)
   }, { signal })
+  // A cancelled touch or a lost capture lets the lever spring back without pulling it.
+  const cancelDrag = () => { if (!drag) return; drag = null; release(false) }
+  knob.addEventListener('pointercancel', cancelDrag, { signal })
+  knob.addEventListener('lostpointercapture', cancelDrag, { signal })
   knob.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pullLever() } }, { signal })
   // A click or "Pull again" still shows the lever going down and springing back.
   function pullLever() {
@@ -260,7 +276,7 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
   const list = $<HTMLElement>('.list')
   let filter = 'all'
   const cats = ['all', ...Object.keys(C.cats)]
-  list.innerHTML = `<h3>${esc(C.latest)}</h3><div class="chips" role="group" aria-label="Topics">${cats.map((k) => `<button class="chip" type="button" data-k="${k}" aria-pressed="${k === 'all'}">${esc(k === 'all' ? C.all : C.cats[k as keyof typeof C.cats])}</button>`).join('')}</div><div class="vids"></div>
+  list.innerHTML = `<h3>${esc(C.latest)}</h3><div class="chips" role="group" aria-label="${esc(C.topics)}">${cats.map((k) => `<button class="chip" type="button" data-k="${k}" aria-pressed="${k === 'all'}">${esc(k === 'all' ? C.all : C.cats[k as keyof typeof C.cats])}</button>`).join('')}</div><div class="vids"></div>
     <a class="more" href="${esc(C.channel)}" target="_blank" rel="noopener">${esc(C.allVideos)}<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8 H13 M9 4 L13 8 L9 12"/></svg></a>`
   const vids = list.querySelector('.vids') as HTMLElement
   function renderList() {
@@ -276,7 +292,7 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
   function boot() { marqDraw(performance.now()); reels.forEach((R) => (R.key = C.videos[0].cat)); drawAll(); renderList(); printTicket(C.videos[0], false, false) }
   ;(document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { if (!stopped) boot() })
   let resizeT: ReturnType<typeof setTimeout> | undefined
-  window.addEventListener('resize', () => { clearLater(resizeT); resizeT = later(200, () => { marqDraw(performance.now()); drawAll(); if (current) printTicket(current, false, false) }) }, { signal })
+  window.addEventListener('resize', () => { clearLater(resizeT); resizeT = later(200, () => { marqDraw(performance.now()); drawAll(); drawStrip() }) }, { signal })
 
   return () => {
     stopped = true

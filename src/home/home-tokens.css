@@ -1,0 +1,9 @@
+/* Shared look of the home page. Every section reads these; a section only declares what is its own. */
+.home-root {
+  --night: #0E0D0B; --ink: #F4EEE4; --lime: #D6F35C; --led: #9FD043; --hot: #F2FFD2;
+  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --body: "Geist", system-ui, -apple-system, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative; background: var(--night); color: var(--ink);
+}
+.home-root .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }

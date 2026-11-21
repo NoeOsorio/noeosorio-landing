@@ -1,12 +1,9 @@
 import type { Mount } from '../useMount'
 import type { Tip, TipsContent } from '../data/tips'
+import { esc } from '../dom'
+import { HOT, LED, LIME, LIME_RGB, LOGO_D, logoPaths } from '../brand'
 
 const E = 'cubic-bezier(0.23, 1, 0.32, 1)'
-const LOGO_D = 'M123 111 L225 111 L250 154 L225 198 L199 155 L150 155 L123 198 L147 243 L97 243 L72 199 Z M252 156 L302 156 L327 200 L276 288 L175 288 L149 244 L174 200 L200 244 L250 244 L276 200 Z'
-const LOGO_PATHS = '<path d="M123 111 L225 111 L250 154 L225 198 L199 155 L150 155 L123 198 L147 243 L97 243 L72 199 Z"/><path d="M252 156 L302 156 L327 200 L276 288 L175 288 L149 244 L174 200 L200 244 L250 244 L276 200 Z"/>'
-const esc = (s: string | number) =>
-  String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] as string)
-
 const CUP = '<svg class="cup" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11 H21 V18 A6 6 0 0 1 15 24 H11 A6 6 0 0 1 5 18 Z M21 13 H23.5 A3 3 0 0 1 23.5 19 H21 M10 4 C 9 6 11 7 10 9 M15 4 C 14 6 16 7 15 9"/></svg>'
 const ICONS = [
   CUP,
@@ -48,7 +45,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     observers.add(io); io.observe(el); return io
   }
 
-  root.innerHTML = `<section class="wrap" aria-label="Tips">
+  root.innerHTML = `<section class="wrap" aria-label="${esc(C.sectionLabel)}">
   <div class="glow" aria-hidden="true"></div>
   <div class="scene"><div class="device">
     <div class="screen">
@@ -85,7 +82,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   void screen
 
   // ---------- The ask ----------
-  vAsk.innerHTML = `<div class="merchant"><svg viewBox="60 100 280 200" fill="var(--screen-ink)" aria-hidden="true">${LOGO_PATHS}</svg><div><b>${esc(C.merchant)}</b><span>${esc(C.place)}</span></div></div><div class="bill"><span>${esc(C.receiptLine)}</span><i></i><span>${esc(C.total)}</span></div>
+  vAsk.innerHTML = `<div class="merchant"><svg viewBox="60 100 280 200" fill="var(--screen-ink)" aria-hidden="true">${logoPaths()}</svg><div><b>${esc(C.merchant)}</b><span>${esc(C.place)}</span></div></div><div class="bill"><span>${esc(C.receiptLine)}</span><i></i><span>${esc(C.total)}</span></div>
     <h2 class="ask">${esc(C.ask)}</h2><p class="askSub">${esc(C.askSub)}</p>
     <div class="tips">${C.tips.map((t, i) => `<a class="tip${i ? '' : ' hero'}" href="${esc(C.jar)}" target="_blank" rel="noopener" data-i="${i}">${ICONS[i] || ''}<span class="price">${esc(t.price)}</span><span class="name">${esc(t.name)}</span><span class="line">${esc(t.line)}</span></a>`).join('')}</div>
     <button class="notip" type="button">${esc(C.noTip)}</button>`
@@ -96,7 +93,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   function paid(t: Tip) {
     vPay.innerHTML = `<svg viewBox="-60 -60 120 120" fill="none" aria-hidden="true">
         <g class="frame" stroke="var(--lime-deep)" stroke-width="4.5" stroke-linecap="round"><path d="M-52 -26 V-40 A12 12 0 0 1 -40 -52 H-26"/><path d="M26 -52 H40 A12 12 0 0 1 52 -40 V-26"/><path d="M52 26 V40 A12 12 0 0 1 40 52 H26"/><path d="M-26 52 H-40 A12 12 0 0 1 -52 40 V26"/></g>
-        <g class="logo" transform="scale(.31) translate(-200,-200)" stroke="var(--lime-deep)" stroke-width="7" stroke-linejoin="round">${LOGO_PATHS.replace(/<path /g, '<path class="lp" ')}</g>
+        <g class="logo" transform="scale(.31) translate(-200,-200)" stroke="var(--lime-deep)" stroke-width="7" stroke-linejoin="round">${logoPaths('class="lp" ')}</g>
         <path class="check" d="M-20 2 L-5 17 L22 -14" stroke="var(--lime-deep)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0"/></svg>
       <h3>${esc(C.thanks)}</h3><p>${esc(t.after)}</p>
       <div class="going"><span>${esc(C.openingJar)}</span><i><b></b></i></div>
@@ -124,7 +121,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
 
   // ---------- No tip: the terminal takes it personally ----------
   function judged() {
-    vJudge.innerHTML = `<div class="slipwrap"><div class="slip">TIP ............ $0.00</div><span class="noted">${esc(C.stamp)}</span></div>
+    vJudge.innerHTML = `<div class="slipwrap"><div class="slip">${esc(C.slip)}</div><span class="noted">${esc(C.stamp)}</span></div>
       ${C.judged.map((l, i) => `<p class="say${i === C.judged.length - 1 ? ' small' : ''}">${esc(l)}</p>`).join('')}
       <div class="last"><h3>${esc(C.subscribeAsk)}</h3><div class="row">
         <a class="yt" href="${esc(C.youtube)}" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5 L19 12 L8 19 Z"/></svg>${esc(C.subscribe)}</a>
@@ -143,43 +140,52 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
 
   // ---------- LED dot matrix ----------
   // Draw a shape into a tiny grid, then light one rounded square per filled cell.
-  function matrix(canvas: HTMLCanvasElement, cols: number, rows: number, paint: (o: CanvasRenderingContext2D, w: number, h: number) => void, opts: { cell: number; grid?: boolean; twinkle?: boolean }) {
-    const dpr = Math.min(2, devicePixelRatio || 1), cell = opts.cell, gap = Math.max(1, cell * 0.18)
-    canvas.width = cols * cell * dpr; canvas.height = rows * cell * dpr; canvas.style.width = cols * cell + 'px'; canvas.style.height = rows * cell + 'px'
-    const off = document.createElement('canvas'); off.width = cols; off.height = rows
-    const o = off.getContext('2d') as CanvasRenderingContext2D; paint(o, cols, rows)
-    const data = o.getImageData(0, 0, cols, rows).data, on: { x: number; y: number; lit: boolean; hot: boolean }[] = []
+  // The canvas gets one draw function, one observer and one set of listeners for its whole life;
+  // the returned setup only recomputes the grid and the canvas size, then draws again.
+  function matrix(canvas: HTMLCanvasElement, opts: { grid?: boolean; twinkle?: boolean }) {
+    let cols = 0, rows = 0, cell = 10, gap = 1
+    let on: { x: number; y: number; lit: boolean; hot: boolean }[] = []
     let seed = 11
     const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647
-    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) { const a = data[(y * cols + x) * 4 + 3]; on.push({ x, y, lit: a > 110, hot: rnd() < 0.07 }) }
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D; ctx.scale(dpr, dpr)
-    let reveal = reduce ? cols : 0, mx = -1e4, my = -1e4, drawRaf = 0, inView = false, revealing = false, revealed = reduce
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    let reveal = reduce ? Infinity : 0, mx = -1e4, my = -1e4, drawRaf = 0, inView = false, revealing = false, revealed = reduce
     function draw() {
       ctx.clearRect(0, 0, cols * cell, rows * cell)
       for (const c of on) {
         const px = c.x * cell + gap / 2, py = c.y * cell + gap / 2, s = cell - gap
         const near = Math.hypot(px + s / 2 - mx, py + s / 2 - my) < cell * 4.5
-        if (c.lit && c.x <= reveal) ctx.fillStyle = near || c.hot ? '#F2FFD2' : '#9FD043'
-        else ctx.fillStyle = opts.grid ? 'rgba(214,243,92,.07)' : 'rgba(0,0,0,0)'
+        if (c.lit && c.x <= reveal) ctx.fillStyle = near || c.hot ? HOT : LED
+        else ctx.fillStyle = opts.grid ? `rgba(${LIME_RGB},.07)` : 'rgba(0,0,0,0)'
         ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(px, py, s, s, s * 0.22); else ctx.rect(px, py, s, s); ctx.fill()
       }
     }
-    draw()
     // A few dots catch the light now and then, like a real panel.
     if (opts.twinkle && !reduce) interval(900, () => { if (document.hidden || !inView) return; for (const c of on) if (c.lit) c.hot = rnd() < 0.08; draw() })
-    // The lights come on from left to right the first time you see them.
+    // The lights come on from left to right the first time you see them, and never again.
     if (!reduce) observe(canvas, ([e]) => {
       inView = e.isIntersecting
       if (!inView || revealing || revealed) return
       revealing = true
       const t0 = performance.now()
-      const step = (t: number) => { reveal = Math.min(cols, ((t - t0) / 1100) * cols); draw(); if (reveal < cols) raf(step); else revealed = true }
+      const step = (t: number) => { reveal = Math.min(cols, ((t - t0) / 1100) * cols); draw(); if (reveal < cols) raf(step); else { revealed = true; reveal = Infinity } }
       step(t0)
     }, { threshold: 0.2 })
     // Near the pointer the dots glow brighter.
     if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
       canvas.addEventListener('pointermove', (e) => { const r = canvas.getBoundingClientRect(); mx = (e.clientX - r.left) * (cols * cell / r.width); my = (e.clientY - r.top) * (rows * cell / r.height); cancelAnimationFrame(drawRaf); rafs.delete(drawRaf); drawRaf = raf(draw) }, { signal })
       canvas.addEventListener('pointerleave', () => { mx = my = -1e4; draw() }, { signal })
+    }
+    return (nc: number, nr: number, ncell: number, paint: (o: CanvasRenderingContext2D, w: number, h: number) => void) => {
+      const dpr = Math.min(2, devicePixelRatio || 1)
+      cols = nc; rows = nr; cell = ncell; gap = Math.max(1, cell * 0.18)
+      canvas.width = cols * cell * dpr; canvas.height = rows * cell * dpr; canvas.style.width = cols * cell + 'px'; canvas.style.height = rows * cell + 'px'
+      const off = document.createElement('canvas'); off.width = cols; off.height = rows
+      const o = off.getContext('2d') as CanvasRenderingContext2D; paint(o, cols, rows)
+      const data = o.getImageData(0, 0, cols, rows).data
+      on = []; seed = 11
+      for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) { const a = data[(y * cols + x) * 4 + 3]; on.push({ x, y, lit: a > 110, hot: rnd() < 0.07 }) }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      draw()
     }
   }
 
@@ -190,7 +196,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     <div class="brand"><canvas width="34" height="25" aria-hidden="true"></canvas>${esc(RB.title)}</div>`
   {
     const cv = robot.querySelector('canvas') as HTMLCanvasElement, x = cv.getContext('2d') as CanvasRenderingContext2D
-    x.fillStyle = '#D6F35C'; x.save(); x.scale(34 / 280, 25 / 200); x.translate(-60, -100); x.fill(new Path2D(LOGO_D)); x.restore()
+    x.fillStyle = LIME; x.save(); x.scale(34 / 280, 25 / 200); x.translate(-60, -100); x.fill(new Path2D(LOGO_D)); x.restore()
   }
   let travel = 0, lx: number | null = null, ly: number | null = null
   window.addEventListener('pointermove', (e) => { if (lx !== null && ly !== null) travel += Math.hypot(e.clientX - lx, e.clientY - ly); lx = e.clientX; ly = e.clientY }, { passive: true, signal })
@@ -222,7 +228,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   function runTerm(note: string) {
     const my = ++runId
     term.hidden = false
-    term.innerHTML = `<div class="bar"><span class="dot g"></span><span class="dot"></span><span class="dot"></span><span class="t">${esc(RB.host)}</span><span class="sp"></span><button type="button" class="cp">${esc(C.copy)}</button><a href="${esc(C.llmsUrl)}" target="_blank" rel="noopener">${esc(C.openRaw)}</a></div><pre></pre>`
+    term.innerHTML = `<div class="bar"><span class="dot g"></span><span class="dot"></span><span class="dot"></span><span class="t">${esc(RB.host)}</span><span class="sp"></span><button type="button" class="cp">${esc(C.copy)}</button><a href="${esc(C.llmsUrl)}" target="_blank" rel="noopener">${esc(C.openRaw)}</a></div><pre tabindex="0" role="region" aria-label="${esc(RB.terminalLabel)}" aria-busy="true"></pre>`
     const pre = term.querySelector('pre') as HTMLElement
     const fileP = loadLlms()
     let fileText = ''
@@ -234,7 +240,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     const art = `<span class="ascii">${esc(asciiLogo())}</span>\n\n`
     clearInt(streamT)
     if (reduce) {
-      fileP.then((text) => { if (stopped || my !== runId) return; fileText = text; pre.innerHTML = head + esc(RB.cmd) + '\n\n' + art + text.trimEnd().split('\n').map(hl).join('\n') + '\n\n<span class="p">$</span> <span class="cur"></span>' })
+      fileP.then((text) => { if (stopped || my !== runId) return; fileText = text; pre.innerHTML = head + esc(RB.cmd) + '\n\n' + art + text.trimEnd().split('\n').map(hl).join('\n') + '\n\n<span class="p">$</span> <span class="cur"></span>'; pre.setAttribute('aria-busy', 'false') })
       return
     }
     term.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: E })
@@ -252,7 +258,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
           streamT = interval(45, () => {
             i = Math.min(lines.length, i + 2)
             pre.innerHTML = head + esc(RB.cmd) + '\n\n' + art + lines.slice(0, i).map(hl).join('\n') + (i >= lines.length ? '\n\n<span class="p">$</span> <span class="cur"></span>' : '')
-            pre.scrollTop = pre.scrollHeight; if (i >= lines.length) clearInt(streamT)
+            pre.scrollTop = pre.scrollHeight; if (i >= lines.length) { clearInt(streamT); pre.setAttribute('aria-busy', 'false') }
           })
         })
       })
@@ -264,7 +270,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     timeout(reduce ? 0 : 900, () => {
       const human = !viaKeys && travel > 400
       box.innerHTML = human ? '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FF9A8B" stroke-width="2.4" stroke-linecap="round"><path d="M4 4 L12 12 M12 4 L4 12"/></svg>'
-        : '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#D6F35C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5 L7.5 13 L14.5 5"/></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="${LIME}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5 L7.5 13 L14.5 5"/></svg>'
       msg.textContent = human ? RB.failed : RB.passed; msg.className = 'msg ' + (human ? 'bad' : 'good')
       box.disabled = false
       timeout(reduce ? 0 : 500, () => runTerm(human ? RB.failedSub : ''))
@@ -305,20 +311,25 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     return `<a class="lnk" href="${esc(h)}"${ext ? ' target="_blank" rel="noopener"' : ''}><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GLYPH[n] || ''}</svg></span><span><b>${esc(n)}</b><small>${esc(sub)}</small></span><svg class="ar" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M6 4h6v6"/></svg></a>`
   }
   sf.innerHTML = `<div class="top"><div class="lead"><p>${esc(F.line)}</p><a class="now" href="${esc(F.nowHref)}"><i></i>${esc(F.now)}</a></div><div class="cols">
-      <div><span class="h">site</span>${F.site.map(lnk).join('')}</div>
-      <div><span class="h">elsewhere</span>${F.elsewhere.map(lnk).join('')}</div></div></div>
+      <div><span class="h">${esc(F.siteLabel)}</span>${F.site.map(lnk).join('')}</div>
+      <div><span class="h">${esc(F.elsewhereLabel)}</span>${F.elsewhere.map(lnk).join('')}</div></div></div>
     <canvas class="bigname" role="img" aria-label="Noé Osorio"></canvas>
     <div class="fine2"><span>© ${esc(C.year)} Noé Osorio</span><button type="button" class="totop"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10 V2 M2.5 5.5 L6 2 L9.5 5.5"/></svg>${esc(F.top)}</button><span class="l"><a href="${esc(F.privacy[1])}">${esc(F.privacy[0])}</a><button type="button" class="cookies">${esc(F.cookies)}</button><span>${esc(F.domain)}</span></span></div>`
   sf.querySelector('.cookies')!.addEventListener('click', () => window.dispatchEvent(new Event('cookie-settings')), { signal })
   sf.querySelector('.totop')!.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }), { signal })
   const big = sf.querySelector('.bigname') as HTMLCanvasElement
+  let bigM: ReturnType<typeof matrix> | null = null, bigKey = ''
   function bigName() {
     const W = (big.parentElement as HTMLElement).clientWidth, cell = W < 600 ? 6 : 10, cols = Math.floor(W / cell), rows = 26
-    matrix(big, cols, rows, (o, w, h) => {
+    const key = cols + 'x' + cell + 'x' + (devicePixelRatio || 1)
+    if (bigM && key === bigKey) return
+    bigKey = key
+    if (!bigM) bigM = matrix(big, { grid: true })
+    bigM(cols, rows, cell, (o, w, h) => {
       o.fillStyle = '#000'; o.textBaseline = 'alphabetic'; let size = 40; o.font = `600 ${size}px Geist, system-ui, sans-serif`
       const tw = o.measureText('Noé Osorio').width; size = size * Math.min((w - 2) / tw, 1.5); o.font = `600 ${size}px Geist, system-ui, sans-serif`
       const m = o.measureText('Noé Osorio'); o.fillText('Noé Osorio', (w - m.width) / 2, h - 3)
-    }, { cell, grid: true })
+    })
     big.style.width = '100%'; big.style.height = 'auto'
   }
   ;(document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { if (!stopped) bigName() })

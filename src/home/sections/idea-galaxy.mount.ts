@@ -1,9 +1,8 @@
 import type { Mount } from '../useMount'
 import type { GalaxyContent } from '../data/galaxy'
+import { HOT, HOT_RGB, INK, LED, LIME, LIME_RGB, LOGO_D } from '../brand'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const LIME = '#D6F35C'
-const LIME_RGB = '214,243,92'
 // The fixed top bar lives outside the section, so its band is kept free of words.
 const BAR_BAND = 84
 
@@ -26,7 +25,10 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
   const tip = document.createElement('div')
   tip.className = 'tip'
   tip.setAttribute('role', 'status')
-  copy.append(h1, p)
+  const sr = document.createElement('span')
+  sr.className = 'sr-only'
+  sr.textContent = C.srSummary
+  copy.append(h1, p, sr)
   root.append(cv, copy, tip)
 
   const ctx = cv.getContext('2d')!
@@ -55,7 +57,7 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
   const shuffle = <T,>(arr: T[]): T[] => { const o = arr.slice(); for (let i = o.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [o[i], o[j]] = [o[j], o[i]] } return o }
 
   // ---------- The logo, rasterized once into LED cells ----------
-  const LOGO = new Path2D('M123 111 L225 111 L250 154 L225 198 L199 155 L150 155 L123 198 L147 243 L97 243 L72 199 Z M252 156 L302 156 L327 200 L276 288 L175 288 L149 244 L174 200 L200 244 L250 244 L276 200 Z')
+  const LOGO = new Path2D(LOGO_D)
   const GW = 30, GH = 21
   const raster: { gx: number; gy: number }[] = []
   {
@@ -77,7 +79,7 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
     cx = mobile ? W * 0.5 : W * 0.66; cy = mobile ? H * 0.34 : H * 0.54
     R = mobile ? Math.min(W * 0.4, H * 0.2) : Math.min(W * 0.24, H * 0.36)
     const L = R * 1.22; cell = L / GW; ox = cx - L / 2; oy = cy - (GH * cell) / 2
-    avoid = [{ x: 0, y: 0, w: W, h: BAR_BAND }, ...[...root.querySelectorAll('.copy > *')].map(el => { const q = el.getBoundingClientRect(); return { x: q.left - r.left - 18, y: q.top - r.top - 14, w: q.width + 36, h: q.height + 28 } })]
+    avoid = [{ x: 0, y: 0, w: W, h: BAR_BAND }, ...[...root.querySelectorAll('.copy > *:not(.sr-only)')].map(el => { const q = el.getBoundingClientRect(); return { x: q.left - r.left - 18, y: q.top - r.top - 14, w: q.width + 36, h: q.height + 28 } })]
     // The empty slots the ideas will fill: a faint dot lattice inside the inner circle.
     grid = document.createElement('canvas'); grid.width = W * dpr; grid.height = H * dpr
     const g = grid.getContext('2d')!; g.setTransform(dpr, 0, 0, dpr, 0, 0)
@@ -116,6 +118,8 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
   const ideaQueue = shuffle(C.ideas.concat(C.eggs)), cellOrder = shuffle(raster.map((_, i) => i))
   const toLogo = Math.min(cellOrder.length, Math.round(ideaQueue.length * 0.72))
   let cellCursor = 0, idlePool: string[] = []
+  // How many logo cells have a star; counted when one lands, so a frame never scans the whole list.
+  let built = 0
 
   function measure(text: string, font: string) { ctx.font = font; return ctx.measureText(text).width }
   function spawn(label: string, kind: string, extra: any = {}) {
@@ -155,7 +159,7 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
       while (acc >= 1 && cellCursor < cellOrder.length) { acc -= 1; const an = rnd() * Math.PI * 2, d = R * (1.5 + rnd() * 1.2)
         spawn('', 'dust', { at: { x: cx + Math.cos(an) * d, y: cy + Math.sin(an) * d }, fly: 650 + rnd() * 500, target: { k: 'cell', i: cellOrder[cellCursor++] } }) }
     }
-    if (!finaleDone && cellCursor >= cellOrder.length && cellStar.every(Boolean)) { finaleDone = true; pulseAt = clock; idleNext = clock + 2400 }
+    if (!finaleDone && cellCursor >= cellOrder.length && built >= raster.length) { finaleDone = true; pulseAt = clock; idleNext = clock + 2400 }
     // After that, the galaxy keeps growing: one new idea every few seconds.
     if (finaleDone && clock > idleNext) { idleNext = clock + 2600; if (!idlePool.length) idlePool = shuffle(C.ideas.concat(C.eggs))
       if (sky.length < 220) { const label = idlePool.shift()!; spawn(label, C.eggs.includes(label) ? 'egg' : 'idea', { hold: 900, fly: 1300, target: { k: 'sky', ...skySpot() } }) } }
@@ -167,7 +171,7 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
         s.x = (1 - q) * (1 - q) * s.sx + 2 * (1 - q) * q * c1x + q * q * T.x; s.y = (1 - q) * (1 - q) * s.sy + 2 * (1 - q) * q * c1y + q * q * T.y
         s.trail.push([s.x, s.y]); if (s.trail.length > 9) s.trail.shift()
         if (k >= 1) { s.landed = clock; live.splice(i, 1)
-          if (s.target.k === 'cell') cellStar[s.target.i] = s; else if (s.target.k === 'sky') sky.push(s); else planets[s.target.p].arrived = clock }
+          if (s.target.k === 'cell') { if (!cellStar[s.target.i]) built++; cellStar[s.target.i] = s } else if (s.target.k === 'sky') sky.push(s); else planets[s.target.p].arrived = clock }
       }
     }
   }
@@ -178,16 +182,16 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
   function draw() {
     ctx.clearRect(0, 0, W, H)
     px += (tx - px) * 0.06; py += (ty - py) * 0.06
-    const gox = px * 7, goy = py * 7, sox = px * 16, soy = py * 16, t = clock, built = cellStar.filter(Boolean).length / raster.length
+    const gox = px * 7, goy = py * 7, sox = px * 16, soy = py * 16, t = clock, builtFrac = built / raster.length
     // Sky: ideas that became distant stars.
     for (const s of sky) { const P = skyPos(s.target), tw = reduce ? 0.6 : 0.45 + 0.55 * Math.abs(Math.sin(t * 0.0011 + s.phase)), born = clamp((t - s.landed) / 600)
-      ctx.globalAlpha = tw * (0.35 + 0.65 * born); ctx.fillStyle = s.kind === 'egg' || s.kind === 'idea' ? '#DDEFB4' : '#9FD043'
+      ctx.globalAlpha = tw * (0.35 + 0.65 * born); ctx.fillStyle = s.kind === 'egg' || s.kind === 'idea' ? '#DDEFB4' : LED
       ctx.beginPath(); ctx.arc(P.x + sox, P.y + soy, 1.3 + born * 0.4, 0, 7); ctx.fill() }
     ctx.globalAlpha = 1
     ctx.save(); ctx.translate(gox, goy)
     ctx.globalAlpha = reduce ? 1 : clamp(t / 1600); ctx.drawImage(grid!, 0, 0, W, H); ctx.globalAlpha = 1
     // Tick ring fades in as the logo fills.
-    const tickA = reduce ? 0.5 : built * 0.5, rot = reduce ? 0 : -t * 0.00004
+    const tickA = reduce ? 0.5 : builtFrac * 0.5, rot = reduce ? 0 : -t * 0.00004
     if (tickA > 0.01) { ctx.strokeStyle = `rgba(244,238,228,${tickA * 0.45})`; ctx.lineWidth = 1; ctx.beginPath()
       for (let i = 0; i < 132; i++) { const an = rot + i / 132 * Math.PI * 2, r1 = R * 0.9, r2 = R * (i % 6 ? 0.925 : 0.94); ctx.moveTo(cx + Math.cos(an) * r1, cy + Math.sin(an) * r1); ctx.lineTo(cx + Math.cos(an) * r2, cy + Math.sin(an) * r2) }
       ctx.stroke() }
@@ -197,28 +201,28 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
       for (let k = 0; k < N; k++) { const a1 = P.an - dir * len * (k / N), a2 = P.an - dir * len * ((k + 1) / N); ctx.strokeStyle = `rgba(${LIME_RGB},${(1 - k / N) * (pl.ring === 0 ? 0.95 : 0.55)})`
         ctx.beginPath(); ctx.arc(cx, cy, P.r, Math.min(a1, a2), Math.max(a1, a2)); ctx.stroke() }
       ctx.fillStyle = `rgba(${LIME_RGB},.16)`; ctx.beginPath(); ctx.arc(P.x, P.y, 11, 0, 7); ctx.fill()
-      ctx.fillStyle = '#F2FFD2'; ctx.beginPath(); ctx.arc(P.x, P.y, 4.6, 0, 7); ctx.fill() })
+      ctx.fillStyle = HOT; ctx.beginPath(); ctx.arc(P.x, P.y, 4.6, 0, 7); ctx.fill() })
     // The logo, one idea per LED.
     const pulse = pulseAt >= 0 ? (t - pulseAt) / 900 : -1, burst = burstAt >= 0 ? t - burstAt : -1
     cellStar.forEach((s, i) => { if (!s) return; let { x, y } = cellPos(i)
       if (burst >= 0 && s.bx !== undefined) { const out = burst < 360 ? eOut(burst / 360) : 1 - eBack(clamp((burst - 360) / 1100)); x += s.bx * out; y += s.by * out }
       const age = t - s.landed, land = clamp(age / 420), d = Math.hypot(x - cx, y - cy) / (R * 0.75)
       const wave = pulse >= 0 && pulse < 1.4 && Math.abs(d - pulse) < 0.09, twinkle = !reduce && Math.sin(t * 0.0021 + s.phase * 9) > 0.985
-      if (land < 1 && !reduce) { ctx.strokeStyle = `rgba(242,255,210,${(1 - land) * 0.8})`; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x, y, cell * (0.3 + land * 1.1), 0, 7); ctx.stroke() }
-      dot(x, y, cell * 0.74, wave || twinkle || land < 0.5 ? '#F2FFD2' : '#9FD043') })
+      if (land < 1 && !reduce) { ctx.strokeStyle = `rgba(${HOT_RGB},${(1 - land) * 0.8})`; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x, y, cell * (0.3 + land * 1.1), 0, 7); ctx.stroke() }
+      dot(x, y, cell * 0.74, wave || twinkle || land < 0.5 ? HOT : LED) })
     ctx.restore()
     // Live ideas: the word, then it collapses into a star and flies home.
     for (const s of live) { const e = t - s.t0, A = s.appear, Hd = A + s.hold, Cl = Hd + s.collapse
       if (s.label && e < Cl) { const k = e < A ? eOut(e / A) : 1, c = e > Hd ? eOut((e - Hd) / s.collapse) : 0
         ctx.save(); ctx.translate(s.sx, s.sy + (1 - k) * 8); ctx.scale(1 - c * 0.85, 1 - c * 0.85); ctx.globalAlpha = k * (1 - c)
-        ctx.font = s.font; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = s.kind === 'heavy' ? '#F4EEE4' : 'rgba(244,238,228,.9)'; ctx.fillText(s.label, 0, 0)
+        ctx.font = s.font; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = s.kind === 'heavy' ? INK : 'rgba(244,238,228,.9)'; ctx.fillText(s.label, 0, 0)
         if (s.kind === 'heavy' && c === 0) { ctx.fillStyle = LIME; ctx.beginPath(); ctx.arc(-s.w / 2 - 14, 0, 4, 0, 7); ctx.fill() }
         ctx.restore(); ctx.globalAlpha = 1
-        if (c > 0) { const g = Math.sin(c * Math.PI) * 9; ctx.fillStyle = `rgba(242,255,210,${0.25 * c})`; ctx.beginPath(); ctx.arc(s.sx, s.sy, s.size + g, 0, 7); ctx.fill()
-          ctx.fillStyle = '#F2FFD2'; ctx.beginPath(); ctx.arc(s.sx, s.sy, s.size * c, 0, 7); ctx.fill() } }
+        if (c > 0) { const g = Math.sin(c * Math.PI) * 9; ctx.fillStyle = `rgba(${HOT_RGB},${0.25 * c})`; ctx.beginPath(); ctx.arc(s.sx, s.sy, s.size + g, 0, 7); ctx.fill()
+          ctx.fillStyle = HOT; ctx.beginPath(); ctx.arc(s.sx, s.sy, s.size * c, 0, 7); ctx.fill() } }
       else if (s.x !== undefined) {
         for (let k = 1; k < s.trail.length; k++) { ctx.strokeStyle = `rgba(${LIME_RGB},${k / s.trail.length * 0.5})`; ctx.lineWidth = s.size * (k / s.trail.length); ctx.beginPath(); ctx.moveTo(s.trail[k - 1][0], s.trail[k - 1][1]); ctx.lineTo(s.trail[k][0], s.trail[k][1]); ctx.stroke() }
-        ctx.fillStyle = '#F2FFD2'; ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, 7); ctx.fill() } }
+        ctx.fillStyle = HOT; ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, 7); ctx.fill() } }
   }
 
   // ---------- Loop: runs only while the section is on screen and the tab is visible ----------
@@ -238,6 +242,7 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
     const q = shuffle(C.ideas.concat(C.eggs))
     cellOrder.forEach((ci, n) => { cellStar[ci] = { label: n < toLogo ? q[n] : '', kind: n < toLogo ? 'idea' : 'dust', landed: -9999, phase: rnd() * 6.28 } })
     q.slice(toLogo).forEach(label => sky.push({ label, kind: 'idea', target: skySpot(), landed: -9999, phase: 0 }))
+    built = raster.length
     finaleDone = true
   }
 

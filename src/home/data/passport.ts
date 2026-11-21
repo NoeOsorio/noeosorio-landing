@@ -33,6 +33,8 @@ export interface PassportContent {
   owner: string;
   role: string;
   sub: string;
+  coverWord: string;
+  visasWord: string;
   pages: PassportPage[];
 }
 
@@ -42,6 +44,7 @@ export const passport: PassportContent = {
   title: "Where I've worked",
   owner: "NOÉ OSORIO", role: "PRODUCT ENGINEER",
   sub: "Each city is a page. Each stamp is something I built or learned there.",
+  coverWord: "PASSPORT", visasWord: "VISAS",
   pages: [
     { city: "New York", seed: 3,
       main: { shape: "circle", ink: INK.green, top: "PORTER  PRODUCT ENGINEER", bottom: "2026 TO TODAY", icon: "clouds", x: 22, y: 104, w: 310, rot: -7 },

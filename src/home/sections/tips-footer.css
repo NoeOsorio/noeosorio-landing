@@ -3,12 +3,9 @@
   /* One object in the middle: a tip terminal, the kind a café turns around to face you. */
   .home-close {
     color-scheme: dark; color: var(--ink); font-family: var(--body);
-    --night: #0E0D0B; --ink: #F4EEE4; --ink-2: rgba(244,238,228,.7); --ink-3: rgba(244,238,228,.45);
+    --ink-2: rgba(244,238,228,.7); --ink-3: rgba(244,238,228,.45);
     --screen: #F6F2EA; --screen-ink: #1C1A16; --screen-2: rgba(28,26,22,.6); --screen-3: rgba(28,26,22,.38);
-    --bezel: #1D1C19; --lime: #D6F35C; --lime-deep: #6E9A1E; --red: #C8382D;
-    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-    --body: "Geist", system-ui, -apple-system, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --bezel: #1D1C19; --lime-deep: #6E9A1E; --red: #C8382D;
   }
   .home-close .wrap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 28px; box-sizing: border-box;
           padding-block: clamp(56px, 10vh, 120px) 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }

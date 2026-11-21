@@ -8,6 +8,7 @@ import ProjectWallet from '../home/sections/ProjectWallet';
 import WorkPassport from '../home/sections/WorkPassport';
 import LearningSlot from '../home/sections/LearningSlot';
 import TipsAndFooter from '../home/sections/TipsAndFooter';
+import '../home/home-tokens.css';
 
 const Home = () => {
   useAnalytics();
@@ -18,7 +19,7 @@ const Home = () => {
   const onClick = (e: MouseEvent<HTMLElement>) => {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const a = (e.target as HTMLElement).closest('a');
-    if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+    if (!a || !a.hasAttribute('href') || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
     const url = new URL(a.href, window.location.href);
     if (url.origin !== window.location.origin || url.hash || /\.[a-z0-9]+$/i.test(url.pathname)) return;
     e.preventDefault();
@@ -26,7 +27,7 @@ const Home = () => {
   };
 
   return (
-    <main onClick={onClick} style={{ position: 'relative', background: '#0E0D0B', color: '#F4EEE4' }}>
+    <main className="home-root" onClick={onClick}>
       <SEO
         title="Noé Osorio | Product Engineer in New York"
         description="I build AI you can trust, and AI that makes you think. Tools made with AI, projects and videos from a Mexican engineer in New York."

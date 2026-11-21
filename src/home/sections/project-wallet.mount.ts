@@ -1,9 +1,9 @@
 import type { Mount } from '../useMount';
 import type { WalletContent, WalletProject } from '../data/wallet';
+import { esc } from '../dom';
+import { LIME, LIME_RGB, logoPaths } from '../brand';
 
 // Mounts the project wallet into root. Ported from the approved prototype (specs/002-home-objects/prototypes/project-wallet.html).
-const esc = (s: unknown) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
-
 const PLAT: Record<string, [string, string]> = {
   mac: ['Mac', '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M1.5 19.5 H22.5"/>'],
   iphone: ['iPhone', '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5 H13"/>'],
@@ -15,7 +15,7 @@ const PLAT: Record<string, [string, string]> = {
 
 // Material: a fine grain and guilloche lines, the way a printed card is finished.
   const NOISE = `url("data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>')}")`;
-  const LOGO = `<svg class="mark" viewBox="60 100 280 200" fill="#7FA62A" aria-hidden="true"><path d="M123 111 L225 111 L250 154 L225 198 L199 155 L150 155 L123 198 L147 243 L97 243 L72 199 Z"/><path d="M252 156 L302 156 L327 200 L276 288 L175 288 L149 244 L174 200 L200 244 L250 244 L276 200 Z"/></svg>`;
+  const LOGO = `<svg class="mark" viewBox="60 100 280 200" fill="#7FA62A" aria-hidden="true">${logoPaths()}</svg>`;
   function rand(seed: number) { let x = seed; return () => (x = (x * 16807) % 2147483647) / 2147483647; }
   const W = 520, H0 = 328;
   const ART: Record<string, () => string> = {
@@ -35,7 +35,7 @@ const PLAT: Record<string, [string, string]> = {
       return l + `<g fill="none" stroke="#9DB4FF" stroke-opacity=".22"><ellipse cx="400" cy="120" rx="150" ry="52" transform="rotate(-18 400 120)"/><ellipse cx="400" cy="120" rx="96" ry="32" transform="rotate(-18 400 120)"/></g>
         <circle cx="400" cy="120" r="7" fill="#C9D6FF" opacity=".85"/><circle cx="276" cy="160" r="3.5" fill="#8FB3FF"/><circle cx="512" cy="74" r="3" fill="#8FB3FF"/><circle cx="470" cy="166" r="2.6" fill="#B7F0C9"/>`; },
     life: () => { const r = rand(5); let l = ""; const s = 12; for (let gy = 0; gy < H0 / s; gy++) for (let gx = 0; gx < W / s; gx++) if (r() < .14) l += `<rect x="${gx * s + 1}" y="${gy * s + 1}" width="${s - 2}" height="${s - 2}" rx="1.5" fill="#9BE07F" opacity="${(r() * .25 + .08).toFixed(2)}"/>`;
-      return l + [[30,4],[31,5],[29,6],[30,6],[31,6]].map(([x, y]) => `<rect x="${x * s + 1}" y="${y * s + 1}" width="${s - 2}" height="${s - 2}" rx="1.5" fill="#D6F35C" opacity=".7"/>`).join(""); },
+      return l + [[30,4],[31,5],[29,6],[30,6],[31,6]].map(([x, y]) => `<rect x="${x * s + 1}" y="${y * s + 1}" width="${s - 2}" height="${s - 2}" rx="1.5" fill="${LIME}" opacity=".7"/>`).join(""); },
     washi: () => { const r = rand(3); let l = ""; for (let i = 0; i < 90; i++) { const x = r() * W, y = r() * H0, a = r() * 6.28, L = 10 + r() * 30; l += `<path d="M${x.toFixed(1)} ${y.toFixed(1)} q ${(Math.cos(a) * L / 2).toFixed(1)} ${(Math.sin(a) * L / 2 + 4).toFixed(1)} ${(Math.cos(a) * L).toFixed(1)} ${(Math.sin(a) * L).toFixed(1)}" fill="none" stroke="#B8A88C" stroke-opacity=".35" stroke-width=".7"/>`; }
       return l + `<text x="430" y="196" text-anchor="middle" font-family="'Yuji Syuku', serif" font-size="190" fill="#1C1A17" opacity=".85">字</text>
         <rect x="474" y="208" width="34" height="34" rx="3" fill="#C23B2E" opacity=".9"/><text x="491" y="232" text-anchor="middle" font-family="'Yuji Syuku', serif" font-size="20" fill="#F1EBDF">漢</text>`; },
@@ -71,14 +71,13 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
             <path d="M52 26 V40 A12 12 0 0 1 40 52 H26"/><path d="M-26 52 H-40 A12 12 0 0 1 -52 40 V26"/>
           </g>
           <g id="logo" transform="scale(.31) translate(-200,-200)" stroke="var(--lime)" stroke-width="7" stroke-linejoin="round">
-            <path class="lp" d="M123 111 L225 111 L250 154 L225 198 L199 155 L150 155 L123 198 L147 243 L97 243 L72 199 Z"/>
-            <path class="lp" d="M252 156 L302 156 L327 200 L276 288 L175 288 L149 244 L174 200 L200 244 L250 244 L276 200 Z"/>
+            ${logoPaths('class="lp" ')}
           </g>
           <path id="check" d="M-20 2 L-5 17 L22 -14" stroke="var(--lime)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <div class="msg" id="msg"></div>
       </div>
-      <div class="details" id="details" role="region" aria-live="polite"></div>
+      <div class="details" id="details" role="region"></div>
     </div>
   </div>
 </div>`;
@@ -91,7 +90,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   const lps = [...logo.querySelectorAll<SVGPathElement>('.lp')];
 
   const closeBtn = document.createElement('button');
-  closeBtn.className = 'x'; closeBtn.type = 'button'; closeBtn.setAttribute('aria-label', C.close);
+  closeBtn.className = 'x'; closeBtn.type = 'button'; closeBtn.setAttribute('aria-label', C.close); closeBtn.style.visibility = 'hidden';
   closeBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4 L12 12 M12 4 L4 12"/></svg>';
   closeBtn.addEventListener('click', () => close(), { signal });
   wallet.appendChild(closeBtn);
@@ -100,9 +99,9 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   const passes: Pass[] = C.projects.map((p) => {
     const b = document.createElement('button');
     b.className = 'pass'; b.type = 'button'; b.style.setProperty('--c', p.c); b.style.setProperty('--fg', p.fg);
-    b.setAttribute('aria-label', `${p.name}. ${p.text}`);
+    b.setAttribute('aria-label', `${p.name}. ${p.text}`); b.setAttribute('aria-expanded', 'false');
     b.innerHTML = `<div class="card"><svg class="art" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${(ART[p.art] || (() => ''))()}</svg><div class="tex"></div>
-      <div class="title"><span class="name">${esc(p.name)}</span><span class="topic">${esc(p.topic)}</span></div>${NFC}${CHIP}
+      <div class="title"><span class="name" id="wallet-name-${esc(p.id)}">${esc(p.name)}</span><span class="topic">${esc(p.topic)}</span></div>${NFC}${CHIP}
       <div class="num">${number(p.commits)}</div>
       <div class="bottom"><div class="field"><span class="lab">${esc(C.createdLabel)}</span><span class="val">${esc(p.created)}</span></div><div class="field"><span class="lab">&nbsp;</span><span class="val">${esc(C.holder)}</span></div>${LOGO}</div></div>`;
     b.addEventListener('click', () => (open === p ? close() : select(p)), { signal });
@@ -118,6 +117,15 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     passes.forEach(({ el }, i) => { place(el, i * P); el.style.opacity = '1'; el.style.zIndex = String(i + 1); el.style.filter = ''; el.tabIndex = 0; });
     wallet.style.height = (passes.length - 1) * P + H + 8 + 'px';
   }
+  // The window changed while a pass is open: only move things to their new places. The check animation and the scroll are not touched.
+  function relayout() {
+    if (!open || !sel) { layout(); return; }
+    const H = cardH(), dh = details.offsetHeight, base = settled ? SETTLED : AUTH, top = base + H + 24, pileTop = top + dh + 36;
+    sel.H = H; sel.dh = dh;
+    place(sel.me.el, base); details.style.top = top + 'px';
+    sel.rest.forEach((x, i) => place(x.el, pileTop + Math.min(i, 3) * 10, 0.93 - Math.min(i, 3) * 0.015));
+    wallet.style.height = pileTop + 3 * 10 + 90 + 'px';
+  }
 
   // ---------- Opening a pass ----------
   // The pass comes forward and drops a little, the others tuck into a pile below. Above it, the frame appears,
@@ -126,9 +134,10 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
   const AUTH = 150;
   let sel: Sel | null = null;
+  let settled = false;
   function select(p: WalletProject) {
     clearTimers();
-    open = p;
+    open = p; settled = false;
     const H = cardH(), me = passes.find((x) => x.p === p) as Pass;
     // Bring the top of the wallet into view, so the check above the card is always seen.
     const wt = wallet.getBoundingClientRect().top;
@@ -156,6 +165,8 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     rest.forEach((x, i) => { place(x.el, pileTop + Math.min(i, 3) * 10, 0.93 - Math.min(i, 3) * 0.015); x.el.style.zIndex = String(50 - i); x.el.style.opacity = i > 3 ? '0' : '1'; x.el.style.filter = 'brightness(.42)'; x.el.tabIndex = -1; });
     wallet.style.height = pileTop + 3 * 10 + 90 + 'px';
     wallet.classList.add('open');
+    passes.forEach((x) => x.el.setAttribute('aria-expanded', String(x === me)));
+    details.setAttribute('aria-labelledby', `wallet-name-${p.id}`);
     msg.textContent = `${C.opening} ${p.name}`;
 
     [auth, frame, logo, check, ...lps].forEach((n) => n.getAnimations().forEach((a) => a.cancel()));
@@ -167,7 +178,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     frame.animate([{ transform: 'scale(1.25)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 380, delay: 300, easing: E, fill: 'forwards' });
     frame.animate([{ transform: 'scale(1)' }, { transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 640, delay: 680, easing: 'ease-in-out', composite: 'add' });
     lps.forEach((l, i) => l.animate([{ strokeDashoffset: l.style.strokeDasharray }, { strokeDashoffset: 0 }], { duration: 620, delay: 420 + i * 160, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fill: 'forwards' }));
-    lps.forEach((l) => l.animate([{ fill: 'rgba(214,243,92,0)' }, { fill: 'rgba(214,243,92,1)' }], { duration: 220, delay: 1140, easing: 'ease-out', fill: 'forwards' }));
+    lps.forEach((l) => l.animate([{ fill: `rgba(${LIME_RGB},0)` }, { fill: `rgba(${LIME_RGB},1)` }], { duration: 220, delay: 1140, easing: 'ease-out', fill: 'forwards' }));
     logo.animate([{ opacity: 1, transform: 'scale(.31) translate(-200px,-200px)' }, { opacity: 0, transform: 'scale(.24) translate(-200px,-200px)' }], { duration: 200, delay: 1460, easing: 'ease-in', fill: 'forwards' });
     check.animate([{ opacity: 0, strokeDashoffset: 60 }, { opacity: 1, strokeDashoffset: 60, offset: 0.01 }, { opacity: 1, strokeDashoffset: 0 }], { duration: 300, delay: 1600, easing: E, fill: 'forwards' });
     frame.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }, { transform: 'scale(1)' }], { duration: 300, delay: 1640, easing: E, composite: 'add' });
@@ -177,6 +188,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   // Once the check is done, the card rises under the close button and the details follow it.
   const SETTLED = 72;
   function showDetails() {
+    settled = true;
     if (sel) {
       const { me, rest, H, dh } = sel, top = SETTLED + H + 24, pileTop = top + dh + 36;
       place(me.el, SETTLED); details.style.top = top + 'px';
@@ -187,29 +199,39 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     details.animate([{ opacity: 0, transform: 'translateY(-8px) scale(.98)', filter: 'blur(4px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }],
       { duration: reduce ? 0 : 340, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'forwards' });
     details.style.opacity = '1';
-    closeBtn.style.opacity = '1'; closeBtn.style.pointerEvents = 'auto'; closeBtn.style.transition = 'opacity 200ms ease';
+    closeBtn.style.visibility = 'visible'; closeBtn.style.opacity = '1'; closeBtn.style.pointerEvents = 'auto'; closeBtn.style.transition = 'opacity 200ms ease';
+    // Keyboard users land on the close button, unless they have already moved on to something else.
+    const at = document.activeElement;
+    if (sel && (!at || at === document.body || at === sel.me.el)) closeBtn.focus({ preventScroll: true });
     auth.animate([{ opacity: 1 }, { opacity: 0 }], { duration: reduce ? 0 : 200, easing: 'ease-out', fill: 'forwards' });
   }
   function close() {
     clearTimers();
-    open = null; wallet.classList.remove('open');
+    const was = sel?.me.el, keepFocus = !document.activeElement || document.activeElement === document.body || root.contains(document.activeElement);
+    open = null; settled = false; sel = null; wallet.classList.remove('open');
+    passes.forEach((x) => x.el.setAttribute('aria-expanded', 'false'));
+    details.removeAttribute('aria-labelledby');
     [auth, frame, logo, check, ...lps].forEach((n) => n.getAnimations().forEach((a) => a.cancel()));
     auth.style.opacity = '0';
     details.getAnimations().forEach((a) => a.cancel());
     if (!reduce) details.animate([{ opacity: 1 }, { opacity: 0, transform: 'translateY(6px)' }], { duration: 160, easing: 'ease-out' });
     details.style.opacity = '0'; details.style.visibility = 'hidden';
-    closeBtn.style.opacity = '0'; closeBtn.style.pointerEvents = 'none';
+    closeBtn.style.opacity = '0'; closeBtn.style.pointerEvents = 'none'; closeBtn.style.visibility = 'hidden';
     layout();
+    // Back to the pass that opened it.
+    if (was && keepFocus) was.focus({ preventScroll: true });
   }
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) close(); }, { signal });
-  addEventListener('resize', () => (open ? select(open) : layout()), { signal });
-  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { if (!disposed) layout(); });
+  let resizeT: number | undefined;
+  addEventListener('resize', () => { clearTimeout(resizeT); resizeT = window.setTimeout(relayout, 150); }, { signal });
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { if (!disposed) relayout(); });
   layout();
 
   return () => {
     disposed = true;
     ac.abort();
     clearTimers();
+    clearTimeout(resizeT);
     root.getAnimations({ subtree: true }).forEach((a) => a.cancel());
     root.removeAttribute('aria-labelledby');
     root.style.removeProperty('--noise');

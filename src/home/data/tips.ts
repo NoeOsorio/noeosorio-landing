@@ -1,9 +1,15 @@
 // Every word, price and link of the tip terminal, the robots terminal, Subscribe and the footer.
 // Site links point to real routes of this app. The llms.txt text is not here: the terminal fetches /llms.txt.
+// The one place the llms.txt location is written: the footer link, the command and the fetch all read it.
+const llmsUrl = '/llms.txt'
+const llmsName = llmsUrl.slice(1)
+
 export type Tip = { price: string; name: string; line: string; after: string }
 type FootLink = [name: string, sub: string, href: string]
 
 export type TipsContent = {
+  sectionLabel: string
+  slip: string
   jar: string
   youtube: string
   merchant: string
@@ -23,7 +29,7 @@ export type TipsContent = {
   subscribeAsk: string
   subscribe: string
   changedMind: string
-  robot: { title: string; check: string; failed: string; failedSub: string; passed: string; host: string; cmd: string; fallback: string }
+  robot: { title: string; check: string; failed: string; failedSub: string; passed: string; host: string; cmd: string; fallback: string; terminalLabel: string }
   agentLine: string
   agentButton: string
   llmsUrl: string
@@ -34,6 +40,8 @@ export type TipsContent = {
   ships: { title: string; text: string; cover: string; button: string; aria: string; after: string }
   foot: {
     line: string
+    siteLabel: string
+    elsewhereLabel: string
     now: string
     nowHref: string
     site: FootLink[]
@@ -46,6 +54,8 @@ export type TipsContent = {
 }
 
 export const tips: TipsContent = {
+  sectionLabel: 'Tips',
+  slip: 'TIP ............ $0.00',
   jar: 'https://buymeacoffee.com/noeosorio',
   youtube: 'https://www.youtube.com/@noeosoriodev?sub_confirmation=1',
   merchant: 'Noé Osorio',
@@ -76,12 +86,13 @@ export const tips: TipsContent = {
     failedSub: "Humans get the tip jar. Here's what robots get anyway:",
     passed: 'Verified. Welcome, fellow robot.',
     host: 'agent@noeosorio.com',
-    cmd: 'curl -s noeosorio.com/llms.txt',
-    fallback: '# llms.txt could not be loaded. Try /llms.txt directly.',
+    cmd: `curl -s noeosorio.com${llmsUrl}`,
+    fallback: `# ${llmsName} could not be loaded. Try ${llmsUrl} directly.`,
+    terminalLabel: `Terminal output of ${llmsName}`,
   },
   agentLine: 'AI agent? You can skip the tip.',
-  agentButton: 'Read llms.txt',
-  llmsUrl: '/llms.txt',
+  agentButton: `Read ${llmsName}`,
+  llmsUrl,
   copy: 'Copy',
   copied: 'Copied',
   openRaw: 'Open raw',
@@ -96,13 +107,15 @@ export const tips: TipsContent = {
   },
   foot: {
     line: 'Built by hand. The code, the design and the mistakes are all mine.',
+    siteLabel: 'site',
+    elsewhereLabel: 'elsewhere',
     now: 'Now building Essay Studio',
     nowHref: '/essay',
     site: [
       ['Projects', "Everything I've built", '/portfolio'],
       ['Essay Studio', 'Waitlist open', '/essay'],
       ['About', "Where I've worked", '/about'],
-      ['llms.txt', 'For agents', '/llms.txt'],
+      [llmsName, 'For agents', llmsUrl],
     ],
     elsewhere: [
       ['YouTube', '@noeosoriodev', 'https://www.youtube.com/@noeosoriodev'],

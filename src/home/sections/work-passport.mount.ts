@@ -1,9 +1,8 @@
 import type { Mount } from '../useMount';
 import type { PassportContent, PassportMain, PassportSkill } from '../data/passport';
+import { esc } from '../dom';
 
 // Mounts the work passport into root. Ported from the approved prototype (specs/002-home-objects/prototypes/work-passport.html).
-const esc = (s: unknown) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
-
 // ---------- Icons: small abstract drawings, centered on (0,0), about 36px across ----------
   const ICON: Record<string, string> = {
     k8s: `<circle r="15"/><circle r="4.5"/>${[0,1,2,3,4,5,6].map(i => { const a = i * 2 * Math.PI / 7 - Math.PI / 2; return `<path d="M${(5*Math.cos(a)).toFixed(1)} ${(5*Math.sin(a)).toFixed(1)} L${(15*Math.cos(a)).toFixed(1)} ${(15*Math.sin(a)).toFixed(1)}"/>`; }).join("")}`,
@@ -152,6 +151,8 @@ const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 
 const clamp = (v: number) => Math.max(0, Math.min(1, v));
 
 type Spec = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+// Everything a stamp says, as one line of text.
+const stampWords = (s: Spec) => [s.top, ...(s.lines || []), s.text, s.bottom].filter(Boolean).join(', ');
 
 export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce }) => {
   const ac = new AbortController();
@@ -173,13 +174,14 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
 
   function stampEl(s: Spec, isMain: boolean, scale = 1) {
     const k = 'st' + (uid++), f = isMain ? MAIN[s.shape](s as PassportMain, k) : SMALL[s.kind](s as PassportSkill);
-    const words = [s.top, ...(s.lines || []), s.text, s.bottom].filter(Boolean).join(', ');
     const el = document.createElement('div');
+    // The page text already says what each stamp says, so the drawing is hidden from screen readers.
+    el.setAttribute('aria-hidden', 'true');
     el.className = 'stamp' + (isMain ? ' main' : '') + (reduce ? '' : ' pending');
     const w = isMain ? s.w : f.w * scale;
     el.style.cssText = `left:${s.x}px; top:${s.y}px; width:${w}px; transform: rotate(${s.rot || 0}deg);`;
     el.dataset.rot = s.rot || 0; el.dataset.w = w; el.dataset.h = String(w * f.h / f.w);
-    el.innerHTML = `<svg viewBox="-6 -6 ${f.w + 12} ${f.h + 12}" role="img" aria-label="${esc(words)}"><g filter="url(#${isMain ? 'ink' + (uid % 3) : 'inkS'})" fill="none" stroke="${s.ink}" color="${s.ink}" font-family="Oswald, 'Arial Narrow', sans-serif">${f.body}</g></svg>`;
+    el.innerHTML = `<svg viewBox="-6 -6 ${f.w + 12} ${f.h + 12}"><g filter="url(#${isMain ? 'ink' + (uid % 3) : 'inkS'})" fill="none" stroke="${s.ink}" color="${s.ink}" font-family="Oswald, 'Arial Narrow', sans-serif">${f.body}</g></svg>`;
     const round = isMain ? /circle|oval|hex|octa/.test(s.shape) : /seal|oct/.test(s.kind);
     const press = document.createElement('div'); press.className = 'press'; press.style.setProperty('--pr', round ? '50%' : '14px'); el.prepend(press);
     el.addEventListener('click', () => land1(el, 0, null, isMain), { signal });   // tap a stamp to stamp it again
@@ -216,15 +218,17 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
 
   function coverEl() {
     const el = document.createElement('div'); el.className = 'page coverfront';
-    el.innerHTML = `<div class="frame"></div><div class="word">PASSPORT</div>${EMBLEM}<div class="name">${esc(CONTENT.owner)}</div><div class="role">${esc(CONTENT.role)}</div>${CHIP}`;
+    el.innerHTML = `<div class="frame"></div><div class="word">${esc(CONTENT.coverWord)}</div>${EMBLEM}<div class="name">${esc(CONTENT.owner)}</div><div class="role">${esc(CONTENT.role)}</div>${CHIP}`;
     return el;
   }
   function pageEl(p: PassportContent['pages'][number] | 'INSIDE' | 'BLANK' | undefined, side: string) {
     const el = document.createElement('div');
     if (p === 'INSIDE') { el.className = 'page inside'; el.innerHTML = '<div class="frame" style="position:absolute; inset:28px; border:1px solid rgba(207,174,99,.25); border-radius:10px"></div>'; return el; }
     el.className = 'page ' + side;
-    el.innerHTML = SECURITY + '<span class="visas">VISAS</span>' + (p && p !== 'BLANK' && p.city ? `<h3>${esc(p.city)}</h3>` : '');
+    el.innerHTML = SECURITY + `<span class="visas">${esc(CONTENT.visasWord)}</span>` + (p && p !== 'BLANK' && p.city ? `<h3>${esc(p.city)}</h3>` : '');
     if (!p || p === 'BLANK') return el;
+    // City, company, dates and every stamp, as real text.
+    el.insertAdjacentHTML('beforeend', `<p class="sr-only">${esc(stampWords(p.main))}. ${esc(p.skills.map(stampWords).join(', '))}.</p>`);
     el.appendChild(stampEl(p.main, true));
     placeSkills(el, p);
     return el;
@@ -313,14 +317,15 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
   }
   // The loop runs only while the section is on screen and the tab is visible.
   let onScreen = true;
-  function frame() { cur += (target - cur) * (reduce ? 1 : 0.1); if (Math.abs(target - cur) < 0.0005) cur = target; render(); raf = requestAnimationFrame(frame); }
+  // Once the book has settled on its target the loop stops; scrolling or resizing starts it again.
+  function frame() { cur += (target - cur) * (reduce ? 1 : 0.1); if (Math.abs(target - cur) < 0.0005) cur = target; render(); raf = cur === target ? 0 : requestAnimationFrame(frame); }
   function sync() {
     const run = onScreen && !document.hidden && !disposed;
     if (run && !raf) { read(); raf = requestAnimationFrame(frame); }
     else if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
   }
-  addEventListener('scroll', read, { passive: true, signal });
-  addEventListener('resize', () => { fit(); read(); }, { signal });
+  addEventListener('scroll', () => { read(); sync(); }, { passive: true, signal });
+  addEventListener('resize', () => { fit(); read(); sync(); }, { signal });
   document.addEventListener('visibilitychange', sync, { signal });
   fit(); read(); cur = target; render(); sync();
 

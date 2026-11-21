@@ -3,6 +3,7 @@ export interface GalaxyContent {
   sub: string
   hintMouse: string
   hintTouch: string
+  srSummary: string
   heavy: string[]
   ideas: string[]
   eggs: string[]
@@ -13,6 +14,7 @@ export const galaxy: GalaxyContent = {
   sub: 'Product engineer in New York. Every star is an idea.',
   hintMouse: 'Hover one.',
   hintTouch: 'Tap one.',
+  srSummary: 'My head as a galaxy: every star is an idea, from software and AI to psychology and Pokémon.',
   heavy: ['Software engineer', 'AI engineer', 'Infrastructure', 'Product engineer', 'Psychology', 'Organizational psychology'],
   ideas: [
     'Essay Studio', 'AI that questions your essay', 'Four agents that disagree', 'Maiden OS', 'An AI assistant on Telegram', 'Permission levels for AI',

@@ -1,10 +1,6 @@
 /* One full screen: a canvas where every idea becomes a star, the copy sits on top. */
 .home-galaxy {
-  --night: #0E0D0B; --ink: #F4EEE4; --ink-2: rgba(244,238,228,.74); --ink-3: rgba(244,238,228,.5);
-  --lime: #D6F35C; --led: #9FD043; --hot: #F2FFD2;
-  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-  --body: "Geist", system-ui, -apple-system, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ink-2: rgba(244,238,228,.74); --ink-3: rgba(244,238,228,.5);
   color-scheme: dark; color: var(--ink); font-family: var(--body);
   position: relative; height: 100vh; height: 100svh; min-height: 660px; overflow: hidden; background: var(--night);
 }

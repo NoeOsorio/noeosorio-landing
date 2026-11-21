@@ -3,11 +3,7 @@
   /* Two columns: the slot machine and its ticket on the left, the latest videos on the right. */
   .home-learning {
     color-scheme: dark; color: var(--ink); font-family: var(--body);
-    --night: #0E0D0B; --ink: #F4EEE4; --ink-2: rgba(244,238,228,.72); --ink-3: rgba(244,238,228,.48);
-    --lime: #D6F35C; --led: #9FD043; --hot: #F2FFD2; --panel: #121210;
-    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-    --body: "Geist", system-ui, -apple-system, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ink-2: rgba(244,238,228,.72); --ink-3: rgba(244,238,228,.48); --panel: #121210;
   }
   .home-learning .lo { max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding-block: clamp(64px, 11vh, 128px);
         padding-left: max(16px, env(safe-area-inset-left, 0px), 4vw); padding-right: max(16px, env(safe-area-inset-right, 0px), 4vw); }

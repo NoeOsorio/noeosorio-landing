@@ -11,6 +11,7 @@ export type LearningContent = {
   allVideos: string
   latest: string
   all: string
+  topics: string
   marquee: string
   spinning: string
   jackpotSign: string
@@ -29,6 +30,7 @@ export const learning: LearningContent = {
   allVideos: 'All videos on YouTube',
   latest: 'Latest from the channel',
   all: 'All',
+  topics: 'Topics',
   marquee: 'PULL THE LEVER',
   spinning: 'GOOD LUCK',
   jackpotSign: 'JACKPOT!',

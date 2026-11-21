@@ -1,12 +1,9 @@
 
 .home-passport{
     color-scheme: dark;
-    --night: #0E0D0B; --ink: #F4EEE4; --ink-2: rgba(244,238,228,.74);
+    --ink-2: rgba(244,238,228,.74);
     --paper: #EFE5CF; --paper-deep: #D6C6A6; --page-ink: #2B2418; --cover: #1C2633; --cover-edge: #121922; --glow: rgba(242,179,106,.18);
-    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
-    --body: "Geist", system-ui, -apple-system, sans-serif;
     --city: "Newsreader", Georgia, "Times New Roman", serif;
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   }
 
 /* The prototype was drawn on browser defaults; the site's reset sets border-box and block svgs. Put them back for this section. */
