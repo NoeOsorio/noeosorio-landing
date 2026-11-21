@@ -103,11 +103,11 @@ export function mountLayers(track: HTMLElement, A: ModelApp): () => void {
       el.style.left = o.x + "px";
       el.style.top = o.y + "px";
     }
-    const n = Math.round((o.thick || 0) / 2);
-    for (let i = n; i >= 1; i--) {
+    // One slab at the deepest point gives the thickness; stacking copies costs a composited layer each.
+    if (o.thick) {
       const e = document.createElement("div");
       e.className = "edge";
-      e.style.transform = `translateZ(${-i * 2}px)`;
+      e.style.transform = `translateZ(${-o.thick}px)`;
       el.prepend(e);
     }
     let sh: HTMLElement | null = null;
@@ -202,6 +202,16 @@ export function mountLayers(track: HTMLElement, A: ModelApp): () => void {
     H = 0,
     fit = 1,
     shift = 0;
+  // On phones the rig is laid out at half size (CSS zoom) so each layer rasterizes at a quarter of the pixels;
+  // the camera scale is doubled so it looks the same. Screen-space translations are multiplied by k as well.
+  const narrow = matchMedia("(max-width: 760px)");
+  let k = 1;
+  const setK = () => {
+    k = narrow.matches ? 2 : 1;
+    rig.style.zoom = String(1 / k);
+    last = -1;
+  };
+  narrow.addEventListener("change", setK, sig);
   function measure() {
     W = innerWidth;
     H = innerHeight;
@@ -244,7 +254,7 @@ export function mountLayers(track: HTMLElement, A: ModelApp): () => void {
   function render(p: number) {
     const e = io(seg(p, 0.08, 0.28)) * (1 - io(seg(p, 0.86, 0.98))); // how far apart the layers are
     const c = cam(p);
-    rig.style.transform = `translate3d(${shift}px,${H < 700 ? 30 : 0}px,0) scale(${fit * c.s}) rotateX(${c.rx + cmy * -5}deg) rotateZ(${c.rz + cmx * 7}deg) translate3d(${-c.fx}px,${-c.fy}px,${-190 * e}px)`;
+    rig.style.transform = `translate3d(${shift * k}px,${(H < 700 ? 30 : 0) * k}px,0) scale(${fit * c.s * k}) rotateX(${c.rx + cmy * -5}deg) rotateZ(${c.rz + cmx * 7}deg) translate3d(${-c.fx}px,${-c.fy}px,${-190 * e}px)`;
 
     // Keep the whole app inside the screen: if the camera would cut it off, pull it back in.
     {
@@ -360,6 +370,7 @@ export function mountLayers(track: HTMLElement, A: ModelApp): () => void {
   }
   const start = () => {
     if (disposed) return;
+    setK();
     measure();
     readScroll();
     cur = target;
@@ -373,6 +384,7 @@ export function mountLayers(track: HTMLElement, A: ModelApp): () => void {
     cancelAnimationFrame(raf);
     ac.abort();
     rig.textContent = "";
+    rig.style.zoom = "";
     scene.style.transform = "";
   };
 }
