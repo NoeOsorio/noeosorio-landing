@@ -1,0 +1,125 @@
+
+.home-passport{
+    color-scheme: dark;
+    --night: #0E0D0B; --ink: #F4EEE4; --ink-2: rgba(244,238,228,.74);
+    --paper: #EFE5CF; --paper-deep: #D6C6A6; --page-ink: #2B2418; --cover: #1C2633; --cover-edge: #121922; --glow: rgba(242,179,106,.18);
+    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    --body: "Geist", system-ui, -apple-system, sans-serif;
+    --city: "Newsreader", Georgia, "Times New Roman", serif;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+/* The prototype was drawn on browser defaults; the site's reset sets border-box and block svgs. Put them back for this section. */
+.home-passport *, .home-passport *::before, .home-passport *::after { box-sizing: content-box; }
+.home-passport svg { display: inline; vertical-align: baseline; }
+
+.home-passport{ background: var(--night); color: var(--ink); }
+
+.home-passport{ font-family: var(--body); }
+
+.home-passport .head{ position: relative; display: flex; flex-direction: column; gap: 12px; max-width: 40rem; }
+
+.home-passport .head h2{ margin: 0; font: 700 clamp(2.4rem, 5vw, 4rem)/1 var(--display); letter-spacing: -0.035em; text-wrap: balance; }
+
+.home-passport .head p{ margin: 0; font-size: clamp(1rem, 1.3vw, 1.125rem); line-height: 1.55; color: var(--ink-2); }
+
+.home-passport .track{ position: relative; }
+
+.home-passport .stage{ position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: clip; display: flex; flex-direction: column; box-sizing: border-box;
+           padding-block: clamp(28px, 6vh, 72px) 20px; padding-left: max(16px, env(safe-area-inset-left, 0px), 5vw); padding-right: max(16px, env(safe-area-inset-right, 0px), 5vw); }
+
+.home-passport .glow{ position: absolute; left: 50%; top: 60%; width: 46vw; height: 30vw; margin: -15vw 0 0 -23vw; border-radius: 50%; background: var(--glow); filter: blur(110px); pointer-events: none; }
+
+.home-passport .room{ position: relative; flex: 1; min-height: 0; perspective: 2800px; perspective-origin: 50% 28%; }
+
+.home-passport .book{ position: absolute; left: 50%; top: 50%; width: 1220px; height: 700px; transform-style: preserve-3d; }
+
+.home-passport .book-shadow{ position: absolute; inset: 24px 6px -14px; border-radius: 20px; background: rgba(0,0,0,.66); filter: blur(36px); transform: translateZ(-8px) translateY(30px); }
+
+.home-passport .leather{ background: radial-gradient(120% 90% at 30% 18%, #2A3A52 0%, var(--cover) 55%, #131B26 100%); }
+
+.home-passport .rim{ position: absolute; top: -12px; left: 598px; width: 634px; height: 724px; border-radius: 6px 22px 22px 6px; transform: translateZ(-6px); box-shadow: inset 0 0 0 1.5px rgba(0,0,0,.35), inset 0 2px 0 rgba(255,255,255,.06); }
+
+.home-passport .stackp{ position: absolute; top: 0; width: 610px; height: 700px; background: #E2D6BB; transform: translateZ(-3px); }
+
+.home-passport .stackp.r{ left: 610px; border-radius: 0 14px 14px 0; box-shadow: 2px 2px 0 #CFC1A2, 4px 4px 0 #E5DAC1, 6px 5px 0 #CBBC9B, 8px 7px 0 #E1D5BB; }
+
+.home-passport .stackp.l{ left: 0; border-radius: 14px 0 0 14px; box-shadow: -2px 2px 0 #CFC1A2, -4px 4px 0 #E5DAC1, -6px 5px 0 #CBBC9B, -8px 7px 0 #E1D5BB; }
+
+.home-passport .leaf{ position: absolute; left: 610px; top: 0; width: 610px; height: 700px; transform-origin: 0 50%; transform-style: preserve-3d; }
+
+.home-passport .leaf.coverleaf{ top: -12px; width: 622px; height: 724px; }
+
+.home-passport .face{ position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
+.home-passport .face.back{ transform: rotateY(180deg); }
+
+.home-passport .shade, .home-passport .cast{ position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+
+.home-passport .page.base-right{ position: absolute; left: 610px; top: 0; }
+
+.home-passport .page{ position: relative; width: 610px; height: 700px; box-sizing: border-box; padding: 40px 52px; overflow: hidden; color: var(--page-ink); background: var(--paper); }
+
+.home-passport .page.l{ border-radius: 14px 0 0 14px; background: linear-gradient(90deg, var(--paper) 0%, var(--paper) 78%, #D9C8A4 95%, #BCA77E 100%); }
+
+.home-passport .page.r{ border-radius: 0 14px 14px 0; background: linear-gradient(90deg, #BCA77E 0%, #D9C8A4 5%, var(--paper) 22%, var(--paper) 100%); padding-left: 66px; }
+
+.home-passport .page.l::after, .home-passport .page.r::after{ content: ""; position: absolute; top: 34px; bottom: 34px; width: 0; border-left: 2px dashed rgba(150,46,40,.55); }
+
+.home-passport .page.l::after{ right: 7px; }
+
+.home-passport .page.r::after{ left: 7px; }
+
+.home-passport .page h3{ position: relative; z-index: 1; margin: 0; font: italic 400 44px/1.05 var(--city); letter-spacing: -0.01em; }
+
+.home-passport .visas{ position: absolute; top: 52px; right: 48px; font: 600 11px/1 var(--body); letter-spacing: .34em; color: rgba(43,36,24,.5); }
+
+.home-passport .security{ position: absolute; inset: 0; pointer-events: none; }
+
+.home-passport .page.inside{ color: #CFAE63; }
+
+.home-passport .page.inside, .home-passport .page.coverfront{ background: radial-gradient(120% 90% at 70% 18%, #2A3A52 0%, var(--cover) 55%, #131B26 100%); }
+
+.home-passport .page.inside{ border-radius: 18px 4px 4px 18px; width: 622px; height: 724px; }
+
+.home-passport .page.coverfront{ width: 622px; height: 724px; border-radius: 4px 20px 20px 4px; display: flex; flex-direction: column; align-items: center; padding: 96px 60px 64px; color: #CFAE63; text-shadow: 0 1px 0 rgba(0,0,0,.45), 0 -1px 0 rgba(255,230,170,.12); }
+
+.home-passport .page.inside::after, .home-passport .page.coverfront::after{ display: none; }
+
+.home-passport .coverfront .frame{ position: absolute; inset: 22px; border: 1.5px solid rgba(207,174,99,.45); border-radius: 12px; }
+
+.home-passport .coverfront .word{ font: 500 40px/1 var(--city); letter-spacing: .32em; margin-right: -.32em; }
+
+.home-passport .coverfront .emblem{ margin: 64px 0 auto; width: 230px; height: 230px; filter: drop-shadow(0 1px 0 rgba(0,0,0,.45)); }
+
+.home-passport .coverfront .name{ font: 600 20px/1 var(--body); letter-spacing: .3em; margin-right: -.3em; }
+
+.home-passport .coverfront .role{ margin-top: 12px; font: 500 12px/1 var(--body); letter-spacing: .34em; margin-right: -.34em; opacity: .75; }
+
+.home-passport .coverfront .chip{ margin-top: 40px; width: 52px; height: 32px; }
+
+.home-passport .stamp{ position: absolute; z-index: 2; mix-blend-mode: multiply; cursor: pointer; }
+
+.home-passport .stamp.main{ z-index: 1; }
+
+.home-passport .stamp svg{ display: block; width: 100%; height: auto; overflow: visible; }
+
+.home-passport .stamp.pending > svg{ opacity: 0; }
+
+.home-passport .press{ position: absolute; inset: 4%; border-radius: var(--pr, 14px); background: rgba(38,28,12,.6); opacity: 0; pointer-events: none; }
+
+@media (hover: hover) and (pointer: fine){.home-passport .stamp > svg{ transition: transform 220ms var(--ease-out); }
+
+.home-passport .stamp:hover > svg{ transform: scale(1.04); }}
+
+.home-passport .stack{ display: none; }
+
+@media (max-width: 760px){.home-passport .track{ display: none; }
+
+.home-passport .stack{ display: flex; flex-direction: column; gap: 28px; padding-block: 48px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+.home-passport .mpage{ position: relative; width: 100%; max-width: 100%; aspect-ratio: 610 / 700; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 6px var(--cover), 0 24px 50px rgba(0,0,0,.55); }
+
+.home-passport .mpage .page{ position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 0; background: var(--paper); padding-left: 52px; }}
+
+@media (prefers-reduced-motion: reduce){.home-passport .stamp.pending > svg{ opacity: 1; }}

@@ -1,7 +1,8 @@
+import { passport } from '../data/passport'
+import { useMount } from '../useMount'
+import { mountPassport } from './work-passport.mount'
+import './work-passport.css'
+
 export default function WorkPassport() {
-  return (
-    <section className="home-passport" style={{ padding: '48px 4vw' }}>
-      <p style={{ margin: 0, opacity: 0.5 }}>Passport</p>
-    </section>
-  )
+  return <section className="home-passport" ref={useMount(mountPassport, passport)} />
 }

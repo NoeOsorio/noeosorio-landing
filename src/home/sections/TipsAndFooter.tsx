@@ -1,7 +1,8 @@
+import { useMount } from '../useMount'
+import { tips } from '../data/tips'
+import { mountClose } from './tips-footer.mount'
+import './tips-footer.css'
+
 export default function TipsAndFooter() {
-  return (
-    <section className="home-close" style={{ padding: '48px 4vw' }}>
-      <p id="subscribe" style={{ margin: 0, opacity: 0.5 }}>Tips and footer</p>
-    </section>
-  )
+  return <div className="home-close" ref={useMount(mountClose, tips)} />
 }

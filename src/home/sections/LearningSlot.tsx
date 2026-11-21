@@ -1,7 +1,8 @@
+import { useMount } from '../useMount'
+import { learning } from '../data/learning'
+import { mountLearning } from './learning-slot.mount'
+import './learning-slot.css'
+
 export default function LearningSlot() {
-  return (
-    <section className="home-learning" style={{ padding: '48px 4vw' }}>
-      <p style={{ margin: 0, opacity: 0.5 }}>Learning</p>
-    </section>
-  )
+  return <section className="home-learning" ref={useMount(mountLearning, learning)} />
 }
