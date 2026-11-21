@@ -1,0 +1,327 @@
+<meta charset="utf-8">
+<title>Learning Slot Machine</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+
+<!-- ============================================================
+     EDIT HERE. Every video and word comes from this block (newest first).
+     cat must be one of the keys in CATS; each category has its LED pictogram.
+     ============================================================ -->
+<script>
+const CONTENT = {
+  title: "Learning out loud",
+  sub: "Can't pick a video? Pull the lever.",
+  channel: "https://www.youtube.com/@noeosoriodev/videos",
+  allVideos: "All videos on YouTube",
+  latest: "Latest from the channel",
+  all: "All",
+  marquee: "PULL THE LEVER",
+  spinning: "GOOD LUCK",
+  jackpotSign: "JACKPOT!",
+  pull: "PULL",
+  watch: "Watch on YouTube",
+  again: "Not this one? Pull again.",
+  jackpot: "Three tacos. You win nothing.",
+  cats: { build: "Builds", life: "Life", career: "Career", podcast: "Podcast" },
+  videos: [
+    { id: "-TwcWcwiMes", cat: "build", title: "Así reviso mis ensayos con IA", date: "2026-11-18", len: 473 },
+    { id: "pH2wqI1eIhY", cat: "life", title: "Lo más nerd que he hecho en Nueva York", date: "2026-11-13", len: 365 },
+    { id: "VXkBNHYGqMo", cat: "career", title: "El fracaso más bonito que pudimos haber tenido", date: "2026-11-11", len: 744 },
+    { id: "UCeUrsZbsPc", cat: "life", title: "Le tengo miedo a las alturas y salté de un avión en Hawaii", date: "2026-10-28", len: 378 },
+    { id: "rZl0ILxdRR0", cat: "build", title: "¿Ingeniería pura o puro vibe coding? Lo que nos dejó un año programando con IA", date: "2026-10-21", len: 896 },
+    { id: "yLiI0HW6DRk", cat: "life", title: "Me quedé sin batería en San Francisco (y fue lo mejor del viaje)", date: "2026-10-12", len: 966 },
+    { id: "Z02yrw2bbpo", cat: "podcast", title: "Mi primera entrevista de trabajo como programador", date: "2024-09-25", len: 1981 },
+    { id: "LPhabDDNskY", cat: "podcast", title: "Retos y obstáculos en mi carrera como programador", date: "2024-09-04", len: 1982 },
+    { id: "p0z1naXJlcU", cat: "build", title: "Diseñé un CRM a medida para cubrir las necesidades de mi negocio", date: "2024-08-23", len: 1316 },
+    { id: "hTimdvdiORM", cat: "podcast", title: "Mis lenguajes de programación", date: "2024-08-21", len: 2189 },
+    { id: "K7oah0eaiOI", cat: "podcast", title: "El día que decidí ser programador", date: "2024-08-07", len: 1626 }
+  ]
+};
+</script>
+
+<style>
+  /* Two columns: the slot machine and its ticket on the left, the latest videos on the right. */
+  :root {
+    color-scheme: dark;
+    --night: #0E0D0B; --ink: #F4EEE4; --ink-2: rgba(244,238,228,.72); --ink-3: rgba(244,238,228,.48);
+    --lime: #C6F06B; --led: #9FD043; --hot: #F2FFD2; --panel: #121210;
+    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    --body: "Geist", system-ui, -apple-system, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  html, body { background: var(--night); color: var(--ink); }
+  body { font-family: var(--body); }
+  .lo { max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding-block: clamp(64px, 11vh, 128px);
+        padding-left: max(16px, env(safe-area-inset-left, 0px), 4vw); padding-right: max(16px, env(safe-area-inset-right, 0px), 4vw); }
+  .lo h2 { margin: 0; font: 700 clamp(2.6rem, 6vw, 4.8rem)/.98 var(--display); letter-spacing: -0.04em; }
+  .lo .sub { margin: 18px 0 0; max-width: 36rem; font-size: 17px; line-height: 1.6; color: var(--ink-2); }
+  .grid { margin-top: 48px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
+
+  /* The machine */
+  .machine { position: relative; display: flex; gap: 22px; align-items: flex-start; }
+  .cab { position: relative; flex: 1; min-width: 0; padding: 14px; border-radius: 26px; background: linear-gradient(#1A1A17, #121210);
+         box-shadow: inset 0 1px 0 rgba(255,255,255,.07), inset 0 0 0 1px rgba(198,240,107,.1), 0 30px 60px rgba(0,0,0,.5); }
+  .marq { display: block; width: 100%; height: auto; border-radius: 12px; background: #0A0A09; box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); }
+  .reels { position: relative; margin-top: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; padding: 10px 6px; border-radius: 14px; background: #0A0A09; box-shadow: inset 0 0 0 1px rgba(198,240,107,.28), inset 0 0 40px rgba(198,240,107,.06); }
+  .reel { position: relative; display: grid; place-items: center; }
+  .reel + .reel::before { content: ""; position: absolute; left: 0; top: 14%; bottom: 14%; border-left: 3px dotted rgba(159,208,67,.7); }
+  .reel canvas { width: 100%; max-width: 170px; height: auto; display: block; }
+  .slot { height: 10px; margin: 14px 18% 2px; border-radius: 99px; background: #050505; box-shadow: inset 0 2px 3px rgba(0,0,0,.8), 0 1px 0 rgba(255,255,255,.05); }
+  .lever { position: relative; width: 44px; flex: none; display: flex; flex-direction: column; align-items: center; padding-top: 10px; user-select: none; touch-action: none; }
+  .lever .track { position: relative; width: 10px; height: 190px; border-radius: 99px; background: #151513; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+  .lever .knob { position: absolute; left: 50%; top: -18px; width: 40px; height: 40px; margin-left: -20px; border: 0; padding: 0; border-radius: 50%; cursor: grab;
+                 background: radial-gradient(circle at 35% 30%, #F2FFD2 0%, #C6F06B 35%, #6E9A1E 100%); box-shadow: 0 10px 22px rgba(0,0,0,.5), 0 0 24px rgba(198,240,107,.35); }
+  .lever .knob:active { cursor: grabbing; }
+  .lever .knob:focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; }
+  .lever span { margin-top: 16px; font: 500 11px var(--mono); letter-spacing: .2em; color: var(--ink-3); }
+
+  /* The ticket it prints */
+  .ticket { position: relative; margin: -4px 26px 0 22px; padding: 18px 20px 20px; border-radius: 0 0 18px 18px; background: #151513; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 24px 40px rgba(0,0,0,.45); }
+  .ticket .strip { display: block; width: 100%; height: auto; border-radius: 8px; background: #0A0A09; }
+  .ticket h3 { margin: 14px 0 6px; font: 600 19px/1.3 var(--body); }
+  .ticket .meta { display: flex; justify-content: space-between; font: 500 12.5px var(--mono); color: var(--ink-3); }
+  .ticket .row { margin-top: 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  .watch { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px; border-radius: 10px; background: var(--lime); color: #15210A; font: 700 14.5px var(--body); text-decoration: none; transition: transform 160ms var(--ease-out); }
+  .watch:active { transform: scale(.97); }
+  .again { border: 0; background: none; color: var(--ink-3); font: 500 13.5px var(--body); cursor: pointer; padding: 6px 0; }
+  .again:hover { color: var(--ink); }
+  .ticket .jp { margin: 10px 0 0; font: 500 13px var(--mono); color: var(--lime); }
+
+  /* The list */
+  .list h3 { margin: 0 0 16px; font: 700 24px var(--display); letter-spacing: -0.02em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .chip { height: 34px; padding: 0 14px; border: 0; border-radius: 9px; cursor: pointer; background: rgba(255,248,236,.06); box-shadow: inset 0 0 0 1px rgba(255,248,236,.08); color: var(--ink-2); font: 500 14px var(--body); transition: transform 160ms var(--ease-out); }
+  .chip:active { transform: scale(.97); }
+  .chip[aria-pressed="true"] { background: var(--ink); color: #15130F; box-shadow: none; }
+  .vids { display: flex; flex-direction: column; gap: 6px; }
+  .vid { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; align-items: center; padding: 10px; border-radius: 14px; text-decoration: none; color: var(--ink); transition: background-color 160ms ease, box-shadow 200ms ease; }
+  .vid canvas { width: 64px; height: 64px; border-radius: 10px; background: #0A0A09; box-shadow: inset 0 0 0 1px rgba(198,240,107,.12); }
+  .vid .top { display: flex; justify-content: space-between; gap: 10px; font: 500 12px var(--mono); color: var(--ink-3); }
+  .vid .top b { color: var(--lime); font-weight: 500; }
+  .vid .t { margin-top: 5px; font: 600 15px/1.35 var(--body); }
+  .vid.on { background: rgba(198,240,107,.06); box-shadow: inset 0 0 0 1px rgba(198,240,107,.35); }
+  @media (hover: hover) and (pointer: fine) { .vid:hover { background: rgba(255,248,236,.04); } }
+  .more { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; color: var(--ink); text-decoration: none; font: 500 15px var(--body); }
+  .more svg { color: var(--lime); transition: transform 200ms var(--ease-out); } .more:hover svg { transform: translateX(3px); }
+  .vid:focus-visible, .more:focus-visible, .watch:focus-visible, .chip:focus-visible, .again:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+
+  @media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } .ticket { margin-right: 66px; } }
+  @media (max-width: 520px) { .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; } .chips::-webkit-scrollbar { display: none; } .chip { flex: none; }
+    .machine { gap: 10px; } .lever { width: 34px; } .lever .track { height: 140px; } .ticket { margin: -4px 44px 0 8px; } }
+</style>
+
+<section class="lo" aria-labelledby="lo-title">
+  <h2 id="lo-title"></h2>
+  <p class="sub" id="lo-sub"></p>
+  <div class="grid">
+    <div>
+      <div class="machine">
+        <div class="cab">
+          <canvas class="marq" id="marq" aria-hidden="true"></canvas>
+          <div class="reels" id="reels" aria-hidden="true"></div>
+          <div class="slot"></div>
+        </div>
+        <div class="lever" id="lever"><div class="track"><button class="knob" type="button" id="knob"></button></div><span></span></div>
+      </div>
+      <div class="ticket" id="ticket" aria-live="polite"></div>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const C = CONTENT, esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches, E = "cubic-bezier(0.23, 1, 0.32, 1)";
+  const fmtLen = s => { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), ss = String(s % 60).padStart(2, "0"); return h ? `${h}:${String(m).padStart(2, "0")}:${ss}` : `${m}:${ss}`; };
+  const fmtDate = d => new Date(d + "T12:00:00").toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  const url = id => `https://www.youtube.com/watch?v=${id}`;
+  document.getElementById("lo-title").textContent = C.title;
+  document.getElementById("lo-sub").textContent = C.sub;
+  document.querySelector("#lever span").textContent = C.pull;
+  document.getElementById("knob").setAttribute("aria-label", C.marquee);
+
+  // ---------- LED pictograms, drawn as shapes and sampled into dots ----------
+  const ICON = {
+    podcast: o => { o.lineWidth = 2.4; o.beginPath(); o.roundRect(8.5, 2.5, 7, 11.5, 3.5); o.fill(); o.beginPath(); o.arc(12, 11, 6.5, 0, Math.PI); o.stroke(); o.beginPath(); o.moveTo(12, 17.5); o.lineTo(12, 21); o.moveTo(7.5, 21.5); o.lineTo(16.5, 21.5); o.stroke(); },
+    build: o => { o.lineWidth = 2.6; o.beginPath(); o.moveTo(8, 6.5); o.lineTo(2.5, 12); o.lineTo(8, 17.5); o.moveTo(16, 6.5); o.lineTo(21.5, 12); o.lineTo(16, 17.5); o.moveTo(14, 4); o.lineTo(10, 20); o.stroke(); },
+    life: o => { o.beginPath(); o.moveTo(12, 22); o.bezierCurveTo(6, 15.5, 4.5, 12.5, 4.5, 9.5); o.arc(12, 9.5, 7.5, Math.PI, 0); o.bezierCurveTo(19.5, 12.5, 18, 15.5, 12, 22); o.fill(); o.globalCompositeOperation = "destination-out"; o.beginPath(); o.arc(12, 9.5, 3, 0, Math.PI * 2); o.fill(); o.globalCompositeOperation = "source-over"; },
+    career: o => { o.beginPath(); o.moveTo(12, 2); o.bezierCurveTo(16.5, 5.5, 17.5, 11, 15.5, 16); o.lineTo(8.5, 16); o.bezierCurveTo(6.5, 11, 7.5, 5.5, 12, 2); o.fill(); o.lineWidth = 2.2; o.beginPath(); o.moveTo(8.5, 12.5); o.lineTo(4.5, 17); o.lineTo(8.5, 16.5); o.moveTo(15.5, 12.5); o.lineTo(19.5, 17); o.lineTo(15.5, 16.5); o.moveTo(12, 18); o.lineTo(12, 22); o.stroke(); o.globalCompositeOperation = "destination-out"; o.beginPath(); o.arc(12, 9, 2.2, 0, Math.PI * 2); o.fill(); o.globalCompositeOperation = "source-over"; },
+    // A taco on its side: the folded shell is a dome, the filling peeks out along the bottom.
+    taco: o => { o.lineWidth = 3.2; o.beginPath(); o.arc(12, 16, 9.5, Math.PI, 0); o.stroke(); o.beginPath(); [5, 9, 13, 17].forEach((x, i) => { const y = i % 2 ? 15.5 : 16.5; o.moveTo(x + 2.3, y); o.arc(x, y, 2.3, 0, 7); }); o.fill(); }
+  };
+  const GRID = 15, mask = {};
+  for (const k in ICON) {
+    const c = document.createElement("canvas"); c.width = c.height = GRID; const o = c.getContext("2d");
+    o.fillStyle = o.strokeStyle = "#000"; o.lineCap = o.lineJoin = "round"; o.save(); o.translate(.5, .5); o.scale((GRID - 1) / 24, (GRID - 1) / 24); ICON[k](o); o.restore();
+    const d = o.getImageData(0, 0, GRID, GRID).data; mask[k] = []; for (let i = 0; i < GRID * GRID; i++) mask[k].push(d[i * 4 + 3] > 95);
+  }
+  let seed = 3; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  function dots(ctx, x0, y0, cell, k, dim = true, glow = 0) {
+    const m = mask[k], g = Math.max(1, cell * .2), s = cell - g;
+    for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) {
+      const on = m[y * GRID + x];
+      if (!on && !dim) continue;
+      ctx.fillStyle = on ? (rnd() < .07 + glow ? "#F2FFD2" : "#9FD043") : "rgba(198,240,107,.07)";
+      ctx.beginPath(); ctx.roundRect(x0 + x * cell + g / 2, y0 + y * cell + g / 2, s, s, s * .22); ctx.fill();
+    }
+  }
+  const dpr = Math.min(2, devicePixelRatio || 1);
+  const sizeCanvas = (cv, w, h) => { cv.width = w * dpr; cv.height = h * dpr; const x = cv.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); return x; };
+
+  // ---------- LED text: a real 5x7 dot-matrix alphabet (marquee and ticket strips) ----------
+  const FONT = {
+    A:"01110100011000111111100011000110001", B:"11110100011000111110100011000111110", C:"01110100011000010000100001000101110", D:"11110100011000110001100011000111110",
+    E:"11111100001000011110100001000011111", F:"11111100001000011110100001000010000", G:"01110100011000010111100011000101111", H:"10001100011000111111100011000110001",
+    I:"01110001000010000100001000010001110", J:"00111000100001000010000101001001100", K:"10001100101010011000101001001010001", L:"10000100001000010000100001000011111",
+    M:"10001110111010110101100011000110001", N:"10001100011100110101100111000110001", O:"01110100011000110001100011000101110", P:"11110100011000111110100001000010000",
+    Q:"01110100011000110001101011001001101", R:"11110100011000111110101001001010001", S:"01111100001000001110000010000111110", T:"11111001000010000100001000010000100",
+    U:"10001100011000110001100011000101110", V:"10001100011000110001100010101000100", W:"10001100011000110101101011010101010", X:"10001100010101000100010101000110001",
+    Y:"10001100011000101010001000010000100", Z:"11111000010001000100010001000011111",
+    0:"01110100011001110101110011000101110", 1:"00100011000010000100001000010001110", 2:"01110100010000100010001000100011111", 3:"11111000100010000010000011000101110",
+    4:"00010001100101010010111110001000010", 5:"11111100001111000001000011000101110", 6:"00110010001000011110100011000101110", 7:"11111000010001000100010000100001000",
+    8:"01110100011000101110100011000101110", 9:"01110100011000101111000010001001100",
+    "?":"01110100010000100010001000000000100", "-":"00000000000000011111000000000000000"
+  };
+  const NARROW = { " ": ["000","000","000","000","000","000","000"], ":": ["0","1","1","0","1","1","0"], "!": ["1","1","1","1","1","0","1"], ".": ["0","0","0","0","0","0","1"] };
+  function textMask(text) {
+    const glyphs = [...text.toUpperCase()].map(ch => NARROW[ch] || (FONT[ch] ? FONT[ch].match(/.{5}/g) : NARROW[" "]));
+    const w = glyphs.reduce((a, g) => a + g[0].length + 1, -1), m = new Array(w * 7).fill(false); let x0 = 0;
+    glyphs.forEach(g => { for (let y = 0; y < 7; y++) for (let x = 0; x < g[y].length; x++) if (g[y][x] === "1") m[y * w + x0 + x] = true; x0 += g[0].length + 1; });
+    return { w, h: 7, m };
+  }
+  // Draws a dot board. hot(x, y) can light some dots brighter, for the shimmer and the blink.
+  function ledText(ctx, W, H, cell, tm, offset, align, hot, lit = true) {
+    ctx.clearRect(0, 0, W, H); const cols = Math.floor(W / cell), rows = Math.floor(H / cell), g = Math.max(1, cell * .22), s = cell - g, top = Math.floor((rows - tm.h) / 2);
+    const ox = (W - cols * cell) / 2, oy = (H - rows * cell) / 2;
+    const start = align === "left" ? 2 : align === "right" ? cols - tm.w - 2 : Math.floor((cols - tm.w) / 2);
+    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+      let tx = x - start + offset; if (offset) tx = ((tx % (tm.w + cols)) + tm.w + cols) % (tm.w + cols);
+      const ty = y - top, on = lit && tx >= 0 && tx < tm.w && ty >= 0 && ty < tm.h && tm.m[ty * tm.w + tx];
+      ctx.fillStyle = on ? (hot && hot(x, y) ? "#F2FFD2" : "#9FD043") : "rgba(198,240,107,.06)"; ctx.beginPath(); ctx.roundRect(ox + x * cell + g / 2, oy + y * cell + g / 2, s, s, s * .22); ctx.fill();
+    }
+  }
+
+  // ---------- Marquee: idle shimmer, a message while it spins, the result blinks ----------
+  const marq = document.getElementById("marq"), base = textMask(C.marquee);
+  let marqText = base, marqMode = "idle", marqT0 = 0, visible = false, looping = false;
+  function say(text, mode, ms) { marqText = textMask(text); marqMode = mode; marqT0 = performance.now(); clearTimeout(say.t); if (ms) say.t = setTimeout(() => say(C.marquee, "idle"), ms); if (reduce) marqDraw(0); }
+  function marqDraw(t) {
+    const W = marq.clientWidth || 600, cell = Math.max(3, Math.min(7, Math.floor(W / (base.w + 6)))), H = cell * 11, x = sizeCanvas(marq, W, H); marq.style.height = H + "px";
+    const cols = Math.floor(W / cell), fits = marqText.w + 4 <= cols, e = t - marqT0;
+    let hot = null, lit = true;
+    if (marqMode === "idle" && !reduce) { const band = (t / 22) % (cols + 40) - 20; hot = (c, r) => Math.abs(c - band + r * .6) < 2.2; }
+    if (marqMode === "spin" && !reduce) hot = () => Math.random() < .18;
+    if (marqMode === "blink" && !reduce) lit = Math.floor(e / 170) % 2 === 0 || e > 170 * 6;
+    ledText(x, W, H, cell, marqText, fits ? 0 : Math.floor(e / 45), fits ? "center" : "left", hot, lit);
+  }
+
+  // ---------- Reels ----------
+  const reelsBox = document.getElementById("reels"), KEYS = ["build", "life", "career", "podcast", "taco"];
+  const reels = [0, 1, 2].map(() => { const r = document.createElement("div"); r.className = "reel"; const cv = document.createElement("canvas"); r.appendChild(cv); reelsBox.appendChild(r); return { cv, key: "podcast", pos: 0, flash: 0 }; });
+  function drawReel(R, spinning) {
+    const W = R.cv.clientWidth || 150, cell = Math.floor(W / (GRID + 2)), H = cell * (GRID + 2), x = sizeCanvas(R.cv, W, H);
+    x.clearRect(0, 0, W, H);
+    if (!spinning) { const f = Math.max(0, 1 - (performance.now() - R.flash) / 420); dots(x, (W - cell * GRID) / 2, cell, cell, R.key, true, f * .8); return; }
+    // While spinning, symbols slide down past the window, a little blurred.
+    const step = H, off = (R.pos % 1) * step, a = KEYS[Math.floor(R.pos) % KEYS.length], b = KEYS[(Math.floor(R.pos) + 1) % KEYS.length];
+    x.save(); x.globalAlpha = .9; x.filter = "blur(1px)"; dots(x, (W - cell * GRID) / 2, cell + off - step, cell, b, false); dots(x, (W - cell * GRID) / 2, cell + off, cell, a, false); x.restore();
+  }
+  const drawAll = () => reels.forEach(R => drawReel(R, false));
+
+  // ---------- Ticket ----------
+  const ticket = document.getElementById("ticket"); let current = null;
+  function printTicket(v, jackpot, animate = true) {
+    ticket.innerHTML = `<canvas class="strip" aria-hidden="true"></canvas><h3>${esc(v.title)}</h3><div class="meta"><span>${esc(fmtDate(v.date))}</span></div>
+      ${jackpot ? `<p class="jp">${esc(C.jackpot)}</p>` : ""}<div class="row"><a class="watch" href="${esc(url(v.id))}" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4 L20 12 L7 20 Z"/></svg>${esc(C.watch)}</a><button class="again" type="button">${esc(C.again)}</button></div>`;
+    const st = ticket.querySelector(".strip"), W = st.clientWidth || 480, cell = Math.max(3, Math.min(5, Math.floor(W / 80))), H = cell * 11, x = sizeCanvas(st, W, H); st.style.height = H + "px";
+    // The strip prints what the reels landed on: the topic on the left, how long the video is on the right.
+    const label = textMask(jackpot ? "JACKPOT" : C.cats[v.cat]), len = textMask(fmtLen(v.len));
+    ledText(x, W, H, cell, label, 0, "left");
+    const cols = Math.floor(W / cell), rows = Math.floor(H / cell), g = Math.max(1, cell * .22), s = cell - g, top = Math.floor((rows - 7) / 2), ox = (W - cols * cell) / 2, oy = (H - rows * cell) / 2;
+    for (let y = 0; y < 7; y++) for (let xx = 0; xx < len.w; xx++) if (len.m[y * len.w + xx]) { x.fillStyle = "#F2FFD2"; x.beginPath(); x.roundRect(ox + (cols - len.w - 2 + xx) * cell + g / 2, oy + (top + y) * cell + g / 2, s, s, s * .22); x.fill(); }
+    ticket.querySelector(".again").addEventListener("click", () => { pullLever(); });
+    if (animate && !reduce) ticket.animate([{ clipPath: "inset(0 0 100% 0)", transform: "translateY(-14px)" }, { clipPath: "inset(0 0 0 0)", transform: "none" }], { duration: 700, easing: "steps(12, end)" });
+    current = v; markList();
+  }
+
+  // ---------- Pull ----------
+  let spinning = false;
+  function pull() {
+    if (spinning) return; spinning = true;
+    const pool = C.videos.filter(x => x !== current), v = pool[Math.floor(Math.random() * pool.length)], jackpot = Math.random() < 1 / 12, target = jackpot ? "taco" : v.cat;
+    if (reduce) { reels.forEach(R => R.key = target); drawAll(); printTicket(v, jackpot); spinning = false; return; }
+    say(C.spinning, "spin");
+    ticket.animate([{ opacity: 1, transform: "none" }, { opacity: .35, transform: "translateY(-6px)" }], { duration: 200, easing: E, fill: "forwards" });
+    const t0 = performance.now(), stops = [900, 1250, 1600];
+    reels.forEach(R => { R.pos = Math.random() * 5; R.done = false; });
+    (function step(t) {
+      reels.forEach((R, i) => {
+        if (R.done) return;
+        const left = stops[i] - (t - t0);
+        if (left <= 0) { R.done = true; R.key = target; R.flash = t; drawReel(R, false);
+          R.cv.animate([{ transform: "translateY(-10px)" }, { transform: "translateY(4px)" }, { transform: "none" }], { duration: 280, easing: E }); return; }
+        R.pos += Math.max(.06, Math.min(.38, left / 2200)); drawReel(R, true);
+      });
+      if (reels.every(R => R.done)) {
+        spinning = false; ticket.getAnimations().forEach(a => a.cancel()); printTicket(v, jackpot);
+        say(jackpot ? C.jackpotSign : C.cats[v.cat], "blink", jackpot ? 3200 : 2000);
+        if (jackpot) reelsBox.animate([{ boxShadow: "inset 0 0 0 1px rgba(242,255,210,.9), inset 0 0 60px rgba(198,240,107,.35)" }, { boxShadow: "inset 0 0 0 1px rgba(198,240,107,.28), inset 0 0 40px rgba(198,240,107,.06)" }], { duration: 300, iterations: 5, easing: "ease" });
+        return;
+      }
+      requestAnimationFrame(step);
+    })(t0);
+  }
+
+  // One loop, only while the machine is on screen: marquee shimmer and the reels' idle twinkle.
+  let lastTw = 0;
+  function loop(t) {
+    if (!visible || reduce) { looping = false; return; }
+    marqDraw(t);
+    if (!spinning && t - lastTw > 140) { lastTw = t; drawAll(); }
+    requestAnimationFrame(loop);
+  }
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && !looping) { looping = true; requestAnimationFrame(loop); } }).observe(document.querySelector(".cab"));
+
+  // ---------- Lever: click it or drag it down ----------
+  const knob = document.getElementById("knob"), track = knob.parentElement;
+  let drag = null;
+  const setKnob = y => { knob.style.transform = `translateY(${y}px)`; };
+  function release(full) {
+    knob.animate([{ transform: knob.style.transform || "none" }, { transform: "translateY(0)" }], { duration: 420, easing: "cubic-bezier(0.34, 1.56, 0.64, 1)" });
+    setKnob(0); if (full) pull();
+  }
+  knob.addEventListener("pointerdown", e => { drag = { y: e.clientY, max: track.clientHeight - 10 }; knob.setPointerCapture(e.pointerId); });
+  knob.addEventListener("pointermove", e => { if (!drag) return; setKnob(Math.max(0, Math.min(drag.max, e.clientY - drag.y))); });
+  knob.addEventListener("pointerup", e => { if (!drag) return; const moved = e.clientY - drag.y; drag = null;
+    if (Math.abs(moved) < 6) pullLever();
+    else release(moved > (track.clientHeight - 10) * .55); });
+  knob.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pullLever(); } });
+  // A click or "Pull again" still shows the lever going down and springing back.
+  function pullLever() {
+    if (spinning) return;
+    if (!reduce) knob.animate([{ transform: "translateY(0)" }, { transform: `translateY(${track.clientHeight - 10}px)`, offset: .4, easing: "cubic-bezier(0.34, 1.56, 0.64, 1)" }, { transform: "translateY(0)" }], { duration: 640, easing: "cubic-bezier(0.65, 0, 0.35, 1)" });
+    setKnob(0); setTimeout(pull, reduce ? 0 : 220);
+  }
+
+  // ---------- List ----------
+  const list = document.getElementById("list"); let filter = "all";
+  const cats = ["all", ...Object.keys(C.cats)];
+  list.innerHTML = `<h3>${esc(C.latest)}</h3><div class="chips" role="group" aria-label="Topics">${cats.map(k => `<button class="chip" type="button" data-k="${k}" aria-pressed="${k === "all"}">${esc(k === "all" ? C.all : C.cats[k])}</button>`).join("")}</div><div class="vids"></div>
+    <a class="more" href="${esc(C.channel)}" target="_blank" rel="noopener">${esc(C.allVideos)}<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8 H13 M9 4 L13 8 L9 12"/></svg></a>`;
+  const vids = list.querySelector(".vids");
+  function renderList() {
+    const shown = C.videos.filter(v => filter === "all" || v.cat === filter).slice(0, 6);
+    vids.innerHTML = shown.map(v => `<a class="vid" href="${esc(url(v.id))}" target="_blank" rel="noopener" data-id="${esc(v.id)}"><canvas aria-hidden="true"></canvas><div><div class="top"><b>${esc(C.cats[v.cat])}</b><span>${esc(fmtDate(v.date))}</span></div><div class="t">${esc(v.title)}</div></div></a>`).join("");
+    vids.querySelectorAll(".vid").forEach((a, i) => { const v = shown[i], cv = a.querySelector("canvas"), x = sizeCanvas(cv, 64, 64); dots(x, (64 - 3.6 * GRID) / 2, (64 - 3.6 * GRID) / 2, 3.6, v.cat, false); });
+    markList();
+  }
+  function markList() { vids.querySelectorAll(".vid").forEach(a => a.classList.toggle("on", !!current && a.dataset.id === current.id)); }
+  list.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => { filter = b.dataset.k; list.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === b)); renderList(); }));
+
+  // ---------- Start: the machine shows the newest video ----------
+  function boot() { marqDraw(performance.now()); reels.forEach(R => R.key = C.videos[0].cat); drawAll(); renderList(); printTicket(C.videos[0], false, false); }
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(boot);
+  addEventListener("resize", () => { clearTimeout(boot.t); boot.t = setTimeout(() => { marqDraw(performance.now()); drawAll(); if (current) printTicket(current, false, false); }, 200); });
+})();
+</script>
