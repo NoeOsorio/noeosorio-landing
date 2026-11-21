@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react'
 import Layout from './components/Layout'
 import ScrollToTop from './components/ScrollToTop'
 import LoadingScreen from './components/LoadingScreen'
+import { CookieConsent } from './components/CookieConsent'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import NotFound from './pages/NotFound'
 
@@ -31,18 +32,22 @@ const router = createBrowserRouter([
     element: (
       <>
         <ScrollToTop />
+        <Suspense fallback={<LoadingScreen />}>
+          <Home />
+        </Suspense>
+        <CookieConsent />
+      </>
+    )
+  },
+  {
+    path: "/",
+    element: (
+      <>
+        <ScrollToTop />
         <Layout />
       </>
     ),
     children: [
-      { 
-        path: "/", 
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <Home />
-          </Suspense>
-        ) 
-      },
       { 
         path: "/about", 
         element: (
