@@ -1,0 +1,212 @@
+// Splits the redrawn Pyventa and Maiden OS cards into a still base (public/home/cards/<card>.webp)
+// and the moving parts (src/home/sections/card-motion/<card>.ts, SVG in the same 520 x 328 space).
+// Source art comes from scripts/cards/living.mjs. Price digits are turned into paths so no web font is needed at runtime.
+// Run from the repo root:  node scripts/cards/gen/living-split.mjs
+import { chromium } from '/private/tmp/claude-501/-Users-noe-Dev-Web/2507de66-3b5f-4d4b-b0d4-cab428c99f73/scratchpad/refs/node_modules/playwright/index.mjs';
+import { createRequire } from 'module';
+import { execSync } from 'child_process';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+
+const TOOLS = '/private/tmp/claude-501/-Users-noe-Dev-Web/2507de66-3b5f-4d4b-b0d4-cab428c99f73/scratchpad/cards-vivas/tools/';
+const opentype = createRequire(TOOLS)('opentype.js');
+const fonts = { 500: opentype.loadSync(TOOLS + 'gm500.ttf'), 700: opentype.loadSync(TOOLS + 'gm700.ttf') };
+
+const root = process.cwd();
+const exe = execSync('ls -d ~/Library/Caches/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-mac-arm64/chrome-headless-shell').toString().trim();
+const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'living-split-'));
+execSync(`node scripts/cards/living.mjs "${tmp}"`, { cwd: root, stdio: 'ignore' });
+
+const b = await chromium.launch({ headless: true, executablePath: exe });
+const p = await b.newPage({ deviceScaleFactor: 2, viewport: { width: 700, height: 600 } });
+const f1 = (v) => String(Math.round(v * 10) / 10);
+
+// Text to path, right aligned at x (text-anchor end), monospace advance from the font.
+function textPath(t) {
+  const font = fonts[t.weight];
+  const adv = (font.charToGlyph('0').advanceWidth / font.unitsPerEm) * t.size;
+  let x = t.x - adv * t.text.length;
+  let d = '';
+  for (const ch of t.text) { d += font.getPath(ch, x, t.y, t.size).toPathData(2); x += adv; }
+  return `<path d="${d}" opacity="${t.opacity}"/>`;
+}
+
+async function open(name, hide) {
+  await p.goto(`file://${tmp}/${name}-art.html`);
+  await p.addStyleTag({ content: 'html,body{background:transparent!important}' + (hide || '') });
+  await p.evaluate(() => document.fonts.ready);
+  await p.waitForTimeout(900);
+}
+async function base(name, hide, out) {
+  await open(name, hide);
+  const png = path.join(tmp, out + '.png');
+  await (await p.$('.card')).screenshot({ path: png, omitBackground: true });
+  execSync(`cwebp -quiet -q 86 -alpha_q 100 "${png}" -o "${root}/public/home/cards/${out}.webp"`);
+}
+const write = (file, svg, body) => {
+  const ts = body.replace('__SVG__', JSON.stringify(svg));
+  fs.writeFileSync(`${root}/src/home/sections/card-motion/${file}.ts`, ts);
+  console.log(file + '.ts bytes', ts.length, 'svg bytes', svg.length);
+};
+
+/* ---------------- Pyventa ---------------- */
+await base('pyventa', '#pv-items,#pv-total,#pv-laser,svg path[stroke-dasharray="5 4"]{display:none!important}', 'pyventa');
+await open('pyventa', '');
+const pv = await p.evaluate(() => {
+  const g = (id) => document.getElementById(id);
+  const txt = (t) => ({ text: t.textContent, x: +t.getAttribute('x'), y: +t.getAttribute('y'), size: +t.getAttribute('font-size'), weight: +t.getAttribute('font-weight'), opacity: t.getAttribute('opacity') });
+  const kids = [...g('pv-items').children];
+  const rows = [];
+  for (let i = 0; i < kids.length; i += 3) rows.push({ leader: kids[i].outerHTML, bar: kids[i + 1].outerHTML, price: txt(kids[i + 2]) });
+  const tot = [...g('pv-total').children];
+  const laser = [...g('pv-laser').children];
+  return {
+    rows,
+    sep: document.querySelector('svg path[stroke-dasharray="5 4"]').outerHTML,
+    totBar: tot[0].outerHTML, totTxt: txt(tot[1]),
+    laserCore: laser[1].outerHTML,
+    ink: document.querySelector('svg g[fill]').getAttribute('fill'),
+    red: laser[1].getAttribute('fill'),
+  };
+});
+const rowsSvg = pv.rows.map((r) => `<g data-row>${r.leader}${r.bar}${textPath(r.price)}</g>`).join('');
+// Soft red glow from stacked low-opacity bars (no filters).
+const glow = [[12, 0.05], [9, 0.07], [6.5, 0.09], [4.4, 0.12]].map(([h, o]) => `<rect x="${104 - (h - 5) / 2}" y="${203 - h / 2}" width="${206 + (h - 5)}" height="${h}" rx="${h / 2}" fill="#D2402F" opacity="${o}"/>`).join('');
+const pvSvg = `<defs><linearGradient id="pv-lz" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#D2402F" stop-opacity="0"/><stop offset=".08" stop-color="#D2402F"/><stop offset=".92" stop-color="#D2402F"/><stop offset="1" stop-color="#D2402F" stop-opacity="0"/></linearGradient></defs>`
+  + `<g fill="${pv.ink}">${rowsSvg}<g data-sep>${pv.sep}</g><g data-tot>${pv.totBar.replace('<rect', '<rect data-tb')}${textPath(pv.totTxt).replace('<path', '<path data-tt')}</g></g>`
+  + `<g data-laser>${glow}${pv.laserCore.replace('url(#lz)', 'url(#pv-lz)')}</g>`;
+write('pyventa', pvSvg, `// Pyventa Web: the moving parts of the card (laser, item lines and prices, separator, total).
+// Generated by scripts/cards/gen/living-split.mjs from the same source as public/home/cards/pyventa.webp (the paper and barcode).
+// At rest, this overlay on that base is the approved card. Build-up is about 1.4 s.
+import { EASE, sweep, type CardMotion } from './index';
+
+const svg = __SVG__;
+
+const opt = (at: number, ms: number): KeyframeAnimationOptions => ({ duration: ms, delay: at, easing: EASE, fill: 'backwards' });
+
+// Fades in from slightly lower and ends on the element's own opacity.
+function rise(el: Element, at: number, ms: number): Animation {
+  return el.animate([{ opacity: 0, transform: 'translateY(2px)' }, { transform: 'translateY(0)' }], opt(at, ms));
+}
+
+const motion: CardMotion = {
+  id: 'pyventa',
+  svg,
+  play(root, delay) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return [];
+    const out: Animation[] = [];
+    const one = <T extends Element>(sel: string) => root.querySelector(sel) as unknown as T;
+    // The red laser comes in at the top of the barcode, scans down once and settles on its resting line.
+    out.push(one<SVGGElement>('[data-laser]').animate(
+      [{ transform: 'translateY(-22px)', opacity: 0 }, { transform: 'translateY(-14px)', opacity: 1, offset: 0.2 }, { transform: 'translateY(20px)', opacity: 1, offset: 0.62 }, { transform: 'translateY(0)', opacity: 1 }],
+      { duration: 700, delay, easing: 'ease-in-out', fill: 'backwards' },
+    ));
+    // Each item prints top to bottom: the bar sweeps left to right, then the leader and price fade in.
+    root.querySelectorAll<SVGGElement>('[data-row]').forEach((row, i) => {
+      const at = delay + 300 + i * 130;
+      out.push(sweep(row.querySelector('rect')!, at, 260));
+      out.push(rise(row.querySelector('path[stroke-dasharray]')!, at + 180, 200));
+      out.push(rise(row.querySelector('path:not([stroke-dasharray])')!, at + 200, 200));
+    });
+    // The dashed separator draws left to right.
+    const sep = one<SVGGElement>('[data-sep]').style;
+    sep.transformBox = 'view-box';
+    sep.transformOrigin = '112px 153px';
+    out.push(one<SVGGElement>('[data-sep]').animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], opt(delay + 960, 260)));
+    out.push(sweep(one('[data-tb]'), delay + 1060, 260));
+    // The total lands last.
+    const tt = one<SVGPathElement>('[data-tt]');
+    tt.style.transformBox = 'view-box';
+    tt.style.transformOrigin = '488px 166px';
+    out.push(tt.animate([{ opacity: 0, transform: 'scale(0.9)' }, { transform: 'scale(1)' }], opt(delay + 1200, 220)));
+    return out;
+  },
+};
+
+export default motion;
+`);
+
+/* ---------------- Maiden OS ---------------- */
+await base('maiden', '#mn-request,#mn-agent,#mn-reply,#mn-table,#mn-page,#mn-wave,#mn-check{display:none!important}', 'maiden');
+await open('maiden', '');
+const mn = await p.evaluate(() => {
+  const g = (id) => document.getElementById(id);
+  const cells = [];
+  for (const k of g('mn-table').children) {
+    if (k.getAttribute('rx') === '4') cells.push(k.outerHTML);
+    else cells[cells.length - 1] += k.outerHTML;
+  }
+  const check = [...g('mn-check').children];
+  return {
+    request: g('mn-request').innerHTML,
+    agent: g('mn-agent').innerHTML,
+    reply: g('mn-reply').innerHTML,
+    cells,
+    page: g('mn-page').innerHTML,
+    wave: g('mn-wave').innerHTML,
+    checkRest: check.slice(1).map((e) => e.outerHTML).join(''),
+    defs: [...document.querySelectorAll('radialGradient')].map((e) => e.outerHTML).join(''),
+  };
+});
+const ren = (s) => s.replace(/url\(#aura\)/g, 'url(#mn-aura)').replace(/url\(#repl\)/g, 'url(#mn-repl)');
+const defs = mn.defs.replace('id="aura"', 'id="mn-aura"').replace('id="repl"', 'id="mn-repl"');
+const checkGlow = [[16, 0.05], [14.5, 0.07], [13, 0.09]].map(([r, o]) => `<circle cx="476" cy="126" r="${r}" fill="#D6F35C" opacity="${o}"/>`).join('');
+const mnSvg = `<defs>${defs}</defs>`
+  + `<g data-req>${mn.request}</g>`
+  + `<g data-agent>${ren(mn.agent)}</g>`
+  + `<g data-reply>${ren(mn.reply)}</g>`
+  + `<g transform="translate(0 3)" data-table>${mn.cells.map((c) => `<g data-cell>${c}</g>`).join('')}</g>`
+  + `<g transform="translate(0 3)" data-page>${mn.page}</g>`
+  + `<g transform="translate(0 3)" data-wave>${mn.wave}</g>`
+  + `<g data-check>${checkGlow}${mn.checkRest}</g>`;
+write('maiden', mnSvg, `// Maiden OS: the moving parts of the card (request bubble, agent dot, reply bubble, table, page, waveform, check).
+// Generated by scripts/cards/gen/living-split.mjs from the same source as public/home/cards/maiden.webp (the obsidian background).
+// At rest, this overlay on that base is the approved card. Build-up is about 1.4 s.
+import { EASE, type CardMotion } from './index';
+
+const svg = __SVG__;
+
+const opt = (at: number, ms: number): KeyframeAnimationOptions => ({ duration: ms, delay: at, easing: EASE, fill: 'backwards' });
+
+// Scales around a point in card space (the transform origin lives on the element, so only transform and opacity move).
+function from(el: Element, origin: string, frames: Keyframe[], at: number, ms: number, easing?: string): Animation {
+  const s = (el as SVGElement).style;
+  s.transformBox = 'view-box';
+  s.transformOrigin = origin;
+  return el.animate(frames, { ...opt(at, ms), ...(easing ? { easing } : {}) });
+}
+function fill(el: Element, origin: string, frames: Keyframe[], at: number, ms: number): Animation {
+  const s = (el as SVGElement).style;
+  s.transformBox = 'fill-box';
+  s.transformOrigin = origin;
+  return el.animate(frames, opt(at, ms));
+}
+
+const motion: CardMotion = {
+  id: 'maiden-os',
+  svg,
+  play(root, delay) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return [];
+    const out: Animation[] = [];
+    const one = (sel: string) => root.querySelector(sel) as SVGElement;
+    const all = (sel: string) => [...root.querySelectorAll<SVGElement>(sel)];
+    // The request arrives from the left, tail included.
+    out.push(one('[data-req]').animate([{ opacity: 0, transform: 'translateX(-8px)' }, { opacity: 1, transform: 'translateX(0)' }], opt(delay, 280)));
+    // The agent dot pulses once, glow with it.
+    out.push(from(one('[data-agent]'), '164px 204px', [{ transform: 'scale(1)' }, { transform: 'scale(1.25)', offset: 0.4 }, { transform: 'scale(1)' }], delay + 260, 420, 'ease-in-out'));
+    // The reply opens from its tail corner.
+    out.push(from(one('[data-reply]'), '186px 214px', [{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'scale(1)' }], delay + 560, 260));
+    // Then its contents build: table cells, page lines, waveform, and the check last.
+    all('[data-cell]').forEach((c, i) => out.push(fill(c, '50% 50%', [{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'scale(1)' }], delay + 760 + i * 30, 200)));
+    all('[data-page] > rect').forEach((r, i) => out.push(fill(r, '0% 50%', [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], delay + 820 + i * 45, 220)));
+    all('[data-wave] > rect').forEach((r, i) => out.push(fill(r, '50% 50%', [{ opacity: 0, transform: 'scaleY(0.2)' }, { transform: 'scaleY(1)' }], delay + 880 + i * 22, 220)));
+    out.push(from(one('[data-check]'), '476px 126px', [{ opacity: 0, transform: 'scale(0.6)' }, { opacity: 1, transform: 'scale(1)' }], delay + 1160, 240));
+    return out;
+  },
+};
+
+export default motion;
+`);
+
+await b.close();

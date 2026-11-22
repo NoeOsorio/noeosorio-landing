@@ -2,7 +2,9 @@ import type { Mount } from '../useMount'
 import type { Tip, TipsContent } from '../data/tips'
 import { esc } from '../dom'
 import { rasterText, missingGlyphs, gridFor, baseCell, NAME_SHARE, OFFER_SHARE } from './led-font'
-import { HOT, LED, LIME, LIME_RGB, LOGO_D, logoPaths } from '../brand'
+import { HOT, LED, LIME, LIME_RGB, LOGO_D, logoPaths, LOGO_PATH_LIST } from '../brand'
+import { learning } from '../data/learning'
+import { LEARNING_DEFS, thumbSvg } from './learning-thumbs'
 
 const E = 'cubic-bezier(0.23, 1, 0.32, 1)'
 const CUP = '<svg class="cup" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11 H21 V18 A6 6 0 0 1 15 24 H11 A6 6 0 0 1 5 18 Z M21 13 H23.5 A3 3 0 0 1 23.5 19 H21 M10 4 C 9 6 11 7 10 9 M15 4 C 14 6 16 7 15 9"/></svg>'
@@ -18,7 +20,6 @@ const GLYPH: Record<string, string> = {
   Instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/>', GitHub: '<path d="M9 19 C 5 20.5 5 17 3.5 16.5 M14.5 21 V17.5 C 14.5 16.5 14.8 15.8 15.3 15.3 C 18 15 20.5 14 20.5 9.8 C 20.5 8.6 20 7.6 19.3 6.8 C 19.6 5.8 19.5 4.7 19 3.7 C 19 3.7 18 3.4 15.8 4.9 C 13.9 4.4 11.9 4.4 10 4.9 C 7.8 3.4 6.8 3.7 6.8 3.7 C 6.3 4.7 6.2 5.8 6.5 6.8 C 5.8 7.6 5.3 8.6 5.3 9.8 C 5.3 14 7.8 15 10.5 15.3 C 10 15.8 9.7 16.6 9.7 17.5 V21"/>',
   LinkedIn: '<rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 10.5 V16.5 M8 7.5 V7.6 M11.5 16.5 V10.5 M11.5 13 C 11.5 11.5 12.5 10.4 14 10.4 C 15.5 10.4 16.2 11.4 16.2 13 V16.5"/>',
 }
-const BELL_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16 V11 A6 6 0 0 1 18 11 V16 L20 18 H4 Z M10 21 H14"/></svg>'
 
 export const mountClose: Mount<TipsContent> = (root, C, env) => {
   const reduce = env.reduce
@@ -77,7 +78,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     <div class="term" data-idle></div>
   </div>
 </section>
-<section class="band" id="subscribe" aria-labelledby="ships-title"><div class="ships"><div class="btnzone"></div><div class="copy"></div></div></section>
+<section class="band yc-band" id="subscribe" aria-label="${esc(C.ships.label)}"></section>
 <footer class="band sitefoot"></footer>`
 
   const $ = <T extends Element>(sel: string) => root.querySelector(sel) as T
@@ -353,33 +354,197 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     })
   }, { signal })
 
-  // ---------- Subscribe: the button you shouldn't press ----------
-  // Get close and the safety cover lifts. Press it and it rings, then YouTube asks you to confirm.
-  const S = C.ships, btnZone = $<HTMLElement>('.btnzone')
-  btnZone.innerHTML = `<div class="halo" aria-hidden="true"></div><div class="plate"><i class="screw a" aria-hidden="true"></i><i class="screw b" aria-hidden="true"></i><i class="screw c" aria-hidden="true"></i><i class="screw d" aria-hidden="true"></i><div class="eng" aria-hidden="true"><span>${esc(S.plate)}</span><i class="lamp"></i></div>
-    <div class="rig"><a class="big" href="${esc(C.youtube)}" target="_blank" rel="noopener" aria-label="${esc(S.aria)}"><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4 L20 12 L6 20 Z"/></svg>${esc(S.button)}</span></a>
-    <span class="cover" aria-hidden="true"><b>${esc(S.cover)}</b></span><span class="hinge" aria-hidden="true"></span></div></div><p class="after" aria-live="polite"></p>`
-  const pushBtn = btnZone.querySelector('.big') as HTMLElement, afterLine = btnZone.querySelector('.after') as HTMLElement, plateEl = btnZone.querySelector('.rig') as HTMLElement
-  let pushed = false
-  const coverOpen = () => btnZone.classList.add('open'), coverClose = () => { if (!pushed) btnZone.classList.remove('open') }
-  // With a mouse the cover lifts as you approach and drops back if you walk away. On touch it lifts by itself.
-  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduce) { btnZone.addEventListener('pointerenter', coverOpen, { signal }); btnZone.addEventListener('pointerleave', coverClose, { signal }) }
-  else observe(plateEl, ([e], io) => { if (e.isIntersecting) { timeout(reduce ? 0 : 600, coverOpen); io.disconnect() } }, { threshold: 0.5 })
-  pushBtn.addEventListener('focus', coverOpen, { signal })
-  pushBtn.addEventListener('click', () => {
-    pushed = true; coverOpen(); pushBtn.classList.add('down'); timeout(240, () => pushBtn.classList.remove('down'))
-    afterLine.innerHTML = BELL_SVG + `<span>${esc(S.after)}</span>`
-    if (reduce) return
-    ;(afterLine.querySelector('svg') as SVGElement).animate([0, 1, 2, 3, 4, 5, 6].map((i) => ({ rotate: i === 6 ? '0deg' : `${(i % 2 ? -1 : 1) * (22 - i * 3)}deg` })), { duration: 700, easing: 'ease-out' })
-    // A burst of lime sparks from the button.
-    const r = pushBtn.getBoundingClientRect(), z = btnZone.getBoundingClientRect(), x0 = r.left - z.left + r.width / 2, y0 = r.top - z.top + r.height / 2
-    for (let i = 0; i < 16; i++) {
-      const sp = document.createElement('span'), an = (i / 16) * Math.PI * 2 + Math.random() * 0.3, d = 110 + Math.random() * 90
-      sp.className = 'spark'; sp.style.left = x0 - 3.5 + 'px'; sp.style.top = y0 - 3.5 + 'px'; btnZone.appendChild(sp)
-      sp.animate([{ transform: 'translate(0, 0) scale(1)', opacity: 1 }, { transform: `translate(${Math.cos(an) * d}px, ${Math.sin(an) * d}px) scale(.4) rotate(${Math.random() * 180}deg)`, opacity: 0 }], { duration: 700 + Math.random() * 300, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'forwards' }).finished.then(() => sp.remove(), () => {})
+  // ---------- Subscribe: the YouTube channel card ----------
+  // The build plays once on first view: the red mark, the red card, the red shrinking into the Subscribe pill, then the content.
+  // The ambient life only runs while the card is on screen and the tab is visible. Under reduced motion it shows finished.
+  function mountChannel(): () => void {
+    const sec = $<HTMLElement>('#subscribe')
+    const S = C.ships, L = learning
+    const OUT = 'cubic-bezier(0.23,1,0.32,1)', MORPH = 'cubic-bezier(0.77,0,0.175,1)'
+    const logoLabel = esc(S.aria.replace('{name}', L.channelName))
+    const BELL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21h4"/></svg>'
+    sec.innerHTML = `${LEARNING_DEFS}<div class="yc-stage" data-pre><div class="yc-card"><div class="yc-face">
+      <div class="yc-surface"><div class="yc-glow"></div>
+        <svg class="yc-rings" viewBox="0 0 100 100" fill="none" stroke="rgba(214,243,92,.12)" stroke-width=".35" aria-hidden="true"><circle cx="50" cy="50" r="48"/><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="32"/><circle cx="50" cy="50" r="24"/></svg>
+        <div class="yc-wallmask" aria-hidden="true"><div class="yc-wallpar"><div class="yc-wall"></div></div></div>
+        <div class="yc-tex"></div></div>
+      <div class="yc-redglow"></div>
+      <div class="yc-redpress"><div class="yc-red"><svg class="yc-tri" viewBox="0 0 40 40" aria-hidden="true"><path d="M14 9.5 L31 20 L14 30.5Z" fill="#fff" stroke="#fff" stroke-width="4" stroke-linejoin="round"/></svg></div></div>
+      <div class="yc-in">
+        <div class="yc-top"><span class="yc-topic">${esc(S.topic)}</span>
+          <svg class="yc-nfc" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 8.5 a6 6 0 0 1 0 9"/><path d="M12 5.5 a10 10 0 0 1 0 15"/><path d="M16 2.5 a14 14 0 0 1 0 21"/></svg></div>
+        <div class="yc-mid">
+          <div class="yc-av"><div class="yc-sonar"></div><div class="yc-avglow"></div>
+            <svg class="yc-ringsvg" viewBox="0 0 100 100" aria-hidden="true"><circle class="yc-ringc" cx="50" cy="50" r="49" pathLength="1"/></svg>
+            <svg class="yc-arc" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="49" pathLength="1"/></svg>
+            <div class="yc-markwrap"><svg class="yc-mark" viewBox="60 100 280 200" aria-hidden="true"><g class="yc-g1"></g><g class="yc-g2"></g></svg><div class="yc-sweep"><div class="yc-scan"></div></div></div></div>
+          <div class="yc-txt"><h2 class="yc-name" aria-label="${esc(L.channelName)}"></h2><span class="yc-handle">${esc(L.channelHandle)}</span></div>
+        </div>
+        <div class="yc-bot"><a class="yc-sub" href="${esc(C.youtube)}" target="_blank" rel="noopener noreferrer" aria-label="${logoLabel}">
+          <span class="yc-pill"><span class="yc-gloss"></span><span class="yc-lbl">${esc(S.button)}</span></span>
+          <span class="yc-bell" aria-hidden="true">${BELL}</span></a></div>
+      </div>
+      <div class="yc-spec"></div><div class="yc-shadow"></div></div></div></div>`
+    const q = <T extends Element>(sel: string) => sec.querySelector(sel) as T
+    const qa = <T extends Element>(sel: string) => [...sec.querySelectorAll<T>(sel)]
+    const stage = q<HTMLElement>('.yc-stage'), card = q<HTMLElement>('.yc-card'), face = q<HTMLElement>('.yc-face')
+    const red = q<HTMLElement>('.yc-red'), hit = q<HTMLElement>('.yc-pill'), tri = q<SVGElement>('.yc-tri'), redglow = q<HTMLElement>('.yc-redglow')
+    const redpress = q<HTMLElement>('.yc-redpress'), surface = q<HTMLElement>('.yc-surface'), shadow = q<HTMLElement>('.yc-shadow')
+    const nameEl = q<HTMLElement>('.yc-name'), bellSvg = q<SVGElement>('.yc-bell svg'), sub = q<HTMLElement>('.yc-sub')
+    const letters = [...L.channelName].map((c) => { const s = document.createElement('span'); s.textContent = c; s.setAttribute('aria-hidden', 'true'); nameEl.appendChild(s); return s })
+
+    // My logo as LED dots: two halves on one grid, plus a mask of the same dots for the scan light.
+    const dotEls: SVGRectElement[] = []
+    {
+      const CELL = 8.4, x0 = 60, y0 = 100, cols = 34, rows = 24, sz = 7.2, ns = 'http://www.w3.org/2000/svg'
+      const ctx = document.createElement('canvas').getContext('2d')!, A = new Path2D(LOGO_PATH_LIST[0]), B = new Path2D(LOGO_PATH_LIST[1])
+      const inside = (p: Path2D, x: number, y: number) => [[0, 0], [-2.6, -2.6], [2.6, -2.6], [-2.6, 2.6], [2.6, 2.6]].reduce((n, [dx, dy]) => n + (ctx.isPointInPath(p, x + dx, y + dy) ? 1 : 0), 0) >= 5
+      let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647
+      const groups = { g1: q<SVGGElement>('.yc-g1'), g2: q<SVGGElement>('.yc-g2') }
+      let mask = ''
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+        const cx = x0 + i * CELL + CELL / 2, cy = y0 + j * CELL + CELL / 2
+        const g = inside(A, cx, cy) ? 'g1' : inside(B, cx, cy) ? 'g2' : null
+        if (!g) continue
+        const px = x0 + i * CELL + (CELL - sz) / 2, py = y0 + j * CELL + (CELL - sz) / 2
+        const r = document.createElementNS(ns, 'rect')
+        r.setAttribute('class', 'yc-dot' + (rnd() < 0.07 ? ' hot' : ''))
+        r.setAttribute('x', String(px)); r.setAttribute('y', String(py)); r.setAttribute('width', String(sz)); r.setAttribute('height', String(sz)); r.setAttribute('rx', '1.7')
+        groups[g].appendChild(r); dotEls.push(r)
+        mask += `<rect x="${px}" y="${py}" width="${sz}" height="${sz}" rx="1.7"/>`
+      }
+      q<HTMLElement>('.yc-sweep').style.setProperty('--logo', `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 100 280 200">${mask}</svg>`)}")`)
     }
-  }, { signal })
-  ;($('.copy') as HTMLElement).innerHTML = `<h2 id="ships-title">${esc(S.title)}</h2><p>${esc(S.text)}</p>`
+
+    // His video wall, from the same videos as the player section. Three columns, each one a wrapper that drifts, never each tile.
+    {
+      const tiles = L.videos.map((v) => thumbSvg({ m: v.motif, title: v.title, word: v.word, fill: v.fill }))
+      const wall = q<HTMLElement>('.yc-wall')
+      for (let c = 0; c < 3; c++) {
+        const col = document.createElement('div'); col.className = 'yc-col'
+        const order = tiles.map((_, i) => tiles[(i + c * 2) % tiles.length])
+        col.innerHTML = [...order, ...order].map((t) => `<div class="yc-t">${t}</div>`).join('')
+        col.style.marginTop = (c === 1 ? -9 : c === 2 ? -4 : -1) + 'cqw'
+        wall.appendChild(col)
+      }
+    }
+
+    const ins = (t: number, r: number, b: number, l: number, rad: number) => `inset(${t}px ${r}px ${b}px ${l}px round ${rad}px)`
+    let clipAnim: Animation | null = null, surfAnim: Animation[] | null = null
+    function geom() {
+      const c = card.getBoundingClientRect(), p = hit.getBoundingClientRect()
+      const W = c.width, H = c.height, R = parseFloat(getComputedStyle(face).borderTopLeftRadius) || 20
+      const Lx = p.left - c.left, T = p.top - c.top, pw = p.width, ph = p.height
+      const lw = Math.max(96, W * 0.21), lh = lw * 0.7, lr = lh * 0.29
+      const lt = (H - lh) / 2, ll = (W - lw) / 2
+      return { W, H, R, pw, ph, logo: ins(lt, ll, lt, ll, lr), full: ins(0, 0, 0, 0, R), pill: ins(T, W - Lx - pw, H - T - ph, Lx, ph / 2), lh, cx: Lx + pw / 2, cy: T + ph / 2 }
+    }
+    function layout() {
+      const g = geom()
+      if (!(g.W > 0)) return g
+      red.style.clipPath = g.pill
+      redpress.style.transformOrigin = `${g.cx}px ${g.cy}px`
+      tri.style.width = tri.style.height = g.lh * 0.62 + 'px'
+      const s = Math.max(g.pw, g.ph) * 1.9
+      Object.assign(redglow.style, { width: s + 'px', height: s + 'px', transform: `translate(${g.cx - s / 2}px,${g.cy - s / 2}px)` })
+      if (clipAnim) clipAnim.effect!.setKeyframes([{ clipPath: g.logo, easing: MORPH }, { clipPath: g.full, easing: MORPH, offset: 460 / 860 }, { clipPath: g.pill }])
+      if (surfAnim) surfAnim.forEach((x) => x.effect!.setKeyframes([{ clipPath: g.logo }, { clipPath: g.full }]))
+      return g
+    }
+    const a = (el: Element, kf: Keyframe[], o: KeyframeAnimationOptions) => el.animate(kf, { fill: 'backwards', easing: OUT, ...o })
+    const RING: Keyframe[] = [{ transform: 'rotate(0)' }, { transform: 'rotate(16deg)', offset: 0.15 }, { transform: 'rotate(-13deg)', offset: 0.35 }, { transform: 'rotate(8deg)', offset: 0.55 }, { transform: 'rotate(-4deg)', offset: 0.75 }, { transform: 'rotate(0)' }]
+    const ring = (d = 0) => bellSvg.animate(RING, { duration: 700, delay: d, easing: 'ease-out' })
+
+    const idle: Animation[] = []
+    const loop = (el: Element, kf: Keyframe[], o: KeyframeAnimationOptions) => { const x = el.animate(kf, { iterations: Infinity, fill: 'forwards', ...o }); idle.push(x); return x }
+    let inView = true
+    const sync = () => idle.forEach((x) => (inView && !document.hidden ? x.play() : x.pause()))
+    function idleLife() {
+      loop(q('.yc-avglow'), [{ opacity: 0.7 }, { opacity: 1 }], { duration: 3000, delay: 2000, direction: 'alternate', easing: 'ease-in-out' })
+      qa('.yc-col').forEach((col, i) => loop(col, [{ transform: 'translateY(0)' }, { transform: 'translateY(-50%)' }], { duration: [36000, 50000, 43000][i], iterationStart: [0.1, 0.55, 0.8][i], easing: 'linear' }))
+      let sd = 3; const r = () => (sd = (sd * 16807) % 2147483647) / 2147483647
+      dotEls.filter((_, i) => i % 5 === 2).forEach((d) => { const T = 4200 + r() * 5000; loop(d, [{ opacity: 1, offset: 0 }, { opacity: 0.22, offset: 0.08 }, { opacity: 1, offset: 0.2 }, { opacity: 1, offset: 1 }], { duration: T, delay: 2300 + r() * 4000, easing: 'ease-in-out' }) })
+      loop(q('.yc-scan'), [{ transform: 'translateX(-130%)', opacity: 0, offset: 0 }, { opacity: 0.9, offset: 0.06 }, { opacity: 0.9, offset: 0.2 }, { transform: 'translateX(300%)', opacity: 0, offset: 0.27 }, { transform: 'translateX(300%)', opacity: 0, offset: 1 }], { duration: 4000, delay: 2900, easing: 'cubic-bezier(0.4,0,0.2,1)' })
+      a(q('.yc-arc'), [{ opacity: 0 }, { opacity: 1 }], { duration: 600, delay: 2300, fill: 'forwards' })
+      loop(q('.yc-arc'), [{ transform: 'rotate(-90deg)' }, { transform: 'rotate(270deg)' }], { duration: 6000, delay: 2300, easing: 'linear' })
+      const sonar = q<HTMLElement>('.yc-sonar'), so2 = sonar.cloneNode() as HTMLElement
+      sonar.after(so2)
+      ;([[sonar, 0, 0.75], [so2, 260, 0.45]] as const).forEach(([el, d, o]) => loop(el, [{ transform: 'scale(.85)', opacity: o, offset: 0 }, { transform: 'scale(1.5)', opacity: 0, offset: 0.62, easing: OUT }, { transform: 'scale(1.5)', opacity: 0, offset: 1 }], { duration: 3500, delay: 2700 + d, easing: OUT }))
+      qa('.yc-nfc path').forEach((p, i) => loop(p, [{ opacity: 1, offset: 0 }, { opacity: 0.3, offset: 0.025 }, { opacity: 1, offset: 0.075 }, { opacity: 1, offset: 1 }], { duration: 6000, delay: 4200 + i * 110, easing: 'ease-out' }))
+      loop(q('.yc-gloss'), [{ transform: 'translateX(-130%) skewX(-18deg)', opacity: 0, offset: 0 }, { opacity: 1, offset: 0.03 }, { opacity: 1, offset: 0.12 }, { transform: 'translateX(230%) skewX(-18deg)', opacity: 0, offset: 0.16 }, { transform: 'translateX(230%) skewX(-18deg)', opacity: 0, offset: 1 }], { duration: 6000, delay: 5600, easing: 'cubic-bezier(0.4,0,0.2,1)' })
+      ring(9600)
+      sync()
+    }
+    function play() {
+      const g = layout()
+      a(red, [{ opacity: 0, transform: 'scale(.9)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 350 })
+      a(tri, [{ opacity: 1, transform: 'scale(1)', offset: 0 }, { opacity: 1, transform: 'scale(1)', offset: 350 / 720 }, { opacity: 1, transform: 'scale(.9)', offset: 435 / 720 }, { opacity: 1, transform: 'scale(1)', offset: 520 / 720 }, { opacity: 0, transform: 'scale(.7)', offset: 1 }], { duration: 720, fill: 'both', easing: 'linear' })
+      clipAnim = red.animate([{ clipPath: g.logo, easing: MORPH }, { clipPath: g.full, easing: MORPH, offset: 460 / 860 }, { clipPath: g.pill }], { duration: 860, delay: 520, fill: 'both' })
+      surfAnim = [surface, shadow].map((el) => el.animate([{ clipPath: g.logo }, { clipPath: g.full }], { duration: 460, delay: 520, easing: MORPH, fill: 'backwards' }))
+      surface.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1, delay: 520, fill: 'backwards' })
+      a(q('.yc-lbl'), [{ opacity: 0, filter: 'blur(2px)' }, { opacity: 1, filter: 'blur(0)' }], { duration: 220, delay: 1200 })
+      a(redglow, [{ opacity: 0 }, { opacity: 0.75 }], { duration: 300, delay: 1250 })
+      a(q('.yc-bell'), [{ opacity: 0, transform: 'scale(.9)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 300, delay: 1250 })
+      a(q('.yc-av'), [{ opacity: 0, transform: 'scale(.8)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 420, delay: 1240 })
+      a(q('.yc-ringc'), [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 520, delay: 1290 })
+      a(q('.yc-topic'), [{ opacity: 0 }, { opacity: 0.7 }], { duration: 300, delay: 1290 })
+      qa('.yc-nfc path').forEach((p, i) => a(p, [{ opacity: 0 }, { opacity: 1 }], { duration: 260, delay: 1290 + i * 110 }))
+      const lock = 'cubic-bezier(0.22,1,0.36,1)'
+      a(q('.yc-g1'), [{ opacity: 0, transform: 'translate(-54px,-20px)' }, { opacity: 1, transform: 'translate(0,0)', offset: 0.75 }, { opacity: 1, transform: 'translate(0,0)' }], { duration: 640, delay: 1250, easing: lock })
+      a(q('.yc-g2'), [{ opacity: 0, transform: 'translate(54px,20px)' }, { opacity: 1, transform: 'translate(0,0)', offset: 0.75 }, { opacity: 1, transform: 'translate(0,0)' }], { duration: 640, delay: 1250, easing: lock })
+      a(q('.yc-markwrap'), [{ transform: 'scale(1.04)' }, { transform: 'scale(1)' }], { duration: 300, delay: 1700 })
+      a(q('.yc-wallmask'), [{ opacity: 0 }, { opacity: 0.42 }], { duration: 600, delay: 1500 })
+      a(q('.yc-spec'), [{ opacity: 0, transform: 'translateX(-130%) skewX(-14deg)' }, { opacity: 1, offset: 0.2 }, { opacity: 1, offset: 0.7 }, { opacity: 0, transform: 'translateX(330%) skewX(-14deg)' }], { duration: 1100, delay: 1950, fill: 'both', easing: 'cubic-bezier(0.4,0,0.2,1)' })
+      letters.forEach((s, i) => a(s, [{ opacity: 0, transform: 'translateY(.45em)', clipPath: 'inset(0 0 100% 0)' }, { opacity: 1, transform: 'translateY(0)', clipPath: 'inset(0 0 0 0)' }], { duration: 380, delay: 1310 + i * 30 }))
+      a(q('.yc-handle'), [{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 1600 })
+      ring(1900)
+      idleLife()
+    }
+
+    // Loops only run while the card is on screen and the tab is visible.
+    observe(stage, ([e]) => { inView = e.isIntersecting; sync() }, { threshold: 0 })
+    document.addEventListener('visibilitychange', sync, { signal })
+
+    // Scroll depth: layers drift at different rates while the page scrolls past. Scroll only, one rAF, transform only.
+    const depth: [HTMLElement, number][] = [[q('.yc-wallpar'), 18], [q('.yc-rings'), 10], [q('.yc-mid'), 4]]
+    let pRaf = 0
+    const depthNow = () => {
+      pRaf = 0
+      const c = card.getBoundingClientRect(), vh = innerHeight
+      const p = Math.max(-1, Math.min(1, (c.top + c.height / 2 - vh / 2) / (vh / 2 + c.height / 2)))
+      depth.forEach(([el, k]) => { el.style.transform = `translate3d(0,${((-p * k) / 2).toFixed(2)}px,0)` })
+    }
+    const onScroll = () => { if (!pRaf && inView) pRaf = raf(depthNow) }
+
+    const ro = new ResizeObserver(() => { if (!stopped) layout() })
+    ro.observe(card)
+    let began = false
+    const begin = () => {
+      if (stopped || began) return
+      began = true
+      layout()
+      if (!reduce) { addEventListener('scroll', onScroll, { passive: true, signal }); addEventListener('resize', onScroll, { signal }); depthNow() }
+      stage.removeAttribute('data-pre')
+      if (!reduce) play()
+    }
+    document.fonts.ready.then(() => {
+      if (stopped) return
+      if (reduce) begin()
+      else observe(stage, ([e], io) => { if (e.isIntersecting) { io.disconnect(); begin() } }, { threshold: 0.55 })
+    })
+
+    // Press feel, shared by the red shape and its label.
+    const up = () => face.classList.remove('down')
+    hit.addEventListener('pointerdown', () => face.classList.add('down'), { signal })
+    ;['pointerup', 'pointercancel', 'pointerleave'].forEach((e) => hit.addEventListener(e, up, { signal }))
+    const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches
+    hit.addEventListener('pointerenter', () => { if (canHover) face.classList.add('hot') }, { signal })
+    hit.addEventListener('pointerleave', () => face.classList.remove('hot'), { signal })
+    sub.addEventListener('click', () => { if (!reduce) ring() }, { signal })
+    return () => { ro.disconnect() }
+  }
+
+  const chanCleanup = mountChannel()
 
   // ---------- Footer ----------
   const F = C.foot, sf = $<HTMLElement>('.sitefoot')
@@ -417,6 +582,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     rafs.forEach((id) => cancelAnimationFrame(id)); rafs.clear()
     timers.forEach((id) => clearTimeout(id)); timers.clear()
     intervals.forEach((id) => clearInterval(id)); intervals.clear()
+    chanCleanup()
     root.getAnimations({ subtree: true }).forEach((a) => a.cancel())
     root.innerHTML = ''
   }

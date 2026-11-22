@@ -10,7 +10,7 @@
 .home-wallet *, .home-wallet *::before, .home-wallet *::after { box-sizing: content-box; }
 .home-wallet svg { display: inline; vertical-align: baseline; }
 
-.home-wallet{ background: var(--night); color: var(--ink); }
+.home-wallet{ color: var(--ink); }
 
 .home-wallet{ font-family: var(--body); }
 
@@ -85,6 +85,8 @@
 .home-wallet .art{ position: absolute !important; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; border-radius: inherit; contain: paint; }
 
 .home-wallet .art-img{ object-fit: cover; display: block; }
+
+.home-wallet .art-motion[data-pending]{ opacity: 0; }
 
 .home-wallet .tex{ position: absolute !important; inset: 0; pointer-events: none; opacity: .3; mix-blend-mode: overlay; background-image: var(--noise); background-size: 220px; }
 

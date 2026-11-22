@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAnalytics } from '../hooks/useAnalytics';
 import { SEO } from "../components/SEO";
 import HomeTopBar from '../home/HomeTopBar';
+import StarField from '../home/sections/StarField';
 import IdeaGalaxy from '../home/sections/IdeaGalaxy';
 import ProjectWallet from '../home/sections/ProjectWallet';
 import WorkPassport from '../home/sections/WorkPassport';
@@ -48,6 +49,7 @@ const Home = () => {
         twitterHandle="@noeosorio.dev"
       />
 
+      <StarField />
       <HomeTopBar />
       <IdeaGalaxy />
       <ProjectWallet />
