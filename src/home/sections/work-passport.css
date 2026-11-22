@@ -14,7 +14,7 @@
 
 .home-passport{ font-family: var(--body); }
 
-.home-passport .head{ position: relative; display: flex; flex-direction: column; gap: 12px; max-width: 40rem; }
+.home-passport .head{ position: relative; will-change: transform; display: flex; flex-direction: column; gap: 12px; max-width: 40rem; }
 
 .home-passport .head h2{ margin: 0; font: 700 clamp(2.4rem, 5vw, 4rem)/1 var(--display); letter-spacing: -0.035em; text-wrap: balance; }
 
@@ -25,13 +25,13 @@
 .home-passport .stage{ position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: clip; display: flex; flex-direction: column; box-sizing: border-box;
            padding-block: clamp(28px, 6vh, 72px) 20px; padding-left: max(16px, env(safe-area-inset-left, 0px), 5vw); padding-right: max(16px, env(safe-area-inset-right, 0px), 5vw); }
 
-.home-passport .glow{ position: absolute; left: 50%; top: 60%; width: 46vw; height: 30vw; margin: -15vw 0 0 -23vw; border-radius: 50%; background: var(--glow); filter: blur(110px); pointer-events: none; }
+.home-passport .glow{ position: absolute; left: 50%; top: 60%; width: 46vw; height: 30vw; margin: -15vw 0 0 -23vw; border-radius: 50%; background: var(--glow); filter: blur(110px); pointer-events: none; will-change: transform; }
 
 .home-passport .room{ position: relative; flex: 1; min-height: 0; perspective: 2800px; perspective-origin: 50% 28%; }
 
 .home-passport .book{ position: absolute; left: 50%; top: 50%; width: 1220px; height: 700px; transform-style: preserve-3d; }
 
-.home-passport .book-shadow{ position: absolute; inset: 24px 6px -14px; border-radius: 20px; background: rgba(0,0,0,.66); filter: blur(36px); transform: translateZ(-8px) translateY(30px); }
+.home-passport .book-shadow{ position: absolute; inset: 500px 6px -14px; border-radius: 20px; background: rgba(0,0,0,.66); filter: blur(36px); transform: translateZ(-8px) translateY(30px); }
 
 .home-passport .leather{ background: radial-gradient(120% 90% at 30% 18%, #2A3A52 0%, var(--cover) 55%, #131B26 100%); }
 
@@ -39,15 +39,23 @@
 
 .home-passport .stackp{ position: absolute; top: 0; width: 610px; height: 700px; background: #E2D6BB; transform: translateZ(-3px); }
 
+.home-passport .stackp.r.v{ left: 1196px; width: 24px; }
+
+.home-passport .stackp.r.h{ left: 610px; top: 676px; height: 24px; }
+
+.home-passport .stackp.l.v{ left: 0; width: 24px; }
+
+.home-passport .stackp.l.h{ left: 0; top: 676px; height: 24px; }
+
 .home-passport .stackp.r{ left: 610px; border-radius: 0 14px 14px 0; box-shadow: 2px 2px 0 #CFC1A2, 4px 4px 0 #E5DAC1, 6px 5px 0 #CBBC9B, 8px 7px 0 #E1D5BB; }
 
 .home-passport .stackp.l{ left: 0; border-radius: 14px 0 0 14px; box-shadow: -2px 2px 0 #CFC1A2, -4px 4px 0 #E5DAC1, -6px 5px 0 #CBBC9B, -8px 7px 0 #E1D5BB; }
 
-.home-passport .leaf{ position: absolute; left: 610px; top: 0; width: 610px; height: 700px; transform-origin: 0 50%; transform-style: preserve-3d; }
+.home-passport .leaf{ position: absolute; left: 610px; top: 0; width: 610px; height: 700px; transform-origin: 0 50%; }
 
 .home-passport .leaf.coverleaf{ top: -12px; width: 622px; height: 724px; }
 
-.home-passport .face{ position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.home-passport .face{ position: absolute; inset: 0; }
 
 .home-passport .face.back{ transform: rotateY(180deg); }
 
@@ -55,7 +63,7 @@
 
 .home-passport .page.base-right{ position: absolute; left: 610px; top: 0; }
 
-.home-passport .page{ position: relative; width: 610px; height: 700px; box-sizing: border-box; padding: 40px 52px; overflow: hidden; color: var(--page-ink); background: var(--paper); }
+.home-passport .page{ position: relative; width: 610px; height: 700px; box-sizing: border-box; padding: 40px 52px; overflow: hidden; isolation: isolate; color: var(--page-ink); background: var(--paper); }
 
 .home-passport .page.l{ border-radius: 14px 0 0 14px; background: linear-gradient(90deg, var(--paper) 0%, var(--paper) 78%, #D9C8A4 95%, #BCA77E 100%); }
 

@@ -237,21 +237,26 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
   // ---------- The thump ----------
   // A rubber stamp falls toward the page (its shadow tightens and darkens), the ink appears at contact with a small squish,
   // then the stamp lifts away and the book gives a little.
+  // The animation is started when its turn comes (not queued with a delay), so only the stamp in flight holds layers.
+  const timers = new Set<number>();
   function land1(el: HTMLElement, d: number, book: HTMLElement | null, isMain: boolean) {
-    el.classList.remove('pending');
-    if (reduce) return;
-    const svg = el.querySelector('svg') as SVGSVGElement, press = el.querySelector('.press') as HTMLElement, a = isMain ? APPROACH.main : APPROACH.small;
-    press.animate([
-      { opacity: 0, transform: 'translate(18px, 26px) scale(1.22)', filter: 'blur(18px)', easing: 'cubic-bezier(0.55, 0, 1, 0.45)' },
-      { opacity: 0.55, transform: 'translate(0, 0) scale(1)', filter: 'blur(4px)', offset: 0.55, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' },
-      { opacity: 0, transform: 'translate(10px, 16px) scale(1.12)', filter: 'blur(14px)' },
-    ], { duration: a / 0.55, delay: d, fill: 'backwards' });
-    svg.animate([
-      { opacity: 0, transform: 'scale(1.04)' },
-      { opacity: 1, transform: 'scale(0.975)', offset: 0.3 },
-      { opacity: 1, transform: 'scale(1)' },
-    ], { duration: isMain ? 340 : 260, delay: d + a, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'backwards' });
-    if (book) book.animate([{ translate: '0 0' }, { translate: `0 ${isMain ? 5 : 2}px` }, { translate: '0 0' }], { duration: isMain ? 240 : 160, delay: d + a, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+    if (reduce) { el.classList.remove('pending'); return; }
+    const go = () => {
+      el.classList.remove('pending');
+      const svg = el.querySelector('svg') as SVGSVGElement, press = el.querySelector('.press') as HTMLElement, a = isMain ? APPROACH.main : APPROACH.small;
+      press.animate([
+        { opacity: 0, transform: 'translate(18px, 26px) scale(1.22)', filter: 'blur(18px)', easing: 'cubic-bezier(0.55, 0, 1, 0.45)' },
+        { opacity: 0.55, transform: 'translate(0, 0) scale(1)', filter: 'blur(4px)', offset: 0.55, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' },
+        { opacity: 0, transform: 'translate(10px, 16px) scale(1.12)', filter: 'blur(14px)' },
+      ], { duration: a / 0.55, fill: 'backwards' });
+      svg.animate([
+        { opacity: 0, transform: 'scale(1.04)' },
+        { opacity: 1, transform: 'scale(0.975)', offset: 0.3 },
+        { opacity: 1, transform: 'scale(1)' },
+      ], { duration: isMain ? 340 : 260, delay: a, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'backwards' });
+      if (book) book.animate([{ translate: '0 0' }, { translate: `0 ${isMain ? 5 : 2}px` }, { translate: '0 0' }], { duration: isMain ? 240 : 160, delay: a, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+    };
+    if (d > 0) { const id = window.setTimeout(() => { timers.delete(id); go(); }, d); timers.add(id); } else go();
   }
   function land(page: HTMLElement, delay0: number, book: HTMLElement | null) {
     const main = page.querySelector('.stamp.main.pending') as HTMLElement | null, small = [...page.querySelectorAll<HTMLElement>('.stamp:not(.main).pending')];
@@ -269,13 +274,14 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
 
   const book = q<HTMLElement>('#book'), track = q<HTMLElement>('#track'), room = book.parentElement as HTMLElement;
   const rim = document.createElement('div'); rim.className = 'rim leather'; book.appendChild(rim);
-  const stackR = document.createElement('div'); stackR.className = 'stackp r'; book.appendChild(stackR);
-  const stackL = document.createElement('div'); stackL.className = 'stackp l'; book.appendChild(stackL);
+  // The page stacks behind the spreads only show their edges, so each is two thin strips instead of one full page (far less layer memory).
+  const mkStack = (side: string) => { const strips = ['v', 'h'].map((k) => { const d = document.createElement('div'); d.className = `stackp ${side} ${k}`; book.appendChild(d); return d; }); return { set visibility(v: string) { strips.forEach((d) => { d.style.visibility = v; d.style.opacity = v === 'visible' ? '1' : '0'; }); } }; };
+  mkStack('r'); const stackL = mkStack('l');
   const els: HTMLElement[] = [];
   els[2 * N - 1] = pageEl(P[2 * N - 1], 'r'); els[2 * N - 1].classList.add('base-right'); book.appendChild(els[2 * N - 1]);
-  const castR = document.createElement('div'); castR.className = 'cast'; castR.style.cssText = 'left:610px; width:610px; background: linear-gradient(90deg, rgba(30,22,10,.42), rgba(30,22,10,0) 75%); border-radius: 0 14px 14px 0;'; book.appendChild(castR);
-  const castL = document.createElement('div'); castL.className = 'cast'; castL.style.cssText = 'left:0; width:610px; background: linear-gradient(270deg, rgba(30,22,10,.42), rgba(30,22,10,0) 75%); border-radius: 14px 0 0 14px;'; book.appendChild(castL);
-  const leaves: { leaf: HTMLElement; s1: HTMLElement; s2: HTMLElement }[] = [];
+  const castR = document.createElement('div'); castR.className = 'cast'; castR.style.cssText = 'left:610px; width:458px; background: linear-gradient(90deg, rgba(30,22,10,.42), rgba(30,22,10,0)); border-radius: 0 14px 14px 0;'; book.appendChild(castR);
+  const castL = document.createElement('div'); castL.className = 'cast'; castL.style.cssText = 'left:152px; width:458px; background: linear-gradient(270deg, rgba(30,22,10,.42), rgba(30,22,10,0)); border-radius: 14px 0 0 14px;'; book.appendChild(castL);
+  const leaves: { leaf: HTMLElement; front: HTMLElement; back: HTMLElement; s1: HTMLElement; s2: HTMLElement }[] = [];
   for (let k = 0; k < N; k++) {
     const leaf = document.createElement('div'); leaf.className = 'leaf' + (k ? '' : ' coverleaf');
     const front = document.createElement('div'); front.className = 'face front';
@@ -284,7 +290,7 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
     else { els[2 * k - 1] = pageEl(P[2 * k - 1], 'r'); els[2 * k] = pageEl(P[2 * k], 'l'); front.appendChild(els[2 * k - 1]); back.appendChild(els[2 * k]); }
     const s1 = document.createElement('div'); s1.className = 'shade'; s1.style.background = 'linear-gradient(90deg, rgba(43,36,24,.45), rgba(43,36,24,.08) 45%, rgba(255,250,235,.10) 80%, rgba(43,36,24,0))'; front.appendChild(s1);
     const s2 = document.createElement('div'); s2.className = 'shade'; s2.style.background = 'linear-gradient(270deg, rgba(43,36,24,.45), rgba(43,36,24,.08) 45%, rgba(255,250,235,.10) 80%, rgba(43,36,24,0))'; back.appendChild(s2);
-    leaf.append(front, back); book.appendChild(leaf); leaves.push({ leaf, s1, s2 });
+    leaf.append(front, back); book.appendChild(leaf); leaves.push({ leaf, front, back, s1, s2 });
   }
   track.style.height = `calc(100vh + ${N * 110}vh)`;
 
@@ -301,18 +307,24 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
   function render() {
     let castRight = 0, castLeft = 0;
     const open = ease(clamp(cur));
+    // Only the leaves that can be seen get a layer: the two at rest, plus the one under a page that is turning.
+    const base = Math.floor(cur), turning = cur > base + 0.0005;
     // Closed, the cover sits centered; as it opens the book slides over to show both pages.
     book.style.transform = `translate(-50%, -50%) scale(${S}) rotateX(8deg) rotateZ(-1.2deg) translateX(${-305 * (1 - open)}px)`;
-    stackL.style.opacity = open > 0.5 ? '1' : '0';
+    stackL.visibility = open > 0.5 ? 'visible' : 'hidden';
+    els[2 * N - 1].style.visibility = cur > N - 2 - 0.0005 ? 'visible' : 'hidden';
     leaves.forEach((L, k) => {
       const t = ease(clamp(cur - k)), sh = Math.sin(Math.PI * t);
       L.leaf.style.transform = `translateZ(${sh * 26}px) rotateY(${-180 * t}deg)`;
       L.leaf.style.zIndex = String(t > 0.5 ? 10 + k : 10 + N - k);
+      L.leaf.style.visibility = k === base - 1 || k === base || (turning && k === base + 1) ? 'visible' : 'hidden';
+      L.front.style.visibility = t <= 0.5 ? 'inherit' : 'hidden'; L.back.style.visibility = t > 0.5 ? 'inherit' : 'hidden';
       L.s1.style.opacity = String(t < 0.5 ? sh * (k ? 1 : 0.5) : 0); L.s2.style.opacity = String(t >= 0.5 ? sh * (k ? 1 : 0.5) : 0);
       if (t > 0 && t < 1) { if (t < 0.5) castRight = Math.max(castRight, sh); else castLeft = Math.max(castLeft, sh); }
       if (clamp(cur - k) > 0.96 && !landed.has(k)) { landed.add(k); const t1 = land(els[2 * k], 60, book); land(els[2 * k + 1], 60 + t1 * 0.5, book); }
     });
     castR.style.opacity = String(castRight * 0.9); castL.style.opacity = String(castLeft * 0.9 * (open > 0.5 ? 1 : 0));
+    castR.style.visibility = castRight > 0 ? 'visible' : 'hidden'; castL.style.visibility = castLeft > 0 && open > 0.5 ? 'visible' : 'hidden';
     castR.style.zIndex = castL.style.zIndex = '9';
   }
   // The loop runs only while the section is on screen and the tab is visible.
@@ -332,7 +344,7 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
   // ---------- Phones: the pages one under another; each gets its stamps as it scrolls in ----------
   const stack = q<HTMLElement>('#stack');
   const mobile = CONTENT.pages.map((p) => { const box = document.createElement('div'); box.className = 'mpage'; const pg = pageEl(p, 'r'); box.appendChild(pg); stack.appendChild(box); return { box, pg }; });
-  const mfit = () => mobile.forEach((m) => { m.pg.style.transform = `scale(${m.box.clientWidth / 610})`; });
+  const mfit = () => mobile.forEach((m) => { m.pg.style.zoom = String(m.box.clientWidth / 610); });
   addEventListener('resize', mfit, { signal }); mfit();
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { const m = mobile.find((m) => m.box === e.target) as (typeof mobile)[number]; land(m.pg, 120, null); io.unobserve(e.target); } }), { threshold: 0.4 });
   mobile.forEach((m) => io.observe(m.box));
@@ -344,6 +356,8 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
     ac.abort();
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
+    timers.forEach((id) => clearTimeout(id));
+    timers.clear();
     io.disconnect();
     vis.disconnect();
     root.getAnimations({ subtree: true }).forEach((a) => a.cancel());
