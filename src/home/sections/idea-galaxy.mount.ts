@@ -32,20 +32,15 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
   root.append(cv, copy, tip)
 
   const ctx = cv.getContext('2d')!
-  const touch = matchMedia('(hover: none)').matches
-  // The name is lime, and the first sentence gets its own line.
-  const [a, b] = C.title.split('. ')
+  // The name is lime; the catchphrase is a second, smaller line of the same headline.
   const em = document.createElement('em')
   em.textContent = 'Noé'
-  // The last two words never split, so the headline never ends on a single word.
-  const words = b.split(' '), tail = document.createElement('span')
-  tail.style.whiteSpace = 'nowrap'
-  tail.textContent = words.slice(-2).join(' ')
-  h1.append(a.replace(em.textContent, ''), em, '.', document.createElement('br'), words.slice(0, -2).join(' ') + ' ', tail)
-  p.textContent = C.sub + ' '
-  const hint = document.createElement('b')
-  hint.textContent = touch ? C.hintTouch : C.hintMouse
-  p.append(hint)
+  const cp = document.createElement('span')
+  cp.className = 'catch'
+  cp.textContent = C.catchphrase
+  const [pre, post] = C.title.split('Noé')
+  h1.append(pre, em, post, cp)
+  p.textContent = C.sub
 
   // ---------- Easing (strong ease-out for arrivals, strong ease-in-out for flights) ----------
   const eOut = (t: number) => 1 - Math.pow(1 - t, 4)

@@ -1,8 +1,7 @@
 export interface GalaxyContent {
   title: string
+  catchphrase: string
   sub: string
-  hintMouse: string
-  hintTouch: string
   srSummary: string
   heavy: string[]
   ideas: string[]
@@ -10,11 +9,10 @@ export interface GalaxyContent {
 }
 
 export const galaxy: GalaxyContent = {
-  title: "I'm Noé. My head looks like this.",
-  sub: 'Product engineer in New York. Every star is an idea.',
-  hintMouse: 'Hover one.',
-  hintTouch: 'Tap one.',
-  srSummary: 'My head as a galaxy: every star is an idea, from software and AI to psychology and Pokémon.',
+  title: "Hi, I'm Noé.",
+  catchphrase: 'I was told to put something impressive here.',
+  sub: 'Product engineer at Porter in New York. Unlicensed psychologist.',
+  srSummary: 'Animation of my logo built from stars.',
   heavy: ['Software engineer', 'AI engineer', 'Infrastructure', 'Product engineer', 'Psychology', 'Organizational psychology'],
   ideas: [
     'Essay Studio', 'AI that questions your essay', 'Four agents that disagree', 'Maiden OS', 'An AI assistant on Telegram', 'Permission levels for AI',
