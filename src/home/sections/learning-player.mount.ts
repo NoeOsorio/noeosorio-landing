@@ -69,6 +69,7 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
     q('title').textContent = v.title
     q('sub').textContent = `${v.cat}, ${v.date}`
     player.href = ytUrl(v.id)
+    learn.style.setProperty('--tint', v.fill)
   }
   const paintList = (anim: boolean) => {
     const arr = C.videos.filter((v) => v.id !== st.main && (st.filter === ALL || v.cat === st.filter))
