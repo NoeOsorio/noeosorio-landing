@@ -365,7 +365,6 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     const BELL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21h4"/></svg>'
     sec.innerHTML = `${LEARNING_DEFS}<div class="yc-stage" data-pre><div class="yc-card"><div class="yc-face">
       <div class="yc-surface"><div class="yc-glow"></div>
-        <svg class="yc-rings" viewBox="0 0 100 100" fill="none" stroke="rgba(214,243,92,.12)" stroke-width=".35" aria-hidden="true"><circle cx="50" cy="50" r="48"/><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="32"/><circle cx="50" cy="50" r="24"/></svg>
         <div class="yc-wallmask" aria-hidden="true"><div class="yc-wallpar"><div class="yc-wall"></div></div></div>
         <div class="yc-tex"></div></div>
       <div class="yc-redglow"></div>
@@ -374,7 +373,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
         <div class="yc-top"><span class="yc-topic">${esc(S.topic)}</span>
           <svg class="yc-nfc" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 8.5 a6 6 0 0 1 0 9"/><path d="M12 5.5 a10 10 0 0 1 0 15"/><path d="M16 2.5 a14 14 0 0 1 0 21"/></svg></div>
         <div class="yc-mid">
-          <div class="yc-av"><div class="yc-sonar"></div><div class="yc-avglow"></div>
+          <div class="yc-av"><svg class="yc-rings" viewBox="0 0 100 100" fill="none" stroke="rgba(214,243,92,.12)" stroke-width=".35" aria-hidden="true"><circle cx="50" cy="50" r="48"/><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="32"/><circle cx="50" cy="50" r="24"/></svg><div class="yc-sonar"></div><div class="yc-avglow"></div>
             <svg class="yc-ringsvg" viewBox="0 0 100 100" aria-hidden="true"><circle class="yc-ringc" cx="50" cy="50" r="49" pathLength="1"/></svg>
             <svg class="yc-arc" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="49" pathLength="1"/></svg>
             <div class="yc-markwrap"><svg class="yc-mark" viewBox="60 100 280 200" aria-hidden="true"><g class="yc-g1"></g><g class="yc-g2"></g></svg><div class="yc-sweep"><div class="yc-scan"></div></div></div></div>
@@ -506,7 +505,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     document.addEventListener('visibilitychange', sync, { signal })
 
     // Scroll depth: layers drift at different rates while the page scrolls past. Scroll only, one rAF, transform only.
-    const depth: [HTMLElement, number][] = [[q('.yc-wallpar'), 18], [q('.yc-rings'), 10], [q('.yc-mid'), 4]]
+    const depth: [HTMLElement, number][] = [[q('.yc-wallpar'), 18], [q('.yc-mid'), 4]]
     let pRaf = 0
     const depthNow = () => {
       pRaf = 0
