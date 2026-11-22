@@ -25,7 +25,7 @@ No unit tests: every task's done-check is a real browser frame or command.
 
 ## Phase 4: User Story 2 - Pyventa explains itself (P1)
 
-- [ ] T009 [P] [US2] Redraw Pyventa in `scripts/cards/` with no words: receipt items as clean rounded bars (skeleton style, never jagged scribbles) with digit prices, total, barcode, crossed-out wifi icon. Still of the finished picture to Noe before integrating.
+- [ ] T009 [P] [US2] Redraw Pyventa in `scripts/cards/` with no words: receipt items as clean rounded bars (skeleton style, never jagged scribbles) with digit prices, total and barcode. No offline icon (Noe: «no es de lo más importante y no se entiende»). Still of the finished picture to Noe before integrating.
 - [ ] T010 [US2] `card-motion/pyventa.ts` and `pyventa.webp` (laser sweeps, lines print, total underlines).
 
 ## Phase 5: User Story 3 - Maiden OS reads as an AI agent (P1)

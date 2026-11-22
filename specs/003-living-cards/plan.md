@@ -43,7 +43,7 @@ Six of the seven illustrated cards are flat images today, so nothing in them can
 - Porter Galaxy: the orbit nodes and lime points travel a short arc into place and fade in; the dust stays in the base.
 - Sim World: the colony cells appear by division (one cell, two, four, the cluster) with small scale steps; drifting organisms translate in a few px.
 - Kanji: 学 strokes as masked brush paths drawn in stroke order; then the seal stamps (scale 1.15 to 1, opacity).
-- Pyventa (redrawn): receipt paper and barcode in the base; laser line sweeps the barcode, item lines (short ink marks plus digit prices) print top to bottom, the total underlines, the crossed-out wifi icon is present throughout.
+- Pyventa (redrawn): receipt paper and barcode in the base; laser line sweeps the barcode, item lines (short ink marks plus digit prices) print top to bottom, the total underlines.
 - Maiden OS (redrawn): dark obsidian base; a short request bubble arrives, a lime pulse marks the agent thinking, the reply bubble builds a small table (cells fill), a page of lines and an audio waveform (bars scale up), then a lime check.
 
 ## What must not break

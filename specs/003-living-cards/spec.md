@@ -40,15 +40,15 @@ Per card, what plays:
 
 ### User Story 2 - The Pyventa card explains itself (Priority: P1)
 
-A visitor sees the Pyventa card and understands it is a point of sale that keeps selling without internet, with no words on the art.
+A visitor sees the Pyventa card and understands it is a store checkout, with no words on the art.
 
 **Why this priority**: Noe said the current card is not understood and its scribbles read like Hebrew.
 
-**Independent Test**: Show the card's finished picture to someone who does not know the project; they can say "a checkout / a receipt that still works offline".
+**Independent Test**: Show the card's finished picture to someone who does not know the project; they can say "a store checkout receipt".
 
 **Acceptance Scenarios**:
 
-1. **Given** the card plays, **Then** a scanner laser sweeps the barcode, each product line prints onto the receipt with a price in digits, and a crossed-out wifi icon is visible while the sale completes with a total.
+1. **Given** the card plays, **Then** a scanner laser sweeps the barcode, each product line prints onto the receipt with a price in digits and the sale completes with a total.
 2. **Given** the finished picture, **Then** it has no words (no "OFFLINE" stamp) and no scribbles that look like a foreign script; product lines are short marks plus prices in digits.
 3. **Given** the card sits in the stack, **Then** it keeps the warm paper receipt look and colors of today's card.
 
@@ -82,7 +82,7 @@ Noe: «Maiden OS es más un agente de AI que estamos creando, así que debería 
 - **FR-003**: Animations MUST NOT loop and MUST NOT replay on scroll; cards hidden behind others in the stack MUST NOT animate.
 - **FR-004**: With reduced motion, every card MUST show its finished picture with no motion.
 - **FR-005**: The finished pictures of Essay Studio, Telar, Porter Galaxy, Sim World and Kanji MUST look the same as today's cards.
-- **FR-006**: The Pyventa card MUST be redrawn with no words and no scribbled pseudo-text: barcode with scanner laser, receipt lines with prices in digits, a total, and a crossed-out wifi icon.
+- **FR-006**: The Pyventa card MUST be redrawn with no words and no scribbled pseudo-text: barcode with scanner laser, receipt lines with prices in digits and a total. No offline icon.
 - **FR-006b**: The Maiden OS card MUST be redrawn as an AI agent at work with no words: a chat request, a brief thinking pulse, a reply that builds a table, a page and an audio waveform, and an approval check; dark obsidian with lime light, no orbits.
 - **FR-007**: The Whiteboard card and its animation MUST stay as they are.
 - **FR-008**: The pay animation, the details panel, the stacking of cards and the card labels (name, topic, number, date, logo) MUST keep working unchanged.

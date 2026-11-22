@@ -2,6 +2,7 @@ import type { Mount } from '../useMount';
 import type { WalletContent, WalletProject } from '../data/wallet';
 import { esc } from '../dom';
 import { LIME, LIME_RGB, logoPaths } from '../brand';
+import { motions } from './card-motion';
 
 // Mounts the project wallet into root. Ported from the approved prototype (specs/002-home-objects/prototypes/project-wallet.html).
 const PLAT: Record<string, [string, string]> = {
@@ -134,15 +135,28 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
         { duration: Number(p.dataset.ms), delay: delay + Number(p.dataset.at), easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'backwards' }));
     });
   }
+  // Living cards: the moving parts build up on open, and once when the front card of the stack first comes into view.
+  let motionAnims: Animation[] = [];
+  const stopMotion = () => { motionAnims.forEach((a) => a.cancel()); motionAnims = []; };
+  function perform(el: HTMLElement, p: WalletProject, delay: number) {
+    const m = motions[p.id], svg = el.querySelector<SVGSVGElement>('.art-motion');
+    if (!m || !svg) return;
+    stopMotion();
+    svg.removeAttribute('data-pending');
+    if (!reduce) motionAnims = m.play(svg, delay);
+  }
   const seen = new Set<Element>();
   const io = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver((es) => es.forEach((e) => {
-    if (e.isIntersecting && !seen.has(e.target)) { seen.add(e.target); if (!open) sketch(e.target as HTMLElement, 200); io?.unobserve(e.target); }
+    if (!e.isIntersecting || seen.has(e.target) || open) return;
+    seen.add(e.target); io?.unobserve(e.target);
+    const me = passes.find((x) => x.el === e.target);
+    if (me?.p.art === 'enamel') sketch(me.el, 200); else if (me) perform(me.el, me.p, 200);
   }), { threshold: 0.5 });
   const passes: Pass[] = C.projects.map((p) => {
     const b = document.createElement('button');
     b.className = 'pass'; b.type = 'button'; b.style.setProperty('--c', p.c); b.style.setProperty('--fg', p.fg);
     b.setAttribute('aria-describedby', `wallet-desc-${p.id}`); b.setAttribute('aria-expanded', 'false');
-    b.innerHTML = `<span class="sr-only" aria-hidden="true" id="wallet-desc-${esc(p.id)}">${esc(p.text)}</span><div class="card">${ART_IMG.has(p.id) ? `<img class="art art-img" src="/home/cards/${ART_FILE[p.id]}.webp" alt="" aria-hidden="true" decoding="async" loading="lazy" draggable="false">` : `<svg class="art" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">${(ART[p.art] || (() => ''))()}</svg><div class="tex"></div>`}
+    b.innerHTML = `<span class="sr-only" aria-hidden="true" id="wallet-desc-${esc(p.id)}">${esc(p.text)}</span><div class="card">${ART_IMG.has(p.id) ? `<img class="art art-img" src="/home/cards/${ART_FILE[p.id]}.webp" alt="" aria-hidden="true" decoding="async" loading="lazy" draggable="false">${motions[p.id] ? `<svg class="art art-motion" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${motions[p.id].svg}</svg>` : ''}` : `<svg class="art" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">${(ART[p.art] || (() => ''))()}</svg><div class="tex"></div>`}
       <div class="title"><span class="name" id="wallet-name-${esc(p.id)}">${esc(p.name)}</span><span class="topic">${esc(p.topic)}</span></div>${NFC}${CHIP}
       <div class="num">${number(p.commits)}</div>
       <div class="bottom"><div class="field"><span class="lab">${esc(C.createdLabel)}</span><span class="val">${esc(p.created)}</span></div><div class="field"><span class="lab">&nbsp;</span><span class="val">${esc(C.holder)}</span></div>${DARK_LOGO.has(p.id) ? LOGO.replace('#7FA62A', LIME) : LOGO}</div></div>`;
@@ -151,6 +165,9 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     if (p.art === 'enamel') io?.observe(b);
     return { p, el: b };
   });
+  // Only the front card of the stack plays by itself, and it waits hidden-from-motion until then.
+  const front = passes[passes.length - 1];
+  if (io && !reduce && front && front.p.art !== 'enamel' && motions[front.p.id]) { front.el.querySelector('.art-motion')?.setAttribute('data-pending', ''); io.observe(front.el); }
 
   const desk = () => matchMedia('(min-width: 1024px)').matches;
   const cardH = () => passes[0].el.getBoundingClientRect().height || 328;
@@ -259,6 +276,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     frame.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }, { transform: 'scale(1)' }], { duration: 300, delay: 1640, easing: E, composite: 'add' });
     (me.el.querySelector('.card') as HTMLElement).animate([{ filter: 'brightness(1)' }, { filter: 'brightness(1.18)' }, { filter: 'brightness(1)' }], { duration: 420, delay: 1600, easing: 'ease-out' });
     if (p.art === 'enamel') { seen.add(me.el); sketch(me.el, 300); }
+    seen.add(me.el); io?.unobserve(me.el); perform(me.el, p, 300);
     later(2200, showDetails);
   }
   // Once the check is done, the card rises under the close button and the details follow it.
@@ -281,7 +299,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     auth.animate([{ opacity: 1 }, { opacity: 0 }], { duration: reduce ? 0 : 200, easing: 'ease-out', fill: 'forwards' });
   }
   function close() {
-    clearTimers(); drawn.forEach((a) => a.cancel()); drawn = [];
+    clearTimers(); drawn.forEach((a) => a.cancel()); drawn = []; stopMotion();
     const was = sel?.me.el, keepFocus = !document.activeElement || document.activeElement === document.body || root.contains(document.activeElement);
     open = null; settled = false; sel = null; wallet.classList.remove('open'); stage.classList.remove('is-open'); setGlow(null);
     passes.forEach((x) => x.el.setAttribute('aria-expanded', 'false'));
@@ -307,6 +325,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     io?.disconnect();
     ac.abort();
     clearTimers();
+    stopMotion();
     clearTimeout(resizeT);
     root.getAnimations({ subtree: true }).forEach((a) => a.cancel());
     root.removeAttribute('aria-labelledby');
