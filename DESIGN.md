@@ -1,81 +1,93 @@
-# Design System: noeosorio.com, design A (warm glass)
+# Design System: noeosorio.com, the home of objects
 
-Design A is the site that ships now, with Noe's real content, while the "Noe OS / Sinapsis" redesign is finished. It keeps what already works (dark canvas, lime accent, glass surfaces) and raises the craft. Real content only; nothing invented.
+The home is a night room with physical objects in it. Every section is one object you can touch: a galaxy that draws Noé's logo, a wallet of project passes, a passport with stamps, a slot machine for videos, a tip terminal, a robots terminal, a Subscribe button, and a footer that spells his name in light. The thread that ties them together is the LED dot matrix: small rounded squares that light up to form letters, logos and images.
 
-## 1. Visual Theme & Atmosphere
+This file describes what the code in `src/home/` does today. The approved design lives in `specs/002-home-objects/prototypes/`, and the rules come from `.specify/memory/constitution.md`. The other pages (About, Portfolio, Essay, Contact, Social, Privacy, 404) keep their own layout and are not covered here. Real content only; nothing invented.
 
-A night studio seen through frosted glass. The page is dark and quiet; light comes from a few warm sources (a lime glow behind the hero, the glow of each project's screenshot), and every surface that holds content is a pane of frosted glass that lets that light through. Calm, confident and personal, like a well-kept workbench at night, never a SaaS landing page.
+## Theme and atmosphere
 
-- **Density:** 4, balanced. Room to breathe, but every section earns its height.
-- **Variance:** 7, offset asymmetric. Left-aligned hero, zig-zag projects, an uneven grid for the four areas. Nothing centered by default.
-- **Motion:** 5, fluid CSS. One orchestrated entrance, soft hover lifts, a slow glow drift. No perpetual noise.
+A dark room, quiet, with a few points of light. The page is warm off-black. Each object has its own materials (leather and paper for the passport, enamel and weave for the pass art, a cream screen for the tip terminal) but all of them sit on the same night and answer with the same lime light.
 
-## 2. Color Palette & Roles
+- **The object is the interface.** A section is not a card with a title above it. Navigation, state and feedback live inside the object: the lever pulls the reels, the stamps land on the page, the receipt prints.
+- **Flat surfaces.** Objects get their depth from shape, a 1px top highlight and a soft dark shadow. No neumorphism, no glass as decoration, no blur behind panels, no gradients on buttons.
+- **Short.** One-line subtitles, status messages of two to five words, nothing explained twice.
 
-Brand colors come from Noe's brandbook (hexagon mark, lime, petrol). Brand fidelity wins over generic rules.
+## Palette and roles
 
-- **Night Canvas** (#0E0D0B) — page background. Warm off-black, never pure black.
-- **Ember Depth** (#17140F) — section bands and the footer, one step above the canvas.
-- **Frosted Glass** (rgba(255, 248, 236, 0.045)) with `backdrop-filter: blur(24px) saturate(140%)` — every content surface (project panels, area tiles, contact). A 1px inner highlight on the top edge (rgba(255, 248, 236, 0.10)) gives the glass its edge; no outer border.
-- **Glass Hover** (rgba(255, 248, 236, 0.07)) — the same pane, one step brighter on hover.
-- **Warm Ink** (#F4EEE4) — primary text and headlines.
-- **Quiet Ink** (rgba(244, 238, 228, 0.66)) — body and secondary text. Never lower than this on the canvas: the current faint grays (≈0.4) fail contrast and are removed.
-- **Petrol Shadow** (#052D37) — deep tint used only inside glows and image shadows, so light feels warm-cool instead of flat.
-- **Lime Signal** (#D6F35C) — the single accent: the primary button, focus rings, the one highlighted word of each headline, active nav. Used sparingly; at most one lime element per viewport.
-- **Lime Glow** (radial-gradient, rgba(214, 243, 92, 0.16) to transparent) — ambient light behind the hero and behind the active project only.
+The brand comes from Noé's brandbook (hexagon mark, lime). The constitution names the lime #D6F35C and the home uses it everywhere.
 
-Banned: a second accent, purple or blue neon, gradient text on large headlines (one solid lime word instead), gray-on-gray cards.
+- **Night** #0E0D0B: page background and the dark inside of every object. Never pure black.
+- **Ink** #F4EEE4: primary text and headlines. Secondary text is ink at about 72% and the quietest text is about 48%, never lower.
+- **Lime** #D6F35C: the one brand accent. Primary buttons, focus rings, the logo, lit state, the winning result. Text on lime is a dark green-black (#15210A).
+- **LED lit** #9FD043: the tone of a lit dot in the matrices and of the dotted reel dividers.
+- **LED hot** #F2FFD2: the brightest dot, for the pointer hover and the pulse that runs through a lit shape.
+- **Glass fill** rgba(255, 248, 236, 0.07) with a line rgba(255, 248, 236, 0.14): the flat translucent surface used by the wallet's blocks and chips. It is a fill plus a 1px inner top highlight, not a blur.
+- **Object materials** are local to the object and never leak out: passport leather #1C2633 and paper #EFE5CF with ink colors for stamps, the tip terminal's cream screen #F6F2EA and bezel #1D1C19, the receipt #F7F4EC, a warning red #C8382D for the judged tip. Each stays inside its object.
 
-## 3. Typography Rules
+Banned: a second accent, purple or blue neon, gradient text, gray-on-gray cards, lowering text contrast below AA.
 
-- **Display:** Bricolage Grotesque, 600 to 700. Track-tight (-0.025em). Hero `clamp(2.75rem, 5.5vw, 4.5rem)`, section titles `clamp(1.9rem, 3.2vw, 2.6rem)`. Hierarchy by weight and the single lime word, not by size jumps.
-- **Body:** Geist, 400, 1.0625rem, line-height 1.6, max 62 characters per line, Quiet Ink.
-- **Mono:** Geist Mono, 500, 0.8125rem, letter-spacing 0.04em — dates, tech stack, small labels. Sentence case, never all caps.
-- **Editorial accent:** Instrument Serif italic, only for pull quotes from Noe's own videos and essays. Never in UI controls.
-- **Banned:** Inter, generic serifs, all-caps eyebrows on every section, more than two weights in one block.
+## Typography
 
-## 4. Component Stylings
+- **Display:** Bricolage Grotesque, 600 to 700, tight tracking, for section titles and object headlines.
+- **Body:** Geist, 400 to 600, for copy, buttons and the cookie card.
+- **Mono:** Geist Mono, 500 to 600, for data and LED-adjacent labels: prices, dates, commit counts, stamps, status lines and the terminals.
+- Titles carry hierarchy by size and weight. Copy lines stay short; labels are sentence case except where the object itself prints in capitals (the marquee, a card holder name, a passport cover).
+- Fonts load before the galaxy measures its words.
 
-- **Primary button:** Lime Signal fill, Night Canvas text, 999px radius, 48px tall, 0 22px padding. Hover lifts 1px and brightens 4%; active presses to `scale(0.97)`. No glow. One per screen.
-- **Secondary action:** a text link in Warm Ink with an arrow that slides 3px on hover. No outlined ghost buttons next to the primary.
-- **Glass panel:** Frosted Glass, 24px radius, padding 28px to 36px, top-edge highlight, shadow `0 30px 80px -30px rgba(5, 45, 55, 0.55)` (petrol-tinted, diffuse). Panels never nest: no box inside a box. Inside a panel, group with spacing and type weight.
-- **Project panel:** the real screenshot is the hero of the panel (16:10, 16px radius, sits on its own glow). Name, one-line description, the stack in Geist Mono as plain text separated by commas (no pills), and one link.
-- **Area tile (the four areas):** glass panel with a small brand-drawn line icon, the area name and one sentence in Noe's words. Hover brightens the glass and reveals the related project names.
-- **Nav:** a floating glass bar, 56px, centered max-width 1120px, sticky with 16px top offset. Logo mark left, four links, one lime "Contact" button right. Collapses to a sheet on mobile.
-- **Images:** every image has its alt text and a fixed aspect ratio; while loading, a glass skeleton of the same size.
-- **Focus:** 2px lime ring with 3px offset on every interactive element.
+## Components
 
-## 5. Layout Principles
+Each object, in page order.
 
-- Max width 1200px content, 1360px for the hero glow. Side gutter `max(20px, 5vw)`.
-- Section rhythm: vertical gap `clamp(4.5rem, 10vw, 8rem)`.
-- **Hero:** left-aligned, two columns at desktop (7/5). Left: headline with two small inline app icons sitting at cap height between words (Maiden OS and Essay Studio, real icons), one sentence, one primary button. Right: the latest thing Noe shipped as a live-looking glass card (screenshot plus date). No centered stack, no row of social icons in the hero.
-- **Projects:** one section only (the duplicate card grid is removed). Newest first. Zig-zag rows: screenshot 7 columns, text 5, alternating sides. The first project is larger.
-- **Four areas:** an uneven grid, never three equal cards: computer science spans two columns; psychology, business and content creation share the rest.
-- **Learning out loud:** a horizontal row of the latest long videos with real thumbnails, newest first, scrolls inside its container.
-- **Work history:** one compact line of company names with years, linking to About. Old work is for the curious.
-- **Contact:** one glass panel, the email as copyable text, one button.
-- Mobile (< 768px): everything is one column; inline hero icons move under the headline; tap targets 44px minimum; no horizontal page scroll.
+- **Top bar:** only the logo and the Subscribe button. The logo links home; the button scrolls to the Subscribe section. The bar floats over the hero and is not a navigation.
+- **Idea galaxy (hero):** a canvas where the big concepts appear, collapse into stars, become planets on orbits and build the LED logo. Hover or tap a star to see the idea it came from. Clicking the logo bursts it and pulls it back. The canvas is `aria-hidden` and a screen-reader summary says what it shows.
+- **Project wallet:** each project is a pass with its own art. Choosing one plays the pay animation with the logo, then opens a short pitch: price or availability first, then the problem, how it works, what is unique, platforms and the stack. One real action per project. A "Latest activity" list sits beside the pass.
+- **Work passport:** a leather cover that opens on scroll. Each page is one job, newest first, with a main stamp and skill stamps that land as the page appears.
+- **Learning out loud (slot machine):** a cabinet with a lever, three LED reels, a marquee and a ticket that prints a real video with a Watch link. Topic chips filter a list of the latest videos beside it, with a link to all videos on YouTube.
+- **Tip terminal:** a payment terminal with three tips and "No tip". A tip plays the thank-you and goes to the tip jar, with a visible fallback link. "No tip" plays the judged sequence and offers subscribing instead.
+- **Robots terminal:** an "I'm a robot" reverse captcha. A human-looking pointer path fails with a joke; keyboard or machine-like input passes and the terminal shows `/llms.txt` with Copy and Open raw.
+- **Subscribe:** today it is the YouTube button. Its design is on hold by Noé's decision and will be redone in its own change; do not restyle it here.
+- **Footer:** two link columns, a "now" line, Back to top, Privacy and Cookie settings (which reopens the consent card), and Noé's name as a large LED matrix canvas with the name as its accessible label.
+- **Cookie card:** a flat floating card, 18px radius, near-black #171714 with a 1px lime inner ring at low opacity, bottom left on desktop and full width on mobile. One sentence and a Privacy link. Accept and decline are the same size and weight.
+- **Buttons:** primary is a lime fill with dark text; on pass pitches the primary is ink on dark. Press scales to 0.97. Chips and secondary buttons use the glass fill. Focus is a 2px lime ring with a 3px offset.
+- **LED dot matrix:** one rounded square per lit cell on a small grid, with a gap of about 18% of the cell. Letters, the logo and thumbnails are drawn into the grid and lit. Pointer proximity brightens nearby cells toward hot.
 
-## 6. Motion & Interaction
+## Layout
 
-- Load `anthropic-skills:emil-design-eng` before writing any motion code.
-- One entrance: hero headline and card fade up 12px with a 40ms stagger, `cubic-bezier(0.23, 1, 0.32, 1)`, 600ms.
-- Sections reveal from a visible resting state (never `opacity: 0` waiting for scroll).
-- Hover: glass panels brighten and lift 2px in 200ms; screenshots scale 1.015 inside their frame.
-- Ambient: the hero lime glow drifts slowly (40s loop). Nothing else loops.
-- Only `transform` and `opacity` animate. `prefers-reduced-motion` keeps fades and drops movement.
+- Sections run in this order: galaxy, project wallet, passport, learning, tips with the robots terminal, Subscribe, footer.
+- Each object is designed first as a full-width scene on desktop at 1440 and 1280, then at 768 and 390. Nothing floats in an empty desk with borders around it.
+- Side gutter is `max(16px, 4vw)` with safe-area insets. No horizontal scroll at any width. Tap targets are at least 44px on small screens.
+- Every list is designed to hold 1000 items (search, filters, dense view). The wallet and the video list stay short by design, newest first, and link out to the full list on YouTube and the portfolio.
+- Content lives in `src/home/data/`, one typed file per section. Components and mount scripts only render it; the same fact is never typed in two places.
 
-## 7. Anti-Patterns (Banned)
+## Motion
 
-- No emojis, no middle dot separators, no numbering for its own sake.
-- No accent bar on the left of cards or quotes.
-- No repeated content: each project, link or fact appears once per page.
-- No pills for tech stacks, no counters or vanity stats.
-- No box inside a card, no hairline dividers as default structure.
-- No keyboard shortcuts printed on the surface (tooltips only).
-- No vendor names in UI copy.
-- No invented content: every claim, date and project comes from Noe or his repos.
-- No centered hero, no three equal cards, no gradient headline text, no neon glow, no pure black, no Inter.
-- No "scroll to explore", bouncing arrows or filler UI text.
-- No AI-cliché copy ("elevate", "seamless", "unleash", "next-gen").
+- Load `emil-design-eng` before writing or changing any motion code.
+- Easing is a strong ease-out, `cubic-bezier(0.23, 1, 0.32, 1)`. Press feedback is about 160ms.
+- Every motion respects `prefers-reduced-motion`: reduced motion shows the finished state of each object (finished galaxy, stamped pages, printed ticket) and keeps only fades. Hover labels and links still work.
+- Loops pause when their section is off screen and when the tab is hidden. Leaving the home and coming back leaves no extra loops, timers, listeners or canvases behind.
+- The galaxy completes its logo within 16 seconds of landing without any input.
+
+## Performance on iPhone
+
+Learned the hard way in this build (the Essay page crashed on iPhone and the galaxy rendered at double size on Retina).
+
+- Keep GPU layer memory low. No stacks of full-size 3D copies to fake thickness; use one thickness layer and draw at the real on-screen size on small screens.
+- Every canvas has an explicit CSS width and height. Never rely on the intrinsic size, which doubles on Retina screens.
+- The canvases cap their pixel ratio at 2.
+- Test every canvas and 3D section at 2x and 3x pixel ratios on a real or simulated iPhone, not only on a laptop.
+- Lighthouse performance, accessibility and SEO at or above 90 on mobile, measured.
+
+## Anti-patterns
+
+From the constitution, applied to everything on the home:
+
+- No middle dot as a separator, anywhere, including docs and commit messages.
+- No numbering for its own sake, no cartoon titles, no invented terms.
+- No colored accent bar on the left edge of anything.
+- No box inside a box inside a card, no hairline dividers as default structure.
+- Nothing said twice on one screen. No keyboard shortcuts printed on the surface (tooltips only). No counters, dates or metadata that do not help the next action.
+- No vendor or model names in anything a visitor sees.
+- No invented content: every claim, project, date and price is true and checkable. Private and joke projects never appear as real ones, and no single project becomes Noé's identity.
+- No glass as decoration, no neumorphism, no gradient on buttons, no neon glow, no pure black.
+- No second accent color and no brand color other than lime without a stated reason.
+- No broken links, and no section that looks good only with five items.

@@ -176,15 +176,15 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
       canvas.addEventListener('pointerleave', () => { mx = my = -1e4; draw() }, { signal })
     }
     return (nc: number, nr: number, ncell: number, paint: (o: CanvasRenderingContext2D, w: number, h: number) => void) => {
-      const dpr = Math.min(2, devicePixelRatio || 1)
+      const dpr = Math.min(3, devicePixelRatio || 1)
       cols = nc; rows = nr; cell = ncell; gap = Math.max(1, cell * 0.18)
-      canvas.width = cols * cell * dpr; canvas.height = rows * cell * dpr; canvas.style.width = cols * cell + 'px'; canvas.style.height = rows * cell + 'px'
+      canvas.width = Math.round(cols * cell * dpr); canvas.height = Math.round(rows * cell * dpr); canvas.style.width = cols * cell + 'px'; canvas.style.height = rows * cell + 'px'
       const off = document.createElement('canvas'); off.width = cols; off.height = rows
       const o = off.getContext('2d') as CanvasRenderingContext2D; paint(o, cols, rows)
       const data = o.getImageData(0, 0, cols, rows).data
       on = []; seed = 11
       for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) { const a = data[(y * cols + x) * 4 + 3]; on.push({ x, y, lit: a > 110, hot: rnd() < 0.07 }) }
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.setTransform(canvas.width / (cols * cell), 0, 0, canvas.height / (rows * cell), 0, 0)
       draw()
     }
   }
@@ -196,6 +196,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     <div class="brand"><canvas width="34" height="25" aria-hidden="true"></canvas>${esc(RB.title)}</div>`
   {
     const cv = robot.querySelector('canvas') as HTMLCanvasElement, x = cv.getContext('2d') as CanvasRenderingContext2D
+    const dpr = Math.min(3, devicePixelRatio || 1); cv.width = Math.round(34 * dpr); cv.height = Math.round(25 * dpr); x.scale(dpr, dpr)
     x.fillStyle = LIME; x.save(); x.scale(34 / 280, 25 / 200); x.translate(-60, -100); x.fill(new Path2D(LOGO_D)); x.restore()
   }
   let travel = 0, lx: number | null = null, ly: number | null = null
@@ -320,8 +321,8 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   const big = sf.querySelector('.bigname') as HTMLCanvasElement
   let bigM: ReturnType<typeof matrix> | null = null, bigKey = ''
   function bigName() {
-    const W = (big.parentElement as HTMLElement).clientWidth, cell = W < 600 ? 6 : 10, cols = Math.floor(W / cell), rows = 26
-    const key = cols + 'x' + cell + 'x' + (devicePixelRatio || 1)
+    const pe = big.parentElement as HTMLElement, pcs = getComputedStyle(pe), W = pe.getBoundingClientRect().width - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight) - parseFloat(pcs.borderLeftWidth) - parseFloat(pcs.borderRightWidth), base = W < 600 ? 6 : 10, cols = Math.floor(W / base), cell = W / cols, rows = 26
+    const key = W + 'x' + base + 'x' + (devicePixelRatio || 1)
     if (bigM && key === bigKey) return
     bigKey = key
     if (!bigM) bigM = matrix(big, { grid: true })
@@ -330,7 +331,6 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
       const tw = o.measureText('Noé Osorio').width; size = size * Math.min((w - 2) / tw, 1.5); o.font = `600 ${size}px Geist, system-ui, sans-serif`
       const m = o.measureText('Noé Osorio'); o.fillText('Noé Osorio', (w - m.width) / 2, h - 3)
     })
-    big.style.width = '100%'; big.style.height = 'auto'
   }
   ;(document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { if (!stopped) bigName() })
   let resizeT: ReturnType<typeof setTimeout> | undefined

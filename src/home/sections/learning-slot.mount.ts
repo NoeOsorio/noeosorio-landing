@@ -114,11 +114,12 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
     }
   }
   // Resizing a canvas wipes it and reallocates its buffer, so that only happens when the size or the pixel ratio really changed.
+  // The buffer is the exact layout size times the pixel ratio (up to 3, an iPhone), and the CSS height is pinned so the layout never depends on the buffer.
   const sized = new WeakMap<HTMLCanvasElement, { w: number; h: number; dpr: number }>()
   const sizeCanvas = (cv: HTMLCanvasElement, w: number, h: number) => {
-    const dpr = Math.min(2, devicePixelRatio || 1), x = cv.getContext('2d') as Ctx, was = sized.get(cv)
-    if (was && was.w === w && was.h === h && was.dpr === dpr) { x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h); return x }
-    cv.width = w * dpr; cv.height = h * dpr; sized.set(cv, { w, h, dpr }); x.setTransform(dpr, 0, 0, dpr, 0, 0); return x
+    const dpr = Math.min(3, devicePixelRatio || 1), x = cv.getContext('2d') as Ctx, was = sized.get(cv)
+    if (was && was.w === w && was.h === h && was.dpr === dpr) { x.setTransform(cv.width / w, 0, 0, cv.height / h, 0, 0); x.clearRect(0, 0, w, h); return x }
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); cv.style.height = h + 'px'; sized.set(cv, { w, h, dpr }); x.setTransform(cv.width / w, 0, 0, cv.height / h, 0, 0); return x
   }
 
   // Draws a dot board. hot(x, y) can light some dots brighter, for the shimmer and the blink.
@@ -146,7 +147,7 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
     if (reduce) marqDraw(0)
   }
   function marqDraw(t: number) {
-    const W = marq.clientWidth || 600, cell = Math.max(3, Math.min(7, Math.floor(W / (base.w + 6)))), H = cell * 11, x = sizeCanvas(marq, W, H)
+    const W = marq.getBoundingClientRect().width || 600, cell = Math.max(3, Math.min(7, Math.floor(W / (base.w + 6)))), H = cell * 11, x = sizeCanvas(marq, W, H)
     marq.style.height = H + 'px'
     const cols = Math.floor(W / cell), fits = marqText.w + 4 <= cols, e = t - marqT0
     let hot: ((c: number, r: number) => boolean) | null = null, lit = true
@@ -165,7 +166,7 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
     return { cv, key: 'podcast', pos: 0, flash: 0 }
   })
   function drawReel(R: Reel, spinning: boolean) {
-    const W = R.cv.clientWidth || 150, cell = Math.floor(W / (GRID + 2)), H = cell * (GRID + 2), x = sizeCanvas(R.cv, W, H)
+    const W = R.cv.getBoundingClientRect().width || 150, cell = Math.floor(W / (GRID + 2)), H = cell * (GRID + 2), x = sizeCanvas(R.cv, W, H)
     x.clearRect(0, 0, W, H)
     if (!spinning) { const f = Math.max(0, 1 - (performance.now() - R.flash) / 420); dots(x, (W - cell * GRID) / 2, cell, cell, R.key, true, f * 0.8); return }
     // While spinning, symbols slide down past the window, a little blurred.
@@ -182,7 +183,7 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
   function drawStrip() {
     const st = ticket.querySelector('.strip') as HTMLCanvasElement | null
     if (!st || !current) return
-    const v = current, W = st.clientWidth || 480, cell = Math.max(3, Math.min(5, Math.floor(W / 80))), H = cell * 11, x = sizeCanvas(st, W, H)
+    const v = current, W = st.getBoundingClientRect().width || 480, cell = Math.max(3, Math.min(5, Math.floor(W / 80))), H = cell * 11, x = sizeCanvas(st, W, H)
     st.style.height = H + 'px'
     const label = textMask(currentJackpot ? 'JACKPOT' : C.cats[v.cat]), len = textMask(fmtLen(v.len))
     ledText(x, W, H, cell, label, 0, 'left', null)
