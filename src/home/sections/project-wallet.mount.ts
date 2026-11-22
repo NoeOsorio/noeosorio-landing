@@ -87,10 +87,11 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   root.setAttribute('aria-labelledby', 'wallet-title');
   root.style.setProperty('--noise', NOISE);
   root.innerHTML = `<div class="wrap">
-  <div class="head"><h2 id="wallet-title"></h2><p id="wallet-sub"></p></div>
-  <div class="stage">
-    <div class="glow" aria-hidden="true"></div>
+  <div class="stage" id="stage">
+    <div class="pool" aria-hidden="true"></div><div class="pool2" aria-hidden="true"></div>
+    <div class="head"><h2 id="wallet-title"></h2><p id="wallet-sub"></p></div>
     <div class="wallet" id="wallet">
+      <div class="floor" id="floor" aria-hidden="true"></div>
       <div class="auth" id="auth" aria-live="polite">
         <svg viewBox="-60 -60 120 120" fill="none" aria-hidden="true">
           <g id="frame" stroke="var(--lime)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
@@ -112,7 +113,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   const q = <T extends Element>(sel: string) => root.querySelector(sel) as T;
   q<HTMLElement>('#wallet-title').textContent = C.title;
   q<HTMLElement>('#wallet-sub').textContent = C.sub;
-  const wallet = q<HTMLElement>('#wallet'), auth = q<HTMLElement>('#auth'), details = q<HTMLElement>('#details'), msg = q<HTMLElement>('#msg');
+  const stage = q<HTMLElement>('#stage'), floor = q<HTMLElement>('#floor'), wallet = q<HTMLElement>('#wallet'), auth = q<HTMLElement>('#auth'), details = q<HTMLElement>('#details'), msg = q<HTMLElement>('#msg');
   const frame = q<SVGGElement>('#frame'), logo = q<SVGGElement>('#logo'), check = q<SVGPathElement>('#check');
   const lps = [...logo.querySelectorAll<SVGPathElement>('.lp')];
 
@@ -151,22 +152,53 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     return { p, el: b };
   });
 
+  const desk = () => matchMedia('(min-width: 1024px)').matches;
   const cardH = () => passes[0].el.getBoundingClientRect().height || 328;
-  const peek = () => (passes.length > 12 ? 60 : cardH() * 0.245);
+  const peek = () => (passes.length > 12 ? 60 : cardH() * (desk() ? 0.215 : 0.245));
   function place(el: HTMLElement, y: number, s = 1) { const t = `translateY(${y}px) scale(${s})`; el.style.setProperty('--rest', t); el.style.transform = t; }
+  // A hint of the open pass colour, lifted and warmed so it reads as light and never as a tint. Neutral cards keep the warm default.
+  const WARM = [255, 214, 160];
+  function glowFor(hex: string): [string, string] {
+    const n = parseInt(hex.slice(1), 16), r = (n >> 16) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
+    let rgb = WARM;
+    const sat = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+    if (sat > 0.2) {
+      const h = (mx === r ? ((g - b) / d + (g < b ? 6 : 0)) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4) / 6;
+      const L = 0.64, S = Math.min(0.75, Math.max(0.5, sat)), c = (1 - Math.abs(2 * L - 1)) * S;
+      const f = (k: number) => { const t = (k + h * 12) % 12; return L - (c / 2) * Math.max(-1, Math.min(t - 3, 9 - t, 1)); };
+      const lit = [f(0), f(8), f(4)].map((v) => v * 255);
+      rgb = lit.map((v, i) => Math.round(v * 0.6 + WARM[i] * 0.4));
+    }
+    return [`rgba(${rgb},.25)`, `rgba(${rgb},.44)`];
+  }
+  function setGlow(c: string | null) {
+    const [a, b] = c ? glowFor(c) : ['', ''];
+    if (c) { stage.style.setProperty('--glow', a); stage.style.setProperty('--glow-hi', b); }
+    else { stage.style.removeProperty('--glow'); stage.style.removeProperty('--glow-hi'); }
+  }
+  const setFloor = (y: number) => { floor.style.transform = `translateY(${Math.round(y - 14)}px)`; };
+  // Where things sit when a pass is open. On a wide screen the details go to the right of the card; below that they go under it.
+  const SETTLED = 72, AUTH = 150;
+  const settledY = () => (desk() ? 0 : SETTLED);
+  function geo(base: number, H: number, dh: number) {
+    if (desk()) { const pileTop = base + H + 44; return { top: 0, pileTop, h: Math.max(pileTop + 30 + 90, dh + 90) }; }
+    const top = base + H + 24, pileTop = top + dh + 36; return { top, pileTop, h: pileTop + 30 + 90 };
+  }
   function layout() {
     const H = cardH(), P = peek();
     passes.forEach(({ el }, i) => { place(el, i * P); el.style.opacity = '1'; el.style.zIndex = String(i + 1); el.style.filter = ''; el.tabIndex = 0; });
     wallet.style.height = (passes.length - 1) * P + H + 8 + 'px';
+    setFloor((passes.length - 1) * P + H);
   }
   // The window changed while a pass is open: only move things to their new places. The check animation and the scroll are not touched.
   function relayout() {
     if (!open || !sel) { layout(); return; }
-    const H = cardH(), dh = details.offsetHeight, base = settled ? SETTLED : AUTH, top = base + H + 24, pileTop = top + dh + 36;
+    const H = cardH(), dh = details.offsetHeight, base = settled ? settledY() : AUTH, g = geo(base, H, dh);
     sel.H = H; sel.dh = dh;
-    place(sel.me.el, base); details.style.top = top + 'px';
-    sel.rest.forEach((x, i) => place(x.el, pileTop + Math.min(i, 3) * 10, 0.93 - Math.min(i, 3) * 0.015));
-    wallet.style.height = pileTop + 3 * 10 + 90 + 'px';
+    place(sel.me.el, base); details.style.top = g.top + 'px';
+    sel.rest.forEach((x, i) => place(x.el, g.pileTop + Math.min(i, 3) * 10, 0.93 - Math.min(i, 3) * 0.015));
+    wallet.style.height = g.h + 'px'; setFloor(base + H);
   }
 
   // ---------- Opening a pass ----------
@@ -174,7 +206,6 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   // my logo draws itself, fills, and turns into a check. Then the details slide in under the card.
   const later = (ms: number, fn: () => void) => { timers.push(window.setTimeout(fn, reduce ? 0 : ms)); };
   const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
-  const AUTH = 150;
   let sel: Sel | null = null;
   let settled = false;
   function select(p: WalletProject) {
@@ -182,8 +213,6 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     open = p; settled = false;
     const H = cardH(), me = passes.find((x) => x.p === p) as Pass;
     // Bring the top of the wallet into view, so the check above the card is always seen.
-    const wt = wallet.getBoundingClientRect().top;
-    if (wt < 40 || wt > innerHeight * 0.35) scrollTo({ top: scrollY + wt - 40, behavior: reduce ? 'auto' : 'smooth' });
     place(me.el, AUTH, 1); me.el.style.zIndex = '100'; me.el.style.filter = '';
     const rest = passes.filter((x) => x !== me);
 
@@ -200,12 +229,16 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
         <div><span class="k">${esc(C.stackLabel)}</span><span class="chips">${p.tags.map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</span></div></div>`;
     closeBtn.style.setProperty('--x', '1');
     details.style.setProperty('--c', p.c); details.style.setProperty('--fg', p.fg);
-    const top = AUTH + H + 24;
-    details.style.top = top + 'px'; details.style.visibility = 'hidden'; details.style.opacity = '0';
-    const dh = details.getBoundingClientRect().height, pileTop = top + dh + 36;
+    details.style.top = (desk() ? 0 : AUTH + H + 24) + 'px'; details.style.visibility = 'hidden'; details.style.opacity = '0';
+    const dh = details.getBoundingClientRect().height, g = geo(AUTH, H, dh);
+    details.style.top = g.top + 'px';
     sel = { me, rest, H, dh };
-    rest.forEach((x, i) => { place(x.el, pileTop + Math.min(i, 3) * 10, 0.93 - Math.min(i, 3) * 0.015); x.el.style.zIndex = String(50 - i); x.el.style.opacity = i > 3 ? '0' : '1'; x.el.style.filter = 'brightness(.42)'; x.el.tabIndex = -1; });
-    wallet.style.height = pileTop + 3 * 10 + 90 + 'px';
+    rest.forEach((x, i) => { place(x.el, g.pileTop + Math.min(i, 3) * 10, 0.93 - Math.min(i, 3) * 0.015); x.el.style.zIndex = String(50 - i); x.el.style.opacity = i > 3 ? '0' : '1'; x.el.style.filter = 'brightness(.42)'; x.el.tabIndex = -1; });
+    wallet.style.height = g.h + 'px'; setFloor(AUTH + H);
+    // Bring the whole open state into view: on a wide screen the card and its details sit side by side, centered in the window.
+    const wt = wallet.getBoundingClientRect().top, want = desk() ? Math.max(88, (innerHeight - Math.max(dh, H + 130)) / 2) : 40;
+    if (desk() ? Math.abs(wt - want) > 24 : wt < 40 || wt > innerHeight * 0.35) scrollTo({ top: scrollY + wt - want, behavior: reduce ? 'auto' : 'smooth' });
+    setGlow(p.c); stage.classList.add('is-open');
     wallet.classList.add('open');
     passes.forEach((x) => x.el.setAttribute('aria-expanded', String(x === me)));
     details.setAttribute('aria-labelledby', `wallet-name-${p.id}`);
@@ -229,17 +262,16 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     later(2200, showDetails);
   }
   // Once the check is done, the card rises under the close button and the details follow it.
-  const SETTLED = 72;
   function showDetails() {
     settled = true;
     if (sel) {
-      const { me, rest, H, dh } = sel, top = SETTLED + H + 24, pileTop = top + dh + 36;
-      place(me.el, SETTLED); details.style.top = top + 'px';
-      rest.forEach((x, i) => place(x.el, pileTop + Math.min(i, 3) * 10, 0.93 - Math.min(i, 3) * 0.015));
-      wallet.style.height = pileTop + 3 * 10 + 90 + 'px';
+      const { me, rest, H, dh } = sel, base = settledY(), g = geo(base, H, dh);
+      place(me.el, base); details.style.top = g.top + 'px';
+      rest.forEach((x, i) => place(x.el, g.pileTop + Math.min(i, 3) * 10, 0.93 - Math.min(i, 3) * 0.015));
+      wallet.style.height = g.h + 'px'; setFloor(base + H);
     }
     details.style.visibility = 'visible';
-    details.animate([{ opacity: 0, transform: 'translateY(-8px) scale(.98)', filter: 'blur(4px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }],
+    details.animate([{ opacity: 0, transform: desk() ? 'translateX(16px)' : 'translateY(-8px) scale(.98)', filter: 'blur(4px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }],
       { duration: reduce ? 0 : 340, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'forwards' });
     details.style.opacity = '1';
     closeBtn.style.visibility = 'visible'; closeBtn.style.opacity = '1'; closeBtn.style.pointerEvents = 'auto'; closeBtn.style.transition = 'opacity 200ms ease';
@@ -251,7 +283,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   function close() {
     clearTimers(); drawn.forEach((a) => a.cancel()); drawn = [];
     const was = sel?.me.el, keepFocus = !document.activeElement || document.activeElement === document.body || root.contains(document.activeElement);
-    open = null; settled = false; sel = null; wallet.classList.remove('open');
+    open = null; settled = false; sel = null; wallet.classList.remove('open'); stage.classList.remove('is-open'); setGlow(null);
     passes.forEach((x) => x.el.setAttribute('aria-expanded', 'false'));
     details.removeAttribute('aria-labelledby');
     [auth, frame, logo, check, ...lps].forEach((n) => n.getAnimations().forEach((a) => a.cancel()));
