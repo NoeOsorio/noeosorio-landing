@@ -1,4 +1,10 @@
 import essay from './essay';
+import telar from './telar';
+import kanji from './kanji';
+import galaxy from './galaxy';
+import simworld from './simworld';
+import pyventa from './pyventa';
+import maiden from './maiden';
 
 // Moving parts of a wallet card. The card's base picture is a still image; each motion adds an SVG overlay
 // in the same 520 x 328 space, so base plus overlay at rest is the finished card. Contract: specs/003-living-cards/contracts/card-motion.md.
@@ -38,4 +44,7 @@ export function sweep(el: Element, at: number, ms: number, origin = '0% 50%'): A
 }
 
 // Registry keyed by project id. Cards without an entry keep their still picture.
-export const motions: Record<string, CardMotion> = { [essay.id]: essay };
+// Cards whose overlay is still a placeholder (empty svg) are left out, so they keep showing their full image.
+export const motions: Record<string, CardMotion> = Object.fromEntries(
+  [essay, telar, kanji, galaxy, simworld, pyventa, maiden].filter((m) => m.svg).map((m) => [m.id, m]),
+);
