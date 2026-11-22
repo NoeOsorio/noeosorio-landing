@@ -1,6 +1,6 @@
 import type { Mount } from '../useMount'
 
-// A quiet field of stars behind every section below the hero (the hero is opaque and sits on top).
+// A quiet field of stars behind every section of the home, the hero included, so space starts from the first frame.
 // One viewport-sized canvas, three depth layers that drift at different fractions of the scroll, drawn
 // only when the page scrolls or resizes. No loop, no pointer input.
 type Star = { u: number; v: number; r: number; a: number; rgb: string; halo: number }

@@ -1,3 +1,3 @@
-/* The star field is one fixed canvas behind the sections; the hero is opaque and covers it. */
+/* The star field is one fixed canvas behind the whole home, the hero included (its background is transparent). */
 .home-stars { position: fixed; left: 0; top: 0; width: 100%; height: 100vh; height: 100lvh; z-index: -1; pointer-events: none; }
 .home-stars canvas { display: block; width: 100%; height: 100%; }
