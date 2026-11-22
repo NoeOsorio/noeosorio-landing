@@ -1,6 +1,7 @@
 import type { Mount } from '../useMount'
 import type { Tip, TipsContent } from '../data/tips'
 import { esc } from '../dom'
+import { rasterText, missingGlyphs, gridFor, baseCell, NAME_SHARE, OFFER_SHARE } from './led-font'
 import { HOT, LED, LIME, LIME_RGB, LOGO_D, logoPaths } from '../brand'
 
 const E = 'cubic-bezier(0.23, 1, 0.32, 1)'
@@ -148,54 +149,106 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     last.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: 6500, easing: E, fill: 'forwards' })
   }
 
-  // ---------- LED dot matrix ----------
-  // Draw a shape into a tiny grid, then light one rounded square per filled cell.
-  // The canvas gets one draw function, one observer and one set of listeners for its whole life;
-  // the returned setup only recomputes the grid and the canvas size, then draws again.
-  function matrix(canvas: HTMLCanvasElement, opts: { grid?: boolean; twinkle?: boolean }) {
+  // ---------- LED sign ----------
+  // One canvas, one grid of dots. Each slide is a grid of lit dots (text from a 5x7 bitmap font), and every lit cell shows one rounded square.
+  // A slide stays perfectly still; the next one arrives by dots switching in a random, left-leaning order.
+  type Slide = { key: string; hold: number; raster: (cols: number, rows: number, o: CanvasRenderingContext2D) => Uint8Array }
+  const BB = C.billboard
+  const textSlide = (text: string, hold: number, share: number): Slide => ({ key: text, hold, raster: (cols, rows) => rasterText(text, cols, rows, share) })
+  const nameSlide = textSlide(BB.name, BB.nameHoldMs, NAME_SHARE)
+  const logoSlide: Slide = {
+    key: 'logo', hold: BB.holdMs,
+    raster: (w, h, o) => {
+      o.clearRect(0, 0, w, h)
+      const k = Math.min((w - 2) / 255, (h - 4) / 177)
+      o.fillStyle = '#000'; o.save(); o.translate(w / 2, h / 2); o.scale(k, k); o.translate(-199.5, -199.5); o.fill(new Path2D(LOGO_D)); o.restore()
+      const d = o.getImageData(0, 0, w, h).data, a = new Uint8Array(w * h)
+      for (let i = 0; i < a.length; i++) a[i] = d[i * 4 + 3] > 110 ? 1 : 0
+      return a
+    },
+  }
+  const offerTexts = BB.slides.flatMap((s) => (s.kind === 'text' ? [s.text] : []))
+  if (import.meta.env.DEV) { const miss = missingGlyphs([BB.name, ...offerTexts]); if (miss.length) console.warn('LED sign: no glyph for', miss.map((c) => `"${c}"`).join(' ')) }
+  // The name opens the sign and comes back between every other slide.
+  const seq: Slide[] = BB.slides.flatMap((s) => [nameSlide, s.kind === 'logo' ? logoSlide : textSlide(s.text, BB.holdMs, OFFER_SHARE)])
+
+  function sign(canvas: HTMLCanvasElement) {
     let cols = 0, rows = 0, cell = 10, gap = 1
-    let on: { x: number; y: number; lit: boolean; hot: boolean }[] = []
+    let cur = new Uint8Array(0), nxt = new Uint8Array(0), hot = new Uint8Array(0), th = new Float32Array(0)
+    const rasters = new Map<string, Uint8Array>()
     let seed = 11
     const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    const off = document.createElement('canvas'), o = off.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D
+    const GRID = `rgba(${LIME_RGB},.07)`
     let reveal = reduce ? Infinity : 0, mx = -1e4, my = -1e4, drawRaf = 0, inView = false, revealing = false, revealed = reduce
+    let at = 0, nextAt = 0, trans = false, progress = -1, tStart = 0, tRaf = 0
+    let holdT: ReturnType<typeof setTimeout> | null = null, holdEnd = 0, remain = 0, running = false
+
     function draw() {
       ctx.clearRect(0, 0, cols * cell, rows * cell)
-      for (const c of on) {
-        const px = c.x * cell + gap / 2, py = c.y * cell + gap / 2, s = cell - gap
-        const near = Math.hypot(px + s / 2 - mx, py + s / 2 - my) < cell * 4.5
-        if (c.lit && c.x <= reveal) ctx.fillStyle = near || c.hot ? HOT : LED
-        else ctx.fillStyle = opts.grid ? `rgba(${LIME_RGB},.07)` : 'rgba(0,0,0,0)'
-        ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(px, py, s, s, s * 0.22); else ctx.rect(px, py, s, s); ctx.fill()
+      const s = cell - gap, r = s * 0.22, near2 = (cell * 4.5) ** 2
+      for (let i = 0; i < cur.length; i++) {
+        const x = i % cols, y = (i / cols) | 0, px = x * cell + gap / 2, py = y * cell + gap / 2
+        let lit = cur[i], flash = false
+        if (progress >= 0 && progress >= th[i]) { lit = nxt[i]; flash = progress - th[i] < 0.14 }
+        if (lit && x <= reveal) { const dx = px + s / 2 - mx, dy = py + s / 2 - my; ctx.fillStyle = flash || hot[i] || dx * dx + dy * dy < near2 ? HOT : LED } else ctx.fillStyle = GRID
+        ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(px, py, s, s, r); else ctx.rect(px, py, s, s); ctx.fill()
       }
     }
-    // A few dots catch the light now and then, like a real panel.
-    if (opts.twinkle && !reduce) interval(900, () => { if (document.hidden || !inView) return; for (const c of on) if (c.lit) c.hot = rnd() < 0.08; draw() })
+    const raster = (sl: Slide) => {
+      let a = rasters.get(sl.key)
+      if (!a) { a = sl.raster(cols, rows, o); rasters.set(sl.key, a) }
+      return a
+    }
+
+    // ----- the cycle -----
+    const clearHold = () => { if (holdT !== null) { clearTimeout(holdT); timers.delete(holdT); holdT = null } }
+    const schedule = (ms: number) => { clearHold(); holdEnd = performance.now() + ms; holdT = timeout(ms, () => { holdT = null; startTrans((at + 1) % seq.length) }) }
+    function startTrans(n: number) {
+      nextAt = n; nxt = raster(seq[n]); trans = true; tStart = performance.now(); progress = 0
+      const step = (t: number) => { progress = Math.min(1, (t - tStart) / BB.transitionMs); draw(); if (progress < 1) tRaf = raf(step); else land() }
+      tRaf = raf(step)
+    }
+    function settle() { cancelAnimationFrame(tRaf); rafs.delete(tRaf); at = nextAt; cur = nxt; trans = false; progress = -1; draw() }
+    function land() { settle(); if (running) schedule(seq[at].hold) }
+    function sync() {
+      const want = !reduce && revealed && inView && !document.hidden
+      if (want === running) return
+      running = want
+      if (want) schedule(remain || seq[at].hold)
+      else if (trans) { settle(); remain = seq[at].hold } else { remain = Math.max(0, holdEnd - performance.now()); clearHold() }
+    }
+
     // The lights come on from left to right the first time you see them, and never again.
-    if (!reduce) observe(canvas, ([e]) => {
+    observe(canvas, ([e]) => {
       inView = e.isIntersecting
-      if (!inView || revealing || revealed) return
-      revealing = true
-      const t0 = performance.now()
-      const step = (t: number) => { reveal = Math.min(cols, ((t - t0) / 1100) * cols); draw(); if (reveal < cols) raf(step); else { revealed = true; reveal = Infinity } }
-      step(t0)
+      if (inView && !revealing && !revealed) {
+        revealing = true
+        const t0 = performance.now()
+        const step = (t: number) => { reveal = Math.min(cols, ((t - t0) / 1100) * cols); draw(); if (reveal < cols) raf(step); else { revealed = true; reveal = Infinity; sync() } }
+        step(t0)
+      } else sync()
     }, { threshold: 0.2 })
+    document.addEventListener('visibilitychange', sync, { signal })
     // Near the pointer the dots glow brighter.
     if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
       canvas.addEventListener('pointermove', (e) => { const r = canvas.getBoundingClientRect(); mx = (e.clientX - r.left) * (cols * cell / r.width); my = (e.clientY - r.top) * (rows * cell / r.height); cancelAnimationFrame(drawRaf); rafs.delete(drawRaf); drawRaf = raf(draw) }, { signal })
       canvas.addEventListener('pointerleave', () => { mx = my = -1e4; draw() }, { signal })
     }
-    return (nc: number, nr: number, ncell: number, paint: (o: CanvasRenderingContext2D, w: number, h: number) => void) => {
+    // Size changes only rebuild the grid and the canvas; the slide on show stays on show.
+    return (nc: number, nr: number, ncell: number) => {
       const dpr = Math.min(3, devicePixelRatio || 1)
+      if (trans) { cancelAnimationFrame(tRaf); rafs.delete(tRaf); at = nextAt; trans = false; progress = -1 }
       cols = nc; rows = nr; cell = ncell; gap = Math.max(1, cell * 0.18)
       canvas.width = Math.round(cols * cell * dpr); canvas.height = Math.round(rows * cell * dpr); canvas.style.width = cols * cell + 'px'; canvas.style.height = rows * cell + 'px'
-      const off = document.createElement('canvas'); off.width = cols; off.height = rows
-      const o = off.getContext('2d') as CanvasRenderingContext2D; paint(o, cols, rows)
-      const data = o.getImageData(0, 0, cols, rows).data
-      on = []; seed = 11
-      for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) { const a = data[(y * cols + x) * 4 + 3]; on.push({ x, y, lit: a > 110, hot: rnd() < 0.07 }) }
+      off.width = cols; off.height = rows; rasters.clear()
+      cur = raster(seq[at]); seed = 11
+      hot = new Uint8Array(cols * rows).map(() => (rnd() < 0.07 ? 1 : 0))
+      th = new Float32Array(cols * rows).map((_, i) => 0.85 * (0.55 * ((i % cols) / cols) + 0.45 * rnd()))
       ctx.setTransform(canvas.width / (cols * cell), 0, 0, canvas.height / (rows * cell), 0, 0)
       draw()
+      if (running) schedule(seq[at].hold)
     }
   }
 
@@ -337,25 +390,23 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   sf.innerHTML = `<div class="top"><div class="lead"><p>${esc(F.line)}</p><a class="now" href="${esc(F.nowHref)}"><i></i>${esc(F.now)}</a></div><div class="cols">
       <div><span class="h">${esc(F.siteLabel)}</span>${F.site.map(lnk).join('')}</div>
       <div><span class="h">${esc(F.elsewhereLabel)}</span>${F.elsewhere.map(lnk).join('')}</div></div></div>
-    <canvas class="bigname" role="img" aria-label="Noé Osorio"></canvas>
+    <span class="sr">${esc(C.billboard.name)}</span><canvas class="bigname" aria-hidden="true"></canvas>
     <div class="fine2"><span class="c">© ${esc(C.year)} Noé Osorio</span><span class="l"><a href="${esc(F.privacy[1])}">${esc(F.privacy[0])}</a><button type="button" class="cookies">${esc(F.cookies)}</button><span>${esc(F.domain)}</span></span><button type="button" class="totop"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10 V2 M2.5 5.5 L6 2 L9.5 5.5"/></svg>${esc(F.top)}</button></div>`
   sf.querySelector('.cookies')!.addEventListener('click', () => window.dispatchEvent(new Event('cookie-settings')), { signal })
   sf.querySelector('.totop')!.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }), { signal })
   const big = sf.querySelector('.bigname') as HTMLCanvasElement
-  let bigM: ReturnType<typeof matrix> | null = null, bigKey = ''
+  let bigM: ReturnType<typeof sign> | null = null, bigKey = ''
   function bigName() {
-    const pe = big.parentElement as HTMLElement, pcs = getComputedStyle(pe), W = pe.getBoundingClientRect().width - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight) - parseFloat(pcs.borderLeftWidth) - parseFloat(pcs.borderRightWidth), base = W < 600 ? 6 : 10, cols = Math.floor(W / base), cell = W / cols, rows = 26
+    const pe = big.parentElement as HTMLElement, pcs = getComputedStyle(pe), W = pe.getBoundingClientRect().width - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight) - parseFloat(pcs.borderLeftWidth) - parseFloat(pcs.borderRightWidth), base = baseCell(W)
+    if (!(W > 0)) return
+    const { cols, rows, cell } = gridFor(W, BB.name, offerTexts)
     const key = W + 'x' + base + 'x' + (devicePixelRatio || 1)
     if (bigM && key === bigKey) return
     bigKey = key
-    if (!bigM) bigM = matrix(big, { grid: true })
-    bigM(cols, rows, cell, (o, w, h) => {
-      o.fillStyle = '#000'; o.textBaseline = 'alphabetic'; let size = 40; o.font = `600 ${size}px Geist, system-ui, sans-serif`
-      const tw = o.measureText('Noé Osorio').width; size = size * Math.min((w - 2) / tw, 1.5); o.font = `600 ${size}px Geist, system-ui, sans-serif`
-      const m = o.measureText('Noé Osorio'); o.fillText('Noé Osorio', (w - m.width) / 2, h - 3)
-    })
+    if (!bigM) bigM = sign(big)
+    bigM(cols, rows, cell)
   }
-  ;(document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { if (!stopped) bigName() })
+  bigName()
   let resizeT: ReturnType<typeof setTimeout> | undefined
   window.addEventListener('resize', () => { if (resizeT !== undefined) { clearTimeout(resizeT); timers.delete(resizeT) } resizeT = timeout(200, bigName) }, { signal })
 
