@@ -46,25 +46,35 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   }
 
   root.innerHTML = `<section class="wrap" aria-label="${esc(C.sectionLabel)}">
-  <div class="glow" aria-hidden="true"></div>
-  <div class="scene"><div class="device">
-    <div class="screen">
-      <div class="view v-ask"></div>
-      <div class="view pay v-pay" hidden></div>
-      <div class="view judge v-judge" hidden></div>
+  <div class="scene">
+    <div class="device">
+      <i class="cam" aria-hidden="true"></i>
+      <div class="screen">
+        <div class="view v-ask"></div>
+        <div class="view pay v-pay" hidden></div>
+        <div class="view judge v-judge" hidden></div>
+      </div>
+      <div class="chin" aria-hidden="true"><svg class="nfc" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M9 9.5 A6.5 6.5 0 0 1 9 18.5"/><path d="M13.5 6.5 A10.5 10.5 0 0 1 13.5 21.5"/><path d="M18 3.5 A14.5 14.5 0 0 1 18 24.5"/></svg><i class="led"></i></div>
     </div>
+    <svg class="standsvg" viewBox="0 -20 400 126" aria-hidden="true">
+      <defs>
+        <linearGradient id="close-neck" x1="0" x2="1"><stop offset="0" stop-color="#0E0E0D"/><stop offset=".3" stop-color="#4A4944"/><stop offset=".55" stop-color="#252421"/><stop offset="1" stop-color="#0B0B0A"/></linearGradient>
+        <linearGradient id="close-side" x1="0" x2="1"><stop offset="0" stop-color="#0B0B0A"/><stop offset=".22" stop-color="#43423D"/><stop offset=".5" stop-color="#1D1C1A"/><stop offset="1" stop-color="#070706"/></linearGradient>
+        <linearGradient id="close-top" x1=".1" y1="0" x2=".9" y2="1"><stop offset="0" stop-color="#55544E"/><stop offset=".5" stop-color="#2C2B28"/><stop offset="1" stop-color="#1A1917"/></linearGradient>
+        <radialGradient id="close-contact" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#000" stop-opacity=".9"/><stop offset=".6" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+        <radialGradient id="close-cast" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#000" stop-opacity=".6"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs>
+      <ellipse cx="246" cy="84" rx="200" ry="18" fill="url(#close-cast)"/>
+      <ellipse cx="200" cy="79" rx="162" ry="12" fill="url(#close-contact)"/>
+      <path d="M50 62 V76 A150 21 0 0 0 350 76 V62 Z" fill="url(#close-side)"/>
+      <ellipse cx="200" cy="62" rx="150" ry="21" fill="url(#close-top)"/>
+      <path d="M50 62 A150 21 0 0 0 350 62" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.2"/>
+      <ellipse cx="200" cy="56" rx="34" ry="7" fill="#090908"/>
+      <path d="M166 -22 H234 C232 14 226 38 222 56 A22 6 0 0 1 178 56 C174 38 168 14 166 -22 Z" fill="url(#close-neck)"/>
+      <path d="M184 -10 C183 18 181 40 183 54" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+  <div class="side">
+    <div class="robot" data-state="idle"></div>
+    <div class="term" data-idle></div>
   </div>
-  <svg class="standsvg" viewBox="0 0 320 120" aria-hidden="true">
-    <defs><linearGradient id="close-neck" x1="0" x2="1"><stop offset="0" stop-color="#121110"/><stop offset=".45" stop-color="#2A2925"/><stop offset="1" stop-color="#121110"/></linearGradient>
-      <radialGradient id="close-foot" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#2B2A26"/><stop offset="1" stop-color="#141311"/></radialGradient>
-      <radialGradient id="close-floor" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#000" stop-opacity=".7"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs>
-    <ellipse cx="160" cy="104" rx="150" ry="14" fill="url(#close-floor)"/>
-    <path d="M138 0 H182 L176 78 H144 Z" fill="url(#close-neck)"/>
-    <ellipse cx="160" cy="88" rx="112" ry="16" fill="#0F0E0D"/>
-    <ellipse cx="160" cy="82" rx="112" ry="16" fill="url(#close-foot)"/>
-    <path d="M52 80 A112 16 0 0 1 268 80" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/></svg></div>
-  <div class="robot"></div>
-  <div class="term" hidden></div>
 </section>
 <section class="band" id="subscribe" aria-labelledby="ships-title"><div class="ships"><div class="btnzone"></div><div class="copy"></div></div></section>
 <footer class="band sitefoot"></footer>`
@@ -84,7 +94,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   // ---------- The ask ----------
   vAsk.innerHTML = `<div class="merchant"><svg viewBox="60 100 280 200" fill="var(--screen-ink)" aria-hidden="true">${logoPaths()}</svg><div><b>${esc(C.merchant)}</b><span>${esc(C.place)}</span></div></div><div class="bill"><span>${esc(C.receiptLine)}</span><i></i><span>${esc(C.total)}</span></div>
     <h2 class="ask">${esc(C.ask)}</h2><p class="askSub">${esc(C.askSub)}</p>
-    <div class="tips">${C.tips.map((t, i) => `<a class="tip${i ? '' : ' hero'}" href="${esc(C.jar)}" target="_blank" rel="noopener" data-i="${i}">${ICONS[i] || ''}<span class="price">${esc(t.price)}</span><span class="name">${esc(t.name)}</span><span class="line">${esc(t.line)}</span></a>`).join('')}</div>
+    <div class="tips">${C.tips.map((t, i) => `<a class="tip${i ? '' : ' hero'}" href="${esc(C.jar)}" target="_blank" rel="noopener" data-i="${i}"><span class="tt"><span class="price">${esc(t.price)}</span>${ICONS[i] || ''}</span><span class="name">${esc(t.name)}</span><span class="line">${esc(t.line)}</span></a>`).join('')}</div>
     <button class="notip" type="button">${esc(C.noTip)}</button>`
   vAsk.querySelectorAll<HTMLElement>('.tip').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); paid(C.tips[+(a.dataset.i as string)]) }, { signal }))
   vAsk.querySelector('.notip')!.addEventListener('click', judged, { signal })
@@ -192,8 +202,11 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   // ---------- Robots only ----------
   // A captcha in reverse. People who wiggle the mouse fail it, and still get what robots get.
   const RB = C.robot, robot = $<HTMLElement>('.robot'), term = $<HTMLElement>('.term')
-  robot.innerHTML = `<button class="box" type="button" aria-label="${esc(RB.check)}"></button><div><div class="lab">${esc(RB.check)}</div><div class="msg" aria-live="polite"></div></div>
-    <div class="brand"><canvas width="34" height="25" aria-hidden="true"></canvas>${esc(RB.title)}</div>`
+  const CHECK = `<svg class="ok" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.5 L7.5 13 L14.5 5"/></svg>`
+  const CROSS = `<svg class="no" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 4 L12 12 M12 4 L4 12"/></svg>`
+  robot.innerHTML = `<button class="box" type="button" aria-label="${esc(RB.check)}">${CHECK}${CROSS}<span class="spin"></span></button>
+    <div class="rtext"><div class="lab">${esc(RB.check)}</div><div class="msg" aria-live="polite"></div></div>
+    <div class="brand"><canvas width="34" height="25" aria-hidden="true"></canvas><span>${esc(RB.title)}</span></div>`
   {
     const cv = robot.querySelector('canvas') as HTMLCanvasElement, x = cv.getContext('2d') as CanvasRenderingContext2D
     const dpr = Math.min(3, devicePixelRatio || 1); cv.width = Math.round(34 * dpr); cv.height = Math.round(25 * dpr); x.scale(dpr, dpr)
@@ -217,34 +230,44 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     if (/^# /.test(line)) return `<span class="h1">${h}</span>`
     if (/^## /.test(line)) return `<span class="h2">${h}</span>`
     if (/^> /.test(line)) return `<span class="q">${h}</span>`
-    return h.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '[<span class="lk">$1</span>](<span class="q">$2</span>)')
+    return h.replace(/^- /, '<span class="b">- </span>').replace(/\[([^\]]+)\]\(([^)]+)\)/g, '[<span class="lk">$1</span>](<span class="q">$2</span>)')
   }
   // The file is the single source: it is fetched when the terminal runs, and a short line stands in if that fails.
   let llmsP: Promise<string> | null = null
   const loadLlms = () => llmsP ?? (llmsP = fetch(C.llmsUrl, { signal })
     .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.text() })
     .catch(() => { llmsP = null; return RB.fallback }))
+  // The window is built once. Before the check it is an empty prompt waiting; each run only rewrites the body.
+  const COPY_ICON = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="2"/><path d="M10.5 5.5 V4.5 A2 2 0 0 0 8.5 2.5 H4.5 A2 2 0 0 0 2.5 4.5 V8.5 A2 2 0 0 0 4.5 10.5 H5.5"/></svg>'
+  const DONE_ICON = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 L6.5 12 L13 4.5"/></svg>'
+  const RAW_ICON = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11 L11 5 M6 5 H11 V10"/></svg>'
+  const PROMPT = '<span class="p">$</span> '
+  term.innerHTML = `<div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="t">${esc(RB.host)}</span><span class="acts"><button type="button" class="cp" disabled>${COPY_ICON}<span>${esc(C.copy)}</span></button><a href="${esc(C.llmsUrl)}" target="_blank" rel="noopener">${RAW_ICON}<span>${esc(C.openRaw)}</span></a></span></div><pre tabindex="0" role="region" aria-label="${esc(RB.terminalLabel)}">${PROMPT}<span class="cur"></span></pre>`
+  const pre = term.querySelector('pre') as HTMLElement, cpBtn = term.querySelector('.cp') as HTMLButtonElement
+  let fileText = ''
+  cpBtn.addEventListener('click', () => {
+    ;(navigator.clipboard ? navigator.clipboard.writeText(fileText) : Promise.reject()).then(() => {
+      cpBtn.innerHTML = `${DONE_ICON}<span>${esc(C.copied)}</span>`; cpBtn.classList.add('done')
+      timeout(1400, () => { cpBtn.innerHTML = `${COPY_ICON}<span>${esc(C.copy)}</span>`; cpBtn.classList.remove('done') })
+    }).catch(() => {})
+  }, { signal })
   let streamT: ReturnType<typeof setInterval> | null = null
   let runId = 0
   function runTerm(note: string) {
     const my = ++runId
-    term.hidden = false
-    term.innerHTML = `<div class="bar"><span class="dot g"></span><span class="dot"></span><span class="dot"></span><span class="t">${esc(RB.host)}</span><span class="sp"></span><button type="button" class="cp">${esc(C.copy)}</button><a href="${esc(C.llmsUrl)}" target="_blank" rel="noopener">${esc(C.openRaw)}</a></div><pre tabindex="0" role="region" aria-label="${esc(RB.terminalLabel)}" aria-busy="true"></pre>`
-    const pre = term.querySelector('pre') as HTMLElement
+    const wasIdle = term.hasAttribute('data-idle')
+    term.removeAttribute('data-idle')
+    pre.setAttribute('aria-busy', 'true'); pre.scrollTop = 0
     const fileP = loadLlms()
-    let fileText = ''
-    term.querySelector('.cp')!.addEventListener('click', (e) => {
-      const b = e.currentTarget as HTMLElement
-      ;(navigator.clipboard ? navigator.clipboard.writeText(fileText) : Promise.reject()).then(() => { b.textContent = C.copied; timeout(1400, () => (b.textContent = C.copy)) }).catch(() => {})
-    }, { signal })
-    const head = (note ? `<span class="q"># ${esc(note)}</span>\n` : '') + `<span class="p">$</span> `
+    const head = (note ? `<span class="q"># ${esc(note)}</span>\n` : '') + PROMPT
     const art = `<span class="ascii">${esc(asciiLogo())}</span>\n\n`
+    const ready = (text: string) => { fileText = text; cpBtn.disabled = false }
     clearInt(streamT)
     if (reduce) {
-      fileP.then((text) => { if (stopped || my !== runId) return; fileText = text; pre.innerHTML = head + esc(RB.cmd) + '\n\n' + art + text.trimEnd().split('\n').map(hl).join('\n') + '\n\n<span class="p">$</span> <span class="cur"></span>'; pre.setAttribute('aria-busy', 'false') })
+      fileP.then((text) => { if (stopped || my !== runId) return; ready(text); pre.innerHTML = head + esc(RB.cmd) + '\n\n' + art + text.trimEnd().split('\n').map(hl).join('\n') + '\n\n' + PROMPT + '<span class="cur"></span>'; pre.setAttribute('aria-busy', 'false') })
       return
     }
-    term.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: E })
+    if (wasIdle) term.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: E })
     // Type the command, print the logo, then stream the file a few lines at a time.
     let ch = 0
     streamT = interval(38, () => {
@@ -254,11 +277,11 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
       timeout(380, () => {
         fileP.then((text) => {
           if (stopped || my !== runId) return
-          fileText = text
+          ready(text)
           const lines = text.trimEnd().split('\n'); let i = 0
           streamT = interval(45, () => {
             i = Math.min(lines.length, i + 2)
-            pre.innerHTML = head + esc(RB.cmd) + '\n\n' + art + lines.slice(0, i).map(hl).join('\n') + (i >= lines.length ? '\n\n<span class="p">$</span> <span class="cur"></span>' : '')
+            pre.innerHTML = head + esc(RB.cmd) + '\n\n' + art + lines.slice(0, i).map(hl).join('\n') + (i >= lines.length ? '\n\n' + PROMPT + '<span class="cur"></span>' : '')
             pre.scrollTop = pre.scrollHeight; if (i >= lines.length) { clearInt(streamT); pre.setAttribute('aria-busy', 'false') }
           })
         })
@@ -266,14 +289,13 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     })
   }
   robot.querySelector('.box')!.addEventListener('click', (e) => {
+    if (robot.dataset.state === 'busy') return
     const box = e.currentTarget as HTMLButtonElement, msg = robot.querySelector('.msg') as HTMLElement, viaKeys = (e as MouseEvent).detail === 0
-    box.innerHTML = '<span class="spin"></span>'; box.disabled = true; msg.textContent = ''; msg.className = 'msg'
+    robot.dataset.state = 'busy'; box.setAttribute('aria-busy', 'true'); msg.textContent = ''; msg.className = 'msg'
     timeout(reduce ? 0 : 900, () => {
       const human = !viaKeys && travel > 400
-      box.innerHTML = human ? '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FF9A8B" stroke-width="2.4" stroke-linecap="round"><path d="M4 4 L12 12 M12 4 L4 12"/></svg>'
-        : `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="${LIME}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5 L7.5 13 L14.5 5"/></svg>`
+      robot.dataset.state = human ? 'fail' : 'pass'; box.removeAttribute('aria-busy')
       msg.textContent = human ? RB.failed : RB.passed; msg.className = 'msg ' + (human ? 'bad' : 'good')
-      box.disabled = false
       timeout(reduce ? 0 : 500, () => runTerm(human ? RB.failedSub : ''))
     })
   }, { signal })
@@ -315,7 +337,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
       <div><span class="h">${esc(F.siteLabel)}</span>${F.site.map(lnk).join('')}</div>
       <div><span class="h">${esc(F.elsewhereLabel)}</span>${F.elsewhere.map(lnk).join('')}</div></div></div>
     <canvas class="bigname" role="img" aria-label="Noé Osorio"></canvas>
-    <div class="fine2"><span>© ${esc(C.year)} Noé Osorio</span><button type="button" class="totop"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10 V2 M2.5 5.5 L6 2 L9.5 5.5"/></svg>${esc(F.top)}</button><span class="l"><a href="${esc(F.privacy[1])}">${esc(F.privacy[0])}</a><button type="button" class="cookies">${esc(F.cookies)}</button><span>${esc(F.domain)}</span></span></div>`
+    <div class="fine2"><span class="c">© ${esc(C.year)} Noé Osorio</span><span class="l"><a href="${esc(F.privacy[1])}">${esc(F.privacy[0])}</a><button type="button" class="cookies">${esc(F.cookies)}</button><span>${esc(F.domain)}</span></span><button type="button" class="totop"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10 V2 M2.5 5.5 L6 2 L9.5 5.5"/></svg>${esc(F.top)}</button></div>`
   sf.querySelector('.cookies')!.addEventListener('click', () => window.dispatchEvent(new Event('cookie-settings')), { signal })
   sf.querySelector('.totop')!.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }), { signal })
   const big = sf.querySelector('.bigname') as HTMLCanvasElement
