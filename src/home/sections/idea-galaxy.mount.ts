@@ -89,17 +89,24 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
   const planetPos = (pl: any, t: number) => { const r = R * RINGS[pl.ring], an = pl.a0 + SPIN[pl.ring] * t; return { x: cx + Math.cos(an) * r, y: cy + Math.sin(an) * r, an, r } }
   const skyPos = (s: any) => ({ x: s.u * W, y: s.v * H })
   const hits = (x: number, y: number, w: number, h: number) => avoid.some(q => x < q.x + q.w && x + w > q.x && y < q.y + q.h && y + h > q.y)
+  // Words need room to be read: keep them well inside the hero, clear of the top bar and the bottom edge.
+  const safe = () => ({ side: mobile ? 24 : 56, top: BAR_BAND + 24, bottom: mobile ? 40 : 56 })
+  function inSafe(x: number, y: number, w: number, h: number) {
+    const m = safe(); return x >= m.side && y >= m.top && x + w <= W - m.side && y + h <= H - m.bottom
+  }
   function freeSpot(w: number, h: number, near: boolean) {
-    for (let k = 0; k < 60; k++) {
+    const m = safe()
+    for (let k = 0; k < 80; k++) {
       let x: number, y: number
       if (near) { const an = rnd() * Math.PI * 2, d = R * (1.25 + rnd() * 0.8); x = cx + Math.cos(an) * d - w / 2; y = cy + Math.sin(an) * d - h / 2 }
-      else { x = 16 + rnd() * (W - 32 - w); y = 80 + rnd() * (H - 120 - h) }
-      if (x < 12 || y < 70 || x + w > W - 12 || y + h > H - 12) continue
+      else { x = m.side + rnd() * (W - 2 * m.side - w); y = m.top + rnd() * (H - m.top - m.bottom - h) }
+      if (!inSafe(x, y, w, h)) continue
       if (Math.hypot(x + w / 2 - cx, y + h / 2 - cy) < R * 0.78) continue
       if (hits(x, y, w, h)) continue
       return { x: x + w / 2, y: y + h / 2 }
     }
-    return { x: cx + (rnd() - 0.5) * R * 2.6, y: cy - R * 1.3 }
+    // Fallback: above the logo, still inside the safe area.
+    return { x: clamp(cx, m.side + w / 2, W - m.side - w / 2), y: clamp(cy - R * 1.3, m.top + h / 2, H - m.bottom - h / 2) }
   }
   function skySpot() {
     for (let k = 0; k < 60; k++) { const u = rnd(), v = 0.1 + rnd() * 0.86, x = u * W, y = v * H; if (Math.hypot(x - cx, y - cy) < R * 1.22 || hits(x - 4, y - 4, 8, 8)) continue; return { u, v } }
@@ -134,7 +141,7 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
     })
     C.heavy.forEach((label, i) => { const at = 400 + i * 620; if (clock - dt < at && clock >= at) {
       const an = planets[i].a0 + SPIN[planets[i].ring] * (at + 2000), d = R * (mobile ? 1.38 : 1.5), w = measure(label, `600 ${mobile ? 19 : 26}px Geist`)
-      let x = cx + Math.cos(an) * d, y = cy + Math.sin(an) * d; x = clamp(x, w / 2 + 16, W - w / 2 - 16); y = clamp(y, 90, H - 30)
+      let x = cx + Math.cos(an) * d, y = cy + Math.sin(an) * d; const m = safe(); x = clamp(x, w / 2 + m.side, W - w / 2 - m.side); y = clamp(y, m.top + 16, H - m.bottom - 16)
       if (hits(x - w / 2, y - 16, w, 32)) { const f = freeSpot(w, 32, true); x = f.x; y = f.y }
       spawn(label, 'heavy', { at: { x, y }, hold: 820, fly: 1250, target: { k: 'planet', p: i } })
     } })
