@@ -130,7 +130,7 @@ for(const n of ['pyventa-art','maiden-art','pyventa-card','maiden-card']){
 }
 // old vs new
 for(const n of ['pyventa','maiden']){
-  const old=`file://${ROOT}public/home/cards/${n}.webp`;
+  const old=`file://${ROOT}src/home/assets/cards/${n}.webp`;
   fs.writeFileSync(`${OUT}/${n}-vs.html`,`<!doctype html><body style="margin:0;background:#0E0D0B;display:flex;gap:40px;padding:40px"><img src="${old}" width="520"><img src="file://${OUT}/${n}-art.png" width="520">`);
   const q=await ctx.newPage();await q.setViewportSize({width:1160,height:408});
   await q.goto(`file://${OUT}/${n}-vs.html`);await q.waitForTimeout(500);await q.screenshot({path:`${OUT}/${n}-old-vs-new.png`});
