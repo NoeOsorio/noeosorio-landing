@@ -8,8 +8,8 @@
 .home-galaxy .copy { position: absolute; z-index: 2; left: max(16px, env(safe-area-inset-left, 0px), 4vw); top: 19%; width: min(36vw, 540px); pointer-events: none; }
 .home-galaxy .copy h1 { margin: 0; font: 700 clamp(2.8rem, 5.6vw, 5.6rem)/.94 var(--display); letter-spacing: -0.045em; text-wrap: balance; }
 .home-galaxy .copy h1 em { font-style: normal; color: var(--lime); }
-.home-galaxy .copy p { margin: 26px 0 0; max-width: 25rem; font-size: 18px; line-height: 1.55; color: var(--ink-2); }
-.home-galaxy .copy h1 .catch { display: block; margin-top: .3em; font-size: .42em; line-height: 1.12; letter-spacing: -0.03em; font-weight: 600; color: var(--ink-2); text-wrap: balance; animation: galaxy-rise 600ms var(--ease-out) 80ms both; }
+.home-galaxy .copy p { margin: 40px 0 0; max-width: 25rem; font-size: 18px; line-height: 1.55; color: var(--ink-2); }
+.home-galaxy .copy h1 .catch { display: block; margin-top: .18em; font-size: .42em; line-height: 1.1; letter-spacing: -0.03em; font-weight: 600; color: var(--ink); text-wrap: balance; animation: galaxy-rise 600ms var(--ease-out) 80ms both; }
 .home-galaxy .copy > * { animation: galaxy-rise 600ms var(--ease-out) both; }
 .home-galaxy .copy p { animation-delay: 160ms; } .home-galaxy .copy h1 { animation-delay: 0ms; }
 @keyframes galaxy-rise { from { opacity: 0; transform: translateY(10px); } }
@@ -19,6 +19,6 @@
 @media (max-width: 760px) {
   .home-galaxy .copy { top: auto; bottom: 34px; width: auto; right: 16px; }
   .home-galaxy .copy h1 { font-size: clamp(2.4rem, 11vw, 3.4rem); }
-  .home-galaxy .copy p { font-size: 16.5px; margin-top: 16px; }
+  .home-galaxy .copy p { font-size: 16.5px; margin-top: 24px; }
 }
 @media (prefers-reduced-motion: reduce) { .home-galaxy .copy > *, .home-galaxy .copy h1 .catch { animation: none; } }
