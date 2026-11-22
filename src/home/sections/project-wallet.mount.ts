@@ -69,6 +69,10 @@ const PLAT: Record<string, [string, string]> = {
   const CHIP = `<svg class="chip" viewBox="0 0 52 40" aria-hidden="true"><rect x=".5" y=".5" width="51" height="39" rx="7" fill="#D7B56A"/><rect x=".5" y=".5" width="51" height="39" rx="7" fill="none" stroke="#9C7B33" stroke-opacity=".6"/>
     <path d="M0 14 H17 M0 26 H17 M35 14 H52 M35 26 H52 M17 0 V40 M35 0 V40 M17 20 H35" stroke="#9C7B33" stroke-opacity=".7" fill="none"/></svg>`;
   const NFC = `<svg class="nfc" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 8.5 a6 6 0 0 1 0 9 M12 5.5 a10 10 0 0 1 0 15 M16 2.5 a14 14 0 0 1 0 21"/></svg>`;
+  // Redesigned passes: the illustration is a pre-rendered image; name, topic, chip, number and logo stay live DOM.
+  const ART_IMG = new Set(['maiden-os', 'essay-studio', 'telar', 'porter-galaxy', 'sim-world', 'kanji', 'pyventa']);
+  const ART_FILE: Record<string, string> = { 'maiden-os': 'maiden', 'essay-studio': 'essay', telar: 'telar', 'porter-galaxy': 'galaxy', 'sim-world': 'simworld', kanji: 'kanji', pyventa: 'pyventa' };
+  const DARK_LOGO = new Set(['maiden-os', 'telar', 'porter-galaxy', 'sim-world']);
   const number = (n: number) => `•••• •••• •••• ${String(n).padStart(4, "0")}`;
 
 type Pass = { p: WalletProject; el: HTMLButtonElement };
@@ -137,10 +141,10 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     const b = document.createElement('button');
     b.className = 'pass'; b.type = 'button'; b.style.setProperty('--c', p.c); b.style.setProperty('--fg', p.fg);
     b.setAttribute('aria-describedby', `wallet-desc-${p.id}`); b.setAttribute('aria-expanded', 'false');
-    b.innerHTML = `<span class="sr-only" aria-hidden="true" id="wallet-desc-${esc(p.id)}">${esc(p.text)}</span><div class="card"><svg class="art" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">${(ART[p.art] || (() => ''))()}</svg><div class="tex"></div>
+    b.innerHTML = `<span class="sr-only" aria-hidden="true" id="wallet-desc-${esc(p.id)}">${esc(p.text)}</span><div class="card">${ART_IMG.has(p.id) ? `<img class="art art-img" src="/home/cards/${ART_FILE[p.id]}.webp" alt="" aria-hidden="true" decoding="async" loading="lazy" draggable="false">` : `<svg class="art" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">${(ART[p.art] || (() => ''))()}</svg><div class="tex"></div>`}
       <div class="title"><span class="name" id="wallet-name-${esc(p.id)}">${esc(p.name)}</span><span class="topic">${esc(p.topic)}</span></div>${NFC}${CHIP}
       <div class="num">${number(p.commits)}</div>
-      <div class="bottom"><div class="field"><span class="lab">${esc(C.createdLabel)}</span><span class="val">${esc(p.created)}</span></div><div class="field"><span class="lab">&nbsp;</span><span class="val">${esc(C.holder)}</span></div>${LOGO}</div></div>`;
+      <div class="bottom"><div class="field"><span class="lab">${esc(C.createdLabel)}</span><span class="val">${esc(p.created)}</span></div><div class="field"><span class="lab">&nbsp;</span><span class="val">${esc(C.holder)}</span></div>${DARK_LOGO.has(p.id) ? LOGO.replace('#7FA62A', LIME) : LOGO}</div></div>`;
     b.addEventListener('click', () => (open === p ? close() : select(p)), { signal });
     wallet.appendChild(b);
     if (p.art === 'enamel') io?.observe(b);
