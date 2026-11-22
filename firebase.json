@@ -17,6 +17,15 @@
     ],
     "headers": [
       {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
         "source": "**/*.@(jpg|jpeg|gif|png|svg|webp)",
         "headers": [
           {
@@ -36,4 +45,4 @@
       }
     ]
   }
-} 
+}
