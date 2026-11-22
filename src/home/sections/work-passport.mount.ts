@@ -321,7 +321,8 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
       L.front.style.visibility = t <= 0.5 ? 'inherit' : 'hidden'; L.back.style.visibility = t > 0.5 ? 'inherit' : 'hidden';
       L.s1.style.opacity = String(t < 0.5 ? sh * (k ? 1 : 0.5) : 0); L.s2.style.opacity = String(t >= 0.5 ? sh * (k ? 1 : 0.5) : 0);
       if (t > 0 && t < 1) { if (t < 0.5) castRight = Math.max(castRight, sh); else castLeft = Math.max(castLeft, sh); }
-      if (clamp(cur - k) > 0.96 && !landed.has(k)) { landed.add(k); const t1 = land(els[2 * k], 60, book); land(els[2 * k + 1], 60 + t1 * 0.5, book); }
+      // Stamps land once a spread is open, or as soon as the book comes to rest with its pages more than half turned (a reader can stop mid-turn).
+      if ((clamp(cur - k) > 0.96 || (cur === target && clamp(cur - k) > 0.5)) && !landed.has(k)) { landed.add(k); const t1 = land(els[2 * k], 60, book); land(els[2 * k + 1], 60 + t1 * 0.5, book); }
     });
     castR.style.opacity = String(castRight * 0.9); castL.style.opacity = String(castLeft * 0.9 * (open > 0.5 ? 1 : 0));
     castR.style.visibility = castRight > 0 ? 'visible' : 'hidden'; castL.style.visibility = castLeft > 0 && open > 0.5 ? 'visible' : 'hidden';
