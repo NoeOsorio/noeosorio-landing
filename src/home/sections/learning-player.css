@@ -6,7 +6,8 @@
 .home-learning *, .home-learning *::before, .home-learning *::after { box-sizing: border-box; }
 .home-learning button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
 .home-learning a { color: inherit; }
-.home-learning :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; border-radius: 12px; }
+.home-learning :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+.home-learning .rec:focus-visible { outline-offset: 0; }
 
 /* The tint is the dominant color of the video on screen; the mount sets it, and it eases from one video to the next. */
 @property --tint { syntax: "<color>"; inherits: true; initial-value: #CFE3EA; }
@@ -28,8 +29,8 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,.055), inset -1px 0 0 rgba(var(--warm), .07), 0 50px 90px -40px rgba(0,0,0,.8),
     0 0 120px -40px color-mix(in srgb, var(--screen) 22%, transparent);
 }
-@media (min-width: 1400px) { .home-learning .learn { --side: 440px; --rt: 164px; } .home-learning .rec h4 { font-size: 14.5px; } .home-learning .rec p { font-size: 12px; } }
-@media (min-width: 1800px) { .home-learning .learn { --side: 480px; --rt: 180px; } .home-learning .rec h4 { font-size: 15px; } }
+@media (min-width: 1400px) { .home-learning .learn { --side: 440px; } .home-learning .rec h4 { font-size: 14.5px; } .home-learning .rec p { font-size: 12px; } }
+@media (min-width: 1800px) { .home-learning .learn { --side: 480px; } .home-learning .rec h4 { font-size: 15px; } }
 
 /* main */
 .home-learning .main { min-width: 0; }
@@ -53,21 +54,22 @@
 .home-learning .meta { padding: 18px 6px 0; }
 .home-learning .meta h3 { font-family: var(--display); font-weight: 700; font-size: clamp(20px, 2vw, 25px); line-height: 1.15; letter-spacing: -.02em; margin: 0 0 5px; text-wrap: balance; }
 .home-learning .sub { font: 400 12.5px var(--mono); color: var(--mute); margin: 0 0 14px; }
-.home-learning .chan { display: flex; align-items: center; gap: 12px; }
+.home-learning .chan { display: flex; align-items: center; gap: 12px; min-height: 40px; }
 .home-learning .chan .logo { width: 40px; height: 40px; border-radius: 50%; background: var(--night); color: var(--lime); box-shadow: inset 0 0 0 1px rgba(214,243,92,.22); display: grid; place-items: center; flex: none; }
 .home-learning .chan .logo svg { width: 40px; height: 40px; display: block; fill: currentColor; }
 .home-learning .chan b { display: block; font-weight: 600; font-size: 15px; line-height: 1.2; }
-.home-learning .chan small { display: block; font: 400 12px var(--mono); color: var(--mute); margin-top: 2px; }
+.home-learning .chan small { display: block; font: 400 12px/1.2 var(--mono); color: var(--mute); margin-top: 3px; }
+.home-learning .chan > div { min-width: 0; }
 .home-learning .chan .sp { flex: 1; }
-.home-learning .sub-btn { padding: 10px 18px; border-radius: 999px; background: var(--ink); color: var(--on-lime); font-weight: 600; font-size: 14px; text-decoration: none; transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out); }
-.home-learning .sub-btn:hover { background: #fff; }
+.home-learning .sub-btn { padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,.08); color: var(--ink); font-weight: 600; font-size: 13.5px; line-height: 1.2; text-decoration: none; white-space: nowrap; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); transition: transform 160ms var(--ease-out), background-color 160ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .home-learning .sub-btn:hover { background: rgba(255,255,255,.15); } }
 .home-learning .sub-btn:active { transform: scale(.97); }
 
 /* comments */
-.home-learning .cwrap { margin: 16px -6px 0; padding: 12px 12px 4px; border-radius: 22px;
+.home-learning .cwrap { margin: 14px -6px 0; padding: 12px 12px 0; border-radius: 22px;
   background: radial-gradient(ellipse 40% 44% at 38% 46%, color-mix(in srgb, var(--screen) 10%, transparent) 0%, transparent 94%); }
-.home-learning .clabel { font-size: 13px; color: var(--mute); margin: 0 0 8px; }
-.home-learning .cmts { position: relative; height: calc(var(--slot) * 3); overflow: hidden; -webkit-mask-image: linear-gradient(transparent 0, #000 16%); mask-image: linear-gradient(transparent 0, #000 16%); }
+.home-learning .clabel { font-size: 13px; font-weight: 500; color: var(--mute); margin: 0 0 6px; }
+.home-learning .cmts { position: relative; height: calc(var(--slot) * 3 - 14px); overflow: hidden; -webkit-mask-image: linear-gradient(transparent 0, #000 16%); mask-image: linear-gradient(transparent 0, #000 16%); }
 .home-learning .cm { position: absolute; left: 0; right: 0; top: 0; height: var(--slot); display: flex; gap: 12px; align-items: flex-start; padding-top: 6px; transition: transform 640ms var(--ease-out), opacity 640ms var(--ease-out); will-change: transform, opacity; }
 .home-learning .cm .av { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; flex: none; }
 .home-learning .cm .av svg { display: block; width: 100%; height: 100%; }
@@ -79,29 +81,31 @@
 /* side */
 .home-learning .side { position: relative; min-width: 0; }
 .home-learning .sidein { position: absolute; inset: 0; display: flex; flex-direction: column; }
-.home-learning .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 2px 14px; }
+.home-learning .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 0 14px 7px; flex: none; }
 .home-learning .chip { padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--mute); font-size: 13.5px; font-weight: 500; transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), transform 160ms var(--ease-out); }
-.home-learning .chip:hover { background: rgba(255,255,255,.11); color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .home-learning .chip:hover { background: rgba(255,255,255,.11); color: var(--ink); } }
 .home-learning .chip:active { transform: scale(.96); }
 .home-learning .chip[aria-pressed=true] { background: var(--lime); color: var(--on-lime); }
-.home-learning .list { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; margin: 0 -8px; padding: 0 8px 24px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.14) transparent;
-  -webkit-mask-image: linear-gradient(#000 calc(100% - 36px), transparent); mask-image: linear-gradient(#000 calc(100% - 36px), transparent); }
-.home-learning .rec { display: grid; grid-template-columns: var(--rt, 148px) minmax(0, 1fr); gap: 13px; width: 100%; padding: 7px; margin-bottom: 2px; border-radius: 18px; transition: transform 240ms var(--ease-out), background-color 240ms var(--ease-out); }
+/* The mount sizes the rows (--rowh, --rtw) so the list fills the column exactly; it only scrolls when the rows hit their minimum. */
+.home-learning .list { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; margin: 0 -8px; padding: 0 8px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.14) transparent; }
+.home-learning .list[data-more] { -webkit-mask-image: linear-gradient(#000 calc(100% - 32px), transparent); mask-image: linear-gradient(#000 calc(100% - 32px), transparent); }
+.home-learning .rec { display: grid; grid-template-columns: var(--rtw, 148px) minmax(0, 1fr); gap: 14px; align-items: center; width: 100%; height: var(--rowh, auto); padding: 7px; margin-bottom: 2px; border-radius: 18px; transition: background-color 240ms var(--ease-out), transform 160ms var(--ease-out); }
 .home-learning .rec .rt { position: relative; aspect-ratio: 16/9; border-radius: 12px; overflow: hidden; }
 .home-learning .rec .rt svg { display: block; width: 100%; height: 100%; }
 .home-learning .rec .rt .d { position: absolute; right: 5px; bottom: 5px; padding: 3px 5px; border-radius: 6px; background: rgba(14,13,11,.82); font: 500 9.5px/1 var(--mono); }
-.home-learning .rec h4 { margin: 1px 0 6px; font-weight: 600; font-size: 13.5px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-wrap: pretty; }
+.home-learning .more { margin: 10px 7px 6px; font-size: 13px; font-weight: 500; color: var(--mute); }
+.home-learning .rec h4 { margin: 0 0 6px; font-weight: 600; font-size: 13.5px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-wrap: pretty; }
 .home-learning .rec p { margin: 0; font: 400 11.5px var(--mono); color: var(--mute); }
-@media (hover: hover) and (pointer: fine) { .home-learning .rec:hover { transform: translateY(-3px); background: rgba(255,255,255,.045); } }
+@media (hover: hover) and (pointer: fine) { .home-learning .rec:hover { background: rgba(255,255,255,.055); } }
 .home-learning .rec:active { transform: scale(.985); }
 .home-learning .rec.in { animation: learning-rec-in 380ms var(--ease-out) both; animation-delay: calc(var(--i) * 35ms); }
 @keyframes learning-rec-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .home-learning .empty { color: var(--faint); font-size: 14px; padding: 18px 8px; }
-.home-learning .all { display: inline-flex; align-items: center; gap: 8px; margin: 10px 6px 0; font-size: 13.5px; color: var(--mute); text-decoration: none; transition: color 160ms var(--ease-out); }
-.home-learning .all:hover { color: var(--ink); }
-.home-learning .all i { width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.08); display: grid; place-items: center; transition: transform 220ms var(--ease-out); }
-.home-learning .all:hover i { transform: translate(2px, -1px); }
-.home-learning .all svg { width: 10px; height: 10px; }
+.home-learning .all { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 12px 7px 0; padding: 5px 5px 5px 18px; border-radius: 999px; background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); font-size: 13.5px; font-weight: 500; color: var(--ink); text-decoration: none; transition: background-color 160ms var(--ease-out), transform 160ms var(--ease-out); }
+.home-learning .all i { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.1); display: grid; place-items: center; transition: transform 220ms var(--ease-out), background-color 160ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .home-learning .all:hover { background: rgba(255,255,255,.11); } .home-learning .all:hover i { transform: translate(2px, -1px); background: rgba(255,255,255,.16); } }
+.home-learning .all:active { transform: scale(.985); }
+.home-learning .all svg { width: 11px; height: 11px; }
 
 /* thumbnail motion */
 .home-learning .steam, .home-learning .drift, .home-learning .bob, .home-learning .bar, .home-learning .sway, .home-learning .fall { transform-box: fill-box; }
@@ -144,7 +148,8 @@
   .home-learning .meta { padding: 16px 6px 0; }
   .home-learning .side, .home-learning .sidein { position: static; }
   .home-learning .list { overflow: visible; -webkit-mask-image: none; mask-image: none; padding-bottom: 6px; }
-  .home-learning .rec { grid-template-columns: 132px minmax(0, 1fr); }
-  .home-learning .chips { padding-bottom: 10px; }
+  .home-learning .rec { grid-template-columns: 132px minmax(0, 1fr); height: auto; }
+  .home-learning .all { margin: 8px 7px 0; }
+  .home-learning .chips { padding: 0 0 10px 7px; }
   .home-learning .cwrap { margin-top: 12px; }
 }

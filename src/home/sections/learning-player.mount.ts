@@ -71,12 +71,33 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
     player.href = ytUrl(v.id)
     learn.style.setProperty('--tint', v.fill)
   }
+  const row = (v: LearningVideo, i: number, anim: boolean) => `<button type="button" class="rec${anim && !reduce ? ' in' : ''}" style="--i:${i}" data-id="${v.id}"><span class="rt">${thumb(v)}<span class="d">${esc(v.len)}</span></span><span><h4>${esc(v.title)}</h4><p>${esc(v.cat)}, ${esc(v.date)}</p></span></button>`
   const paintList = (anim: boolean) => {
-    const arr = C.videos.filter((v) => v.id !== st.main && (st.filter === ALL || v.cat === st.filter))
-    list.innerHTML = arr.length
-      ? arr.map((v, i) => `<button type="button" class="rec${anim && !reduce ? ' in' : ''}" style="--i:${i}" data-id="${v.id}"><span class="rt">${thumb(v)}<span class="d">${esc(v.len)}</span></span><span><h4>${esc(v.title)}</h4><p>${esc(v.cat)}, ${esc(v.date)}</p></span></button>`).join('')
-      : `<p class="empty">${esc(C.empty)}</p>`
+    // The chosen topic goes first; the other videos follow so the column is always full.
+    const rest = C.videos.filter((v) => v.id !== st.main)
+    const hit = st.filter === ALL ? rest : rest.filter((v) => v.cat === st.filter)
+    const other = st.filter === ALL ? [] : rest.filter((v) => v.cat !== st.filter)
+    list.innerHTML = hit.map((v, i) => row(v, i, anim)).join('')
+      + (other.length ? `<p class="more">${esc(C.more)}</p>` + other.map((v, i) => row(v, hit.length + i, anim)).join('') : '')
+    fit()
   }
+
+  // Sizes the rows so the list fills the column down to "All videos"; scrolls only if rows would get too small.
+  const wide = window.matchMedia('(min-width: 901px)')
+  function fit() {
+    if (!wide.matches) { list.style.removeProperty('--rowh'); list.style.removeProperty('--rtw'); list.removeAttribute('data-more'); return }
+    const n = list.querySelectorAll('.rec').length
+    if (!n) return
+    const extra = Array.from(list.querySelectorAll<HTMLElement>('.more')).reduce((t, e) => t + e.offsetHeight + 16, 0)
+    const rowH = Math.max(92, Math.min(150, Math.floor((list.clientHeight - extra) / n) - 2))
+    const rtw = Math.min(Math.round((rowH - 14) * 16 / 9), Math.round(list.clientWidth * 0.42))
+    list.style.setProperty('--rowh', `${rowH}px`)
+    list.style.setProperty('--rtw', `${rtw}px`)
+    list.toggleAttribute('data-more', list.scrollHeight > list.clientHeight + 1)
+  }
+  const ro = new ResizeObserver(fit)
+  ro.observe(list)
+  wide.addEventListener('change', fit, { signal })
 
   let swapT: ReturnType<typeof setTimeout> | undefined
   const swap = (id: string, byKeyboard: boolean) => {
@@ -167,6 +188,7 @@ export const mountLearning: Mount<LearningContent> = (root, C, env) => {
   return () => {
     ac.abort()
     io.disconnect()
+    ro.disconnect()
     stop()
     timers.forEach((t) => clearTimeout(t))
     timers.clear()

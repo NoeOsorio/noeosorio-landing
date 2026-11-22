@@ -28,6 +28,7 @@ export type LearningContent = {
   watch: string
   comments: string
   empty: string
+  more: string
   videos: LearningVideo[]
   commentList: LearningComment[]
 }
@@ -45,6 +46,7 @@ export const learning: LearningContent = {
   watch: 'Watch on YouTube',
   comments: 'Comments',
   empty: 'Nothing else here yet.',
+  more: 'More videos',
   videos: [
     { id: '-TwcWcwiMes', cat: 'Builds', title: 'Así reviso mis ensayos con IA', date: 'Nov 2026', len: '7:53', word: 'ENSAYOS', fill: '#D6F35C', motif: 'essay' },
     { id: 'pH2wqI1eIhY', cat: 'Life', title: 'Lo más nerd que he hecho en Nueva York', date: 'Nov 2026', len: '6:05', word: 'NERD', fill: '#FFE3A8', motif: 'city' },
