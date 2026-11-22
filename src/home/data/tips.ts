@@ -37,7 +37,7 @@ export type TipsContent = {
   copied: string
   openRaw: string
   year: string
-  ships: { title: string; text: string; cover: string; button: string; aria: string; after: string }
+  ships: { title: string; text: string; cover: string; plate: string; button: string; aria: string; after: string }
   foot: {
     line: string
     siteLabel: string
@@ -101,6 +101,7 @@ export const tips: TipsContent = {
     title: "Don't press this.",
     text: 'It subscribes you to my YouTube channel.',
     cover: 'DO NOT PRESS',
+    plate: 'YOUTUBE CHANNEL',
     button: 'Subscribe',
     aria: 'Subscribe on YouTube',
     after: 'Too late. Confirm it on YouTube.',

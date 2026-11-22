@@ -302,18 +302,19 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
 
   // ---------- Subscribe: the button you shouldn't press ----------
   // Get close and the safety cover lifts. Press it and it rings, then YouTube asks you to confirm.
-  const S = C.ships, btnZone = $<HTMLElement>('.btnzone'), shipsBox = $<HTMLElement>('.ships')
-  btnZone.innerHTML = `<div class="halo" aria-hidden="true"></div><div class="rig"><span class="stripes" aria-hidden="true"></span><a class="big" href="${esc(C.youtube)}" target="_blank" rel="noopener" aria-label="${esc(S.aria)}"><span><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4 L20 12 L6 20 Z"/></svg>${esc(S.button)}</span></a>
-    <span class="door l" aria-hidden="true"><i><b>${esc(S.cover)}</b></i></span><span class="door r" aria-hidden="true"><i><b>${esc(S.cover)}</b></i></span></div><p class="after" aria-live="polite"></p>`
+  const S = C.ships, btnZone = $<HTMLElement>('.btnzone')
+  btnZone.innerHTML = `<div class="halo" aria-hidden="true"></div><div class="plate"><i class="screw a" aria-hidden="true"></i><i class="screw b" aria-hidden="true"></i><i class="screw c" aria-hidden="true"></i><i class="screw d" aria-hidden="true"></i><div class="eng" aria-hidden="true"><span>${esc(S.plate)}</span><i class="lamp"></i></div>
+    <div class="rig"><a class="big" href="${esc(C.youtube)}" target="_blank" rel="noopener" aria-label="${esc(S.aria)}"><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4 L20 12 L6 20 Z"/></svg>${esc(S.button)}</span></a>
+    <span class="cover" aria-hidden="true"><b>${esc(S.cover)}</b></span><span class="hinge" aria-hidden="true"></span></div></div><p class="after" aria-live="polite"></p>`
   const pushBtn = btnZone.querySelector('.big') as HTMLElement, afterLine = btnZone.querySelector('.after') as HTMLElement, plateEl = btnZone.querySelector('.rig') as HTMLElement
   let pushed = false
   const coverOpen = () => btnZone.classList.add('open'), coverClose = () => { if (!pushed) btnZone.classList.remove('open') }
   // With a mouse the cover lifts as you approach and drops back if you walk away. On touch it lifts by itself.
-  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduce) { shipsBox.addEventListener('pointerenter', coverOpen, { signal }); shipsBox.addEventListener('pointerleave', coverClose, { signal }) }
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduce) { btnZone.addEventListener('pointerenter', coverOpen, { signal }); btnZone.addEventListener('pointerleave', coverClose, { signal }) }
   else observe(plateEl, ([e], io) => { if (e.isIntersecting) { timeout(reduce ? 0 : 600, coverOpen); io.disconnect() } }, { threshold: 0.5 })
   pushBtn.addEventListener('focus', coverOpen, { signal })
   pushBtn.addEventListener('click', () => {
-    pushed = true; coverOpen(); pushBtn.classList.add('down'); timeout(180, () => pushBtn.classList.remove('down'))
+    pushed = true; coverOpen(); pushBtn.classList.add('down'); timeout(240, () => pushBtn.classList.remove('down'))
     afterLine.innerHTML = BELL_SVG + `<span>${esc(S.after)}</span>`
     if (reduce) return
     ;(afterLine.querySelector('svg') as SVGElement).animate([0, 1, 2, 3, 4, 5, 6].map((i) => ({ rotate: i === 6 ? '0deg' : `${(i % 2 ? -1 : 1) * (22 - i * 3)}deg` })), { duration: 700, easing: 'ease-out' })
