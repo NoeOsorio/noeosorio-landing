@@ -2,6 +2,13 @@ import type { Mount } from '../useMount';
 import type { WalletContent, WalletProject } from '../data/wallet';
 import { esc } from '../dom';
 import { LIME, LIME_RGB, logoPaths } from '../brand';
+import artMaiden from '../assets/cards/maiden.webp';
+import artEssay from '../assets/cards/essay.webp';
+import artTelar from '../assets/cards/telar.webp';
+import artGalaxy from '../assets/cards/galaxy.webp';
+import artSimworld from '../assets/cards/simworld.webp';
+import artKanji from '../assets/cards/kanji.webp';
+import artPyventa from '../assets/cards/pyventa.webp';
 import { motions } from './card-motion';
 
 // Mounts the project wallet into root. Ported from the approved prototype (specs/002-home-objects/prototypes/project-wallet.html).
@@ -72,7 +79,8 @@ const PLAT: Record<string, [string, string]> = {
   const NFC = `<svg class="nfc" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 8.5 a6 6 0 0 1 0 9 M12 5.5 a10 10 0 0 1 0 15 M16 2.5 a14 14 0 0 1 0 21"/></svg>`;
   // Redesigned passes: the illustration is a pre-rendered image; name, topic, chip, number and logo stay live DOM.
   const ART_IMG = new Set(['maiden-os', 'essay-studio', 'telar', 'porter-galaxy', 'sim-world', 'kanji', 'pyventa']);
-  const ART_FILE: Record<string, string> = { 'maiden-os': 'maiden', 'essay-studio': 'essay', telar: 'telar', 'porter-galaxy': 'galaxy', 'sim-world': 'simworld', kanji: 'kanji', pyventa: 'pyventa' };
+  // Imported so every image gets a content-hashed name: a changed picture is a new URL, never a stale cached one.
+  const ART_URL: Record<string, string> = { 'maiden-os': artMaiden, 'essay-studio': artEssay, telar: artTelar, 'porter-galaxy': artGalaxy, 'sim-world': artSimworld, kanji: artKanji, pyventa: artPyventa };
   const DARK_LOGO = new Set(['maiden-os', 'telar', 'porter-galaxy', 'sim-world']);
   const number = (n: number) => `•••• •••• •••• ${String(n).padStart(4, "0")}`;
 
@@ -156,7 +164,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     const b = document.createElement('button');
     b.className = 'pass'; b.type = 'button'; b.style.setProperty('--c', p.c); b.style.setProperty('--fg', p.fg);
     b.setAttribute('aria-describedby', `wallet-desc-${p.id}`); b.setAttribute('aria-expanded', 'false');
-    b.innerHTML = `<span class="sr-only" aria-hidden="true" id="wallet-desc-${esc(p.id)}">${esc(p.text)}</span><div class="card">${ART_IMG.has(p.id) ? `<img class="art art-img" src="/home/cards/${ART_FILE[p.id]}.webp" alt="" aria-hidden="true" decoding="async" loading="lazy" draggable="false">${motions[p.id] ? `<svg class="art art-motion" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${motions[p.id].svg}</svg>` : ''}` : `<svg class="art" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">${(ART[p.art] || (() => ''))()}</svg><div class="tex"></div>`}
+    b.innerHTML = `<span class="sr-only" aria-hidden="true" id="wallet-desc-${esc(p.id)}">${esc(p.text)}</span><div class="card">${ART_IMG.has(p.id) ? `<img class="art art-img" src="${ART_URL[p.id]}" alt="" aria-hidden="true" decoding="async" loading="lazy" draggable="false">${motions[p.id] ? `<svg class="art art-motion" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${motions[p.id].svg}</svg>` : ''}` : `<svg class="art" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">${(ART[p.art] || (() => ''))()}</svg><div class="tex"></div>`}
       <div class="title"><span class="name" id="wallet-name-${esc(p.id)}">${esc(p.name)}</span><span class="topic">${esc(p.topic)}</span></div>${NFC}${CHIP}
       <div class="num">${number(p.commits)}</div>
       <div class="bottom"><div class="field"><span class="lab">${esc(C.createdLabel)}</span><span class="val">${esc(p.created)}</span></div><div class="field"><span class="lab">&nbsp;</span><span class="val">${esc(C.holder)}</span></div>${DARK_LOGO.has(p.id) ? LOGO.replace('#7FA62A', LIME) : LOGO}</div></div>`;
