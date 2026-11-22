@@ -11,7 +11,7 @@ export interface GalaxyContent {
 export const galaxy: GalaxyContent = {
   title: "Hi, I'm Noé.",
   catchphrase: 'I was told to put something impressive here.',
-  sub: 'Product engineer at Porter in New York. Psychology master's in progress.',
+  sub: "Product engineer at Porter in New York. Psychology master's in progress.",
   srSummary: 'Animation of my logo built from stars.',
   heavy: ['Software engineer', 'AI engineer', 'Infrastructure', 'Product engineer', 'Psychology', 'Organizational psychology'],
   ideas: [
