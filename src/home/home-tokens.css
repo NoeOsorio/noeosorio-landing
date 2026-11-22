@@ -7,3 +7,6 @@
   position: relative; overflow-x: clip; background: var(--night); color: var(--ink);
 }
 .home-root .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+/* The home is a shade darker than the other pages; Safari paints its top and bottom bars with this. */
+html:has(.home-root), body:has(.home-root) { background: #0E0D0B; }

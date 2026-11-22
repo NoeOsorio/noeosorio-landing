@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAnalytics } from '../hooks/useAnalytics';
@@ -6,12 +7,20 @@ import HomeTopBar from '../home/HomeTopBar';
 import IdeaGalaxy from '../home/sections/IdeaGalaxy';
 import ProjectWallet from '../home/sections/ProjectWallet';
 import WorkPassport from '../home/sections/WorkPassport';
-import LearningSlot from '../home/sections/LearningSlot';
+import LearningPlayer from '../home/sections/LearningPlayer';
 import TipsAndFooter from '../home/sections/TipsAndFooter';
 import '../home/home-tokens.css';
 
 const Home = () => {
   useAnalytics();
+
+  // Safari tints its bars with the theme color; the home is darker than the other pages.
+  useEffect(() => {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    const prev = meta?.getAttribute('content');
+    meta?.setAttribute('content', '#0E0D0B');
+    return () => { if (prev) meta?.setAttribute('content', prev); };
+  }, []);
   const navigate = useNavigate();
 
   // The sections are plain DOM, so their links to other pages of the site would reload the app.
@@ -43,7 +52,7 @@ const Home = () => {
       <IdeaGalaxy />
       <ProjectWallet />
       <WorkPassport />
-      <LearningSlot />
+      <LearningPlayer />
       <TipsAndFooter />
     </main>
   );

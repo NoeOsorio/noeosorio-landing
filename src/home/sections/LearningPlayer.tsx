@@ -1,8 +1,8 @@
 import { useMount } from '../useMount'
 import { learning } from '../data/learning'
-import { mountLearning } from './learning-slot.mount'
-import './learning-slot.css'
+import { mountLearning } from './learning-player.mount'
+import './learning-player.css'
 
-export default function LearningSlot() {
+export default function LearningPlayer() {
   return <section className="home-learning" ref={useMount(mountLearning, learning)} />
 }
