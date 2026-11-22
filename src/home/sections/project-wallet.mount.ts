@@ -26,9 +26,32 @@ const PLAT: Record<string, [string, string]> = {
         <path d="M300 214 q 10 -5 20 0 t 20 0 t 20 0 t 20 0" fill="none" stroke="#D99A2B" stroke-width="3" stroke-linecap="round" opacity=".7"/>
         <path d="M352 236 q 10 -5 20 0 t 20 0 t 20 0" fill="none" stroke="#4E8E6B" stroke-width="3" stroke-linecap="round" opacity=".7"/>
         <path d="M318 192 q 10 -5 20 0 t 20 0 t 20 0 t 20 0 t 20 0" fill="none" stroke="#7B61C9" stroke-width="3" stroke-linecap="round" opacity=".65"/>`; },
-    enamel: () => `<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".55">
-        <path d="M300 60 C 340 120 380 170 470 200" stroke="#2F6FD1" stroke-width="4"/><path d="M300 210 C 360 170 420 110 470 70" stroke="#2E9A5E" stroke-width="4"/>
-        <path d="M296 50 V232 H486" stroke="#1C2A2E" stroke-width="3"/><circle cx="384" cy="140" r="11" stroke="#D2463B" stroke-width="3"/></g>`,
+    enamel: () => {
+      const S: [string, string, number][] = [
+        ['M196 86 C 220 82 250 84 274 83 C 281 84 283 90 283 98 L 282 120 C 282 128 278 131 270 131 L 226 132 L 204 148 L 207 132 C 198 132 192 129 192 121 L 193 96 C 193 90 192 87 196 86 Z', '#2F6FD6', 360],
+        ['M206 100 q6 -6 12 0 t12 0 t12 0 t12 0 t12 0', '#1D1B18', 220],
+        ['M206 115 q6 -5 12 0 t12 0 t12 0', '#1D1B18', 180],
+        ['M204 72 L198 63 M237 69 L237 58 M270 72 L277 63', '#2F6FD6', 170],
+        ['M294 112 C 312 104 330 106 352 112', '#1D1B18', 240],
+        ['M342 103 L353 112 L341 119', '#1D1B18', 130],
+        ['M368 84 C 395 80 430 82 462 81 C 468 82 470 88 470 95 L 469 140 C 469 147 465 150 458 150 L 376 151 C 369 151 366 147 366 140 L 367 92 C 367 88 366 85 368 84 Z', '#2E9E62', 380],
+        ['M382 102 q6 -5 12 0 t12 0 t12 0 t12 0 t12 0', '#1D1B18', 220],
+        ['M382 118 q6 -5 12 0 t12 0 t12 0', '#1D1B18', 180],
+        ['M382 133 l6 7 l14 -15', '#D64545', 160],
+        ['M372 166 C 400 160 430 170 466 162', '#D64545', 200],
+        ['M384 175 C 408 171 436 177 456 172', '#D64545', 160],
+      ];
+      let at = 0;
+      const strokes = S.map(([d, c, ms]) => { const el = `<path data-draw data-ms="${ms}" data-at="${Math.round(at)}" d="${d}" stroke="${c}" pathLength="1" stroke-dasharray="1 1"/>`; at += ms * 0.5; return el; }).join('');
+      return `<defs><linearGradient id="wb-metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DDE1E3"/><stop offset="1" stop-color="#B3B9BD"/></linearGradient><filter id="wb-smudge" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs>
+        <rect width="${W}" height="${H0}" fill="#F4F5F2"/>
+        <g filter="url(#wb-smudge)" fill="none" stroke="#1D1B18" stroke-linecap="round" stroke-width="16">
+          <path d="M150 120 C 190 100 240 150 300 128" opacity=".045"/><path d="M330 210 C 380 196 420 226 470 206" opacity=".04"/><path d="M130 186 C 170 176 220 200 262 186" opacity=".035"/></g>
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">${strokes}</g>
+        <rect x="300" y="304" width="58" height="11" rx="4" fill="#EDEFEA" stroke="#C9CDC8"/><rect x="300" y="304" width="14" height="11" rx="4" fill="#2F6FD6"/>
+        <rect x="368" y="304" width="58" height="11" rx="4" fill="#EDEFEA" stroke="#C9CDC8"/><rect x="368" y="304" width="14" height="11" rx="4" fill="#D64545"/>
+        <rect x="0" y="315" width="${W}" height="${H0 - 315}" fill="url(#wb-metal)"/><path d="M0 315.5 H${W}" stroke="#fff" stroke-opacity=".8"/><path d="M0 ${H0 - .5} H${W}" stroke="#8D9499" stroke-opacity=".5"/>`;
+    },
     weave: () => { let l = ""; for (let x = 0; x < W; x += 12) l += `<path d="M${x} 0 V${H0}" stroke="#F2C2B0" stroke-opacity=".10" stroke-width="5"/>`;
       for (let y = 0; y < H0; y += 12) for (let x = (y / 12) % 2 ? 0 : 12; x < W; x += 24) l += `<path d="M${x - 1} ${y + 6} H${x + 13}" stroke="#F2C2B0" stroke-opacity=".22" stroke-width="5" stroke-linecap="round"/>`; return l; },
     space: () => { const r = rand(11); let l = ""; for (let i = 0; i < 140; i++) l += `<circle cx="${(r() * W).toFixed(1)}" cy="${(r() * H0).toFixed(1)}" r="${(r() * 1.2 + .3).toFixed(2)}" fill="#fff" opacity="${(r() * .7 + .1).toFixed(2)}"/>`;
@@ -96,6 +119,20 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   wallet.appendChild(closeBtn);
 
   let open: WalletProject | null = null;
+  // Whiteboard: the strokes draw themselves one after another, like someone sketching while teaching.
+  let drawn: Animation[] = [];
+  function sketch(el: HTMLElement, delay: number) {
+    drawn.forEach((a) => a.cancel()); drawn = [];
+    if (reduce) return;
+    el.querySelectorAll<SVGPathElement>('[data-draw]').forEach((p) => {
+      drawn.push(p.animate([{ strokeDashoffset: 1, opacity: 0 }, { strokeDashoffset: 1, opacity: 1, offset: 0.001 }, { strokeDashoffset: 0, opacity: 1 }],
+        { duration: Number(p.dataset.ms), delay: delay + Number(p.dataset.at), easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'backwards' }));
+    });
+  }
+  const seen = new Set<Element>();
+  const io = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting && !seen.has(e.target)) { seen.add(e.target); if (!open) sketch(e.target as HTMLElement, 200); io?.unobserve(e.target); }
+  }), { threshold: 0.5 });
   const passes: Pass[] = C.projects.map((p) => {
     const b = document.createElement('button');
     b.className = 'pass'; b.type = 'button'; b.style.setProperty('--c', p.c); b.style.setProperty('--fg', p.fg);
@@ -106,6 +143,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
       <div class="bottom"><div class="field"><span class="lab">${esc(C.createdLabel)}</span><span class="val">${esc(p.created)}</span></div><div class="field"><span class="lab">&nbsp;</span><span class="val">${esc(C.holder)}</span></div>${LOGO}</div></div>`;
     b.addEventListener('click', () => (open === p ? close() : select(p)), { signal });
     wallet.appendChild(b);
+    if (p.art === 'enamel') io?.observe(b);
     return { p, el: b };
   });
 
@@ -183,6 +221,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     check.animate([{ opacity: 0, strokeDashoffset: 60 }, { opacity: 1, strokeDashoffset: 60, offset: 0.01 }, { opacity: 1, strokeDashoffset: 0 }], { duration: 300, delay: 1600, easing: E, fill: 'forwards' });
     frame.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }, { transform: 'scale(1)' }], { duration: 300, delay: 1640, easing: E, composite: 'add' });
     (me.el.querySelector('.card') as HTMLElement).animate([{ filter: 'brightness(1)' }, { filter: 'brightness(1.18)' }, { filter: 'brightness(1)' }], { duration: 420, delay: 1600, easing: 'ease-out' });
+    if (p.art === 'enamel') { seen.add(me.el); sketch(me.el, 300); }
     later(2200, showDetails);
   }
   // Once the check is done, the card rises under the close button and the details follow it.
@@ -206,7 +245,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     auth.animate([{ opacity: 1 }, { opacity: 0 }], { duration: reduce ? 0 : 200, easing: 'ease-out', fill: 'forwards' });
   }
   function close() {
-    clearTimers();
+    clearTimers(); drawn.forEach((a) => a.cancel()); drawn = [];
     const was = sel?.me.el, keepFocus = !document.activeElement || document.activeElement === document.body || root.contains(document.activeElement);
     open = null; settled = false; sel = null; wallet.classList.remove('open');
     passes.forEach((x) => x.el.setAttribute('aria-expanded', 'false'));
@@ -229,6 +268,7 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
 
   return () => {
     disposed = true;
+    io?.disconnect();
     ac.abort();
     clearTimers();
     clearTimeout(resizeT);
