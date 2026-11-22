@@ -124,10 +124,13 @@ export const tips: TipsContent = {
     slides: [
       { kind: 'logo' },
       { kind: 'text', text: '0% OFF EVERYTHING' },
+      { kind: 'text', text: 'QUESTIONS? ASK CLAUDE' },
       { kind: 'text', text: 'FREE ADVICE (WORTH IT)' },
       { kind: 'text', text: 'BUY 1 BUG GET 2 FREE' },
+      { kind: 'text', text: 'SUPPORT TEAM: CLAUDE' },
       { kind: 'text', text: 'NOW WITH 20% MORE BUGS' },
       { kind: 'text', text: 'LIMITED TIME: FOREVER' },
+      { kind: 'text', text: 'BUILT BY CLAUDE, BLAMED ON ME' },
       { kind: 'text', text: 'OPEN 24/7 (ASLEEP 8 OF THEM)' },
     ],
   },

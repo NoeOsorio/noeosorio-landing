@@ -1,6 +1,7 @@
 import type { Mount } from '../useMount'
 import type { Tip, TipsContent } from '../data/tips'
 import { esc } from '../dom'
+import { rasterText, missingGlyphs, gridFor, baseCell, NAME_SHARE, OFFER_SHARE } from './led-font'
 import { HOT, LED, LIME, LIME_RGB, LOGO_D, logoPaths } from '../brand'
 
 const E = 'cubic-bezier(0.23, 1, 0.32, 1)'
@@ -149,50 +150,27 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   }
 
   // ---------- LED sign ----------
-  // One canvas, one grid of dots. Each slide is drawn into a tiny grid, then every filled cell lights one rounded square.
+  // One canvas, one grid of dots. Each slide is a grid of lit dots (text from a 5x7 bitmap font), and every lit cell shows one rounded square.
   // A slide stays perfectly still; the next one arrives by dots switching in a random, left-leaning order.
-  type Slide = { key: string; hold: number; draw: (o: CanvasRenderingContext2D, w: number, h: number) => void }
+  type Slide = { key: string; hold: number; raster: (cols: number, rows: number, o: CanvasRenderingContext2D) => Uint8Array }
   const BB = C.billboard
-  const FONT = (size: number) => `600 ${size}px Geist, system-ui, sans-serif`
-  const CAP = 0.72, LH = 1.05
-  // Pick the line breaks that give the biggest letters: one line when it fits big enough, else two or three.
-  function fitText(o: CanvasRenderingContext2D, text: string, w: number, h: number, maxSize: number) {
-    o.font = FONT(100)
-    const em = (s: string) => o.measureText(s).width / 100
-    const words = text.split(' ')
-    const options: string[][] = [[text]]
-    for (let i = 1; i < words.length; i++) {
-      options.push([words.slice(0, i).join(' '), words.slice(i).join(' ')])
-      for (let j = i + 1; j < words.length; j++) options.push([words.slice(0, i).join(' '), words.slice(i, j).join(' '), words.slice(j).join(' ')])
-    }
-    let best = { size: 0, score: 0, lines: [text] }
-    for (const lines of options) {
-      const size = Math.min((w - 4) / Math.max(...lines.map(em)), (h - 6) / ((lines.length - 1) * LH + CAP), maxSize)
-      // Extra lines cost a little, so a sign that fits on one line stays on one line.
-      const score = size / (1 + 0.35 * (lines.length - 1))
-      if (score > best.score * 1.04) best = { size, score, lines }
-    }
-    return best
-  }
-  const textSlide = (text: string, hold: number, maxK: number): Slide => ({
-    key: text, hold,
-    draw: (o, w, h) => {
-      const { size, lines } = fitText(o, text, w, h, h * maxK)
-      o.fillStyle = '#000'; o.textAlign = 'center'; o.textBaseline = 'alphabetic'; o.font = FONT(size)
-      const top = (h - ((lines.length - 1) * LH + CAP) * size) / 2 + CAP * size
-      lines.forEach((l, i) => o.fillText(l, w / 2, top + i * LH * size))
-    },
-  })
-  const nameSlide = textSlide(BB.name, BB.nameHoldMs, 0.9)
+  const textSlide = (text: string, hold: number, share: number): Slide => ({ key: text, hold, raster: (cols, rows) => rasterText(text, cols, rows, share) })
+  const nameSlide = textSlide(BB.name, BB.nameHoldMs, NAME_SHARE)
   const logoSlide: Slide = {
     key: 'logo', hold: BB.holdMs,
-    draw: (o, w, h) => {
+    raster: (w, h, o) => {
+      o.clearRect(0, 0, w, h)
       const k = Math.min((w - 2) / 255, (h - 4) / 177)
       o.fillStyle = '#000'; o.save(); o.translate(w / 2, h / 2); o.scale(k, k); o.translate(-199.5, -199.5); o.fill(new Path2D(LOGO_D)); o.restore()
+      const d = o.getImageData(0, 0, w, h).data, a = new Uint8Array(w * h)
+      for (let i = 0; i < a.length; i++) a[i] = d[i * 4 + 3] > 110 ? 1 : 0
+      return a
     },
   }
+  const offerTexts = BB.slides.flatMap((s) => (s.kind === 'text' ? [s.text] : []))
+  if (import.meta.env.DEV) { const miss = missingGlyphs([BB.name, ...offerTexts]); if (miss.length) console.warn('LED sign: no glyph for', miss.map((c) => `"${c}"`).join(' ')) }
   // The name opens the sign and comes back between every other slide.
-  const seq: Slide[] = BB.slides.flatMap((s) => [nameSlide, s.kind === 'logo' ? logoSlide : textSlide(s.text, BB.holdMs, 0.6)])
+  const seq: Slide[] = BB.slides.flatMap((s) => [nameSlide, s.kind === 'logo' ? logoSlide : textSlide(s.text, BB.holdMs, OFFER_SHARE)])
 
   function sign(canvas: HTMLCanvasElement) {
     let cols = 0, rows = 0, cell = 10, gap = 1
@@ -220,12 +198,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     }
     const raster = (sl: Slide) => {
       let a = rasters.get(sl.key)
-      if (!a) {
-        o.clearRect(0, 0, cols, rows); sl.draw(o, cols, rows)
-        const d = o.getImageData(0, 0, cols, rows).data
-        a = new Uint8Array(cols * rows); for (let i = 0; i < a.length; i++) a[i] = d[i * 4 + 3] > 110 ? 1 : 0
-        rasters.set(sl.key, a)
-      }
+      if (!a) { a = sl.raster(cols, rows, o); rasters.set(sl.key, a) }
       return a
     }
 
@@ -424,14 +397,16 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   const big = sf.querySelector('.bigname') as HTMLCanvasElement
   let bigM: ReturnType<typeof sign> | null = null, bigKey = ''
   function bigName() {
-    const pe = big.parentElement as HTMLElement, pcs = getComputedStyle(pe), W = pe.getBoundingClientRect().width - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight) - parseFloat(pcs.borderLeftWidth) - parseFloat(pcs.borderRightWidth), base = W < 600 ? 6 : 10, cols = Math.floor(W / base), cell = W / cols, rows = 26
+    const pe = big.parentElement as HTMLElement, pcs = getComputedStyle(pe), W = pe.getBoundingClientRect().width - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight) - parseFloat(pcs.borderLeftWidth) - parseFloat(pcs.borderRightWidth), base = baseCell(W)
+    if (!(W > 0)) return
+    const { cols, rows, cell } = gridFor(W, BB.name, offerTexts)
     const key = W + 'x' + base + 'x' + (devicePixelRatio || 1)
     if (bigM && key === bigKey) return
     bigKey = key
     if (!bigM) bigM = sign(big)
     bigM(cols, rows, cell)
   }
-  ;(document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { if (!stopped) bigName() })
+  bigName()
   let resizeT: ReturnType<typeof setTimeout> | undefined
   window.addEventListener('resize', () => { if (resizeT !== undefined) { clearTimeout(resizeT); timers.delete(resizeT) } resizeT = timeout(200, bigName) }, { signal })
 
