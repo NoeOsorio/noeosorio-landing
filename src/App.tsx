@@ -1,10 +1,14 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
-import Layout from './components/Layout'
 import ScrollToTop from './components/ScrollToTop'
 import LoadingScreen from './components/LoadingScreen'
-import PrivacyPolicy from './pages/PrivacyPolicy'
-import NotFound from './pages/NotFound'
+
+// Layout (navbar, footer), the cookie banner (animation library) and the secondary pages are
+// not needed to paint the home, so they load as separate chunks.
+const Layout = lazy(() => import('./components/Layout'))
+const CookieConsent = lazy(() => import('./components/CookieConsent').then(m => ({ default: m.CookieConsent })))
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
+const NotFound = lazy(() => import('./pages/NotFound'))
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'))
@@ -31,18 +35,25 @@ const router = createBrowserRouter([
     element: (
       <>
         <ScrollToTop />
-        <Layout />
+        <Suspense fallback={<LoadingScreen />}>
+          <Home />
+        </Suspense>
+        <Suspense fallback={null}>
+          <CookieConsent />
+        </Suspense>
+      </>
+    )
+  },
+  {
+    element: (
+      <>
+        <ScrollToTop />
+        <Suspense fallback={<LoadingScreen />}>
+          <Layout />
+        </Suspense>
       </>
     ),
     children: [
-      { 
-        path: "/", 
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <Home />
-          </Suspense>
-        ) 
-      },
       { 
         path: "/about", 
         element: (
@@ -81,7 +92,11 @@ const router = createBrowserRouter([
       },
       {
         path: "privacy-policy",
-        element: <PrivacyPolicy />
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <PrivacyPolicy />
+          </Suspense>
+        )
       },
       {
         path: "/social",
@@ -99,7 +114,14 @@ const router = createBrowserRouter([
         path: "/landing/:projectId",
         element: <Navigate to="/portfolio" replace />
       },
-      { path: "*", element: <NotFound /> }
+      {
+        path: "*",
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <NotFound />
+          </Suspense>
+        )
+      }
     ]
   }
 ])

@@ -1,0 +1,33 @@
+# Noé Osorio
+
+> Product engineer in New York. He builds AI you can trust (permission levels, spending limits, an audit log) and AI that makes you think instead of thinking for you. He explains what he learns on YouTube.
+
+- Works at Porter, New York, as a Product Engineer (2026 to today): Kubernetes clusters, AI agents and workflows, system design, product design and UX, for YC startups.
+- Before: Apex Systems (Jul 2024 to Nov 2025), Osmind in San Francisco (2022 to 2023), Clip in Mexico City (2021 to 2022), Finloop in Puebla (2020 to 2021), Smartkode in Puebla (2018 to 2020, tech lead).
+- Writes and speaks in English and Spanish. His videos are in Spanish.
+
+## Projects
+
+- [Essay Studio](https://noeosorio.com/essay): A writing app where four AI agents question your essay instead of writing it for you. The score comes from findings you can see. Open source, Mac, download coming soon.
+- [Essay Studio source](https://github.com/NoeOsorio/essay-studio): Rust, Tauri, Next.js and TypeScript.
+- [Sim World](https://simulations.noeosorio.com): Life simulations in the browser, from the primordial soup to families with personalities. Free and open source.
+- [Porter Galaxy](https://github.com/NoeOsorio/porter-galaxy): A Kubernetes cluster shown as a living 3D galaxy, updating live. A personal project, not a Porter product. Open source.
+- [Kanji Study App](https://github.com/NoeOsorio/kanjy-study-app): Learn Japanese kanji in Spanish with short lessons, stroke practice and six quiz modes. Open source.
+- [All projects](https://noeosorio.com/portfolio): Also Maiden OS (his personal AI operating system on Telegram, Mac and iPhone), Whiteboard (notes that draw themselves while you teach), Telar (a story engine for educational visual novels) and Pyventa Web (a point of sale that keeps selling offline, available on demand).
+
+## Videos
+
+- [YouTube, @noeosoriodev](https://www.youtube.com/@noeosoriodev): Videos about building software with AI, life as a developer in New York, and his podcast "Vida de un programador".
+- [TikTok, @noeosorio.dev](https://www.tiktok.com/@noeosorio.dev): Short videos.
+
+## Follow and support
+
+- [Subscribe on YouTube](https://www.youtube.com/@noeosoriodev?sub_confirmation=1): The best way to follow his work.
+- [Tips](https://buymeacoffee.com/noeosorio): Tips don't buy anything. They just say thanks.
+- [GitHub](https://github.com/NoeOsorio): Code.
+- [LinkedIn](https://www.linkedin.com/in/noeosorioh/): Professional profile.
+
+## Optional
+
+- [About](https://noeosorio.com/about): His full work history.
+- [Privacy](https://noeosorio.com/privacy-policy): How the site handles data.
