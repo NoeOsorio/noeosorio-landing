@@ -7,7 +7,17 @@ const llmsName = llmsUrl.slice(1)
 export type Tip = { price: string; name: string; line: string; after: string }
 type FootLink = [name: string, sub: string, href: string]
 
+// The footer sign: it shows the name between every other slide. Each slide holds still, then the dots swap.
+export type Billboard = {
+  name: string
+  nameHoldMs: number
+  holdMs: number
+  transitionMs: number
+  slides: ({ kind: 'logo' } | { kind: 'text'; text: string })[]
+}
+
 export type TipsContent = {
+  billboard: Billboard
   sectionLabel: string
   slip: string
   jar: string
@@ -105,6 +115,21 @@ export const tips: TipsContent = {
     button: 'Subscribe',
     aria: 'Subscribe on YouTube',
     after: 'Too late. Confirm it on YouTube.',
+  },
+  billboard: {
+    name: 'Noé Osorio',
+    nameHoldMs: 6000,
+    holdMs: 4000,
+    transitionMs: 600,
+    slides: [
+      { kind: 'logo' },
+      { kind: 'text', text: '0% OFF EVERYTHING' },
+      { kind: 'text', text: 'FREE ADVICE (WORTH IT)' },
+      { kind: 'text', text: 'BUY 1 BUG GET 2 FREE' },
+      { kind: 'text', text: 'NOW WITH 20% MORE BUGS' },
+      { kind: 'text', text: 'LIMITED TIME: FOREVER' },
+      { kind: 'text', text: 'OPEN 24/7 (ASLEEP 8 OF THEM)' },
+    ],
   },
   foot: {
     line: 'Built by hand. The code, the design and the mistakes are all mine.',
