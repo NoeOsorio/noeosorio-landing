@@ -10,7 +10,7 @@
 .home-wallet *, .home-wallet *::before, .home-wallet *::after { box-sizing: content-box; }
 .home-wallet svg { display: inline; vertical-align: baseline; }
 
-.home-wallet{ background: var(--night); color: var(--ink); }
+.home-wallet{ color: var(--ink); }
 
 .home-wallet{ font-family: var(--body); }
 

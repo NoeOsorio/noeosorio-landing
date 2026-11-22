@@ -110,3 +110,28 @@ Noe: «Maiden OS es más un agente de AI que estamos creando, así que debería 
 - "As it loads" means when the card first comes into view, the same trigger Whiteboard uses today.
 - Prices in digits on the Pyventa receipt are not "explaining with words"; they are what a receipt shows.
 - Out of scope: the card back/details copy, the pitch text, other sections of the home.
+
+## Added 2026-11-22 (same delivery)
+
+### User Story 4 - Subscribe becomes a channel card that builds itself (Priority: P1)
+
+Noe on the current Subscribe button: «De verdad odio este botón… no me gusta la idea del neumorfismo, no entona nada con el resto de la página.» Direction: «algo más a una card que se arma con el nombre del canal animado y lo de suscríbete».
+
+**Acceptance Scenarios**:
+
+1. **Given** the visitor reaches the Subscribe section, **When** it comes into view, **Then** a card in the same craft as the wallet cards builds itself once (about 1.5 s): his logo as the channel avatar, the channel name and handle animating in, and a Subscribe button that arrives last.
+2. **Given** the card is built, **When** the visitor presses Subscribe, **Then** the YouTube subscribe link opens in a new tab.
+3. **Given** the finished card, **Then** it has no neumorphism, no "Don't press this" plate, no invented numbers (no subscriber counts), and reduced motion shows it finished.
+
+### User Story 5 - The whole page shares the space theme (Priority: P2)
+
+Noe: «El background de toda la página no me gusta tanto, ¿por qué no le ponemos las estrellas o algo para que se sienta en el espacio, o algo que comparta temática?»
+
+**Acceptance Scenarios**:
+
+1. **Given** any section of the home, **Then** a quiet field of stars continues the hero's galaxy behind it, sparse and dim enough that text, cards and objects stay the focus.
+2. **Given** each section's own lights (wallet pool, passport lamp, player glow), **Then** they stay and sit on top of the stars; every light still fades to zero before any edge.
+3. **Given** an iPhone, **Then** layer memory stays within 10% of today and there is no horizontal scroll.
+
+- **FR-011**: The Subscribe section MUST be a self-building channel card (logo avatar, real channel name and handle, Subscribe button to the existing YouTube link), replacing the neumorphic button.
+- **FR-012**: The home background MUST carry a static, sparse star field consistent with the hero, under every section, without adding a full-page animated canvas.

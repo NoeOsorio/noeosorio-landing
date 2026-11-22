@@ -10,7 +10,7 @@
 .home-passport *, .home-passport *::before, .home-passport *::after { box-sizing: content-box; }
 .home-passport svg { display: inline; vertical-align: baseline; }
 
-.home-passport{ background: var(--night); color: var(--ink); }
+.home-passport{ color: var(--ink); }
 
 .home-passport{ font-family: var(--body); }
 

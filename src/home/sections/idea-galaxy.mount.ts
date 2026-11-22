@@ -180,11 +180,14 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
 
   // ---------- Drawing ----------
   function dot(x: number, y: number, size: number, color: string) { ctx.fillStyle = color; ctx.beginPath(); ctx.roundRect(x - size / 2, y - size / 2, size, size, size * 0.24); ctx.fill() }
-  let px = 0, py = 0, tx = 0, ty = 0
+  // Depth on scroll: as the page leaves the hero, the sky stars trail it more than the logo grid does.
+  // The offset is pushed down so the layer moves slower than the page; none of it follows the pointer.
+  let gox = 0, goy = 0, sox = 0, soy = 0
+  function parallax() { const sy = reduce ? 0 : Math.max(0, Math.min(window.scrollY, H)); goy = sy * 0.1; soy = sy * 0.25 }
   function draw() {
     ctx.clearRect(0, 0, W, H)
-    px += (tx - px) * 0.06; py += (ty - py) * 0.06
-    const gox = px * 7, goy = py * 7, sox = px * 16, soy = py * 16, t = clock, builtFrac = built / raster.length
+    parallax()
+    const t = clock, builtFrac = built / raster.length
     // Sky: ideas that became distant stars.
     for (const s of sky) { const P = skyPos(s.target), tw = reduce ? 0.6 : 0.45 + 0.55 * Math.abs(Math.sin(t * 0.0011 + s.phase)), born = clamp((t - s.landed) / 600)
       ctx.globalAlpha = tw * (0.35 + 0.65 * born); ctx.fillStyle = s.kind === 'egg' || s.kind === 'idea' ? '#DDEFB4' : LED
@@ -251,10 +254,10 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
   // ---------- Hover or tap a star to read its idea ----------
   function nearest(x: number, y: number) {
     let best: any = null, bd = 16
-    const gx = x - px * 7, gy = y - py * 7
-    cellStar.forEach((s, i) => { if (!s || !s.label) return; const P = cellPos(i), d = Math.hypot(P.x - gx, P.y - gy); if (d < Math.min(bd, cell * 0.8)) { bd = d; best = { s, P: { x: P.x + px * 7, y: P.y + py * 7 } } } })
-    planets.forEach(pl => { if (!pl || pl.arrived < 0) return; const P = planetPos(pl, clock), d = Math.hypot(P.x - gx, P.y - gy); if (d < 18 && d < bd + 6) { bd = d; best = { s: pl, P: { x: P.x + px * 7, y: P.y + py * 7 } } } })
-    sky.forEach(s => { const P = skyPos(s.target), X = P.x + px * 16, Y = P.y + py * 16, d = Math.hypot(X - x, Y - y); if (d < bd) { bd = d; best = { s, P: { x: X, y: Y } } } })
+    const gx = x - gox, gy = y - goy
+    cellStar.forEach((s, i) => { if (!s || !s.label) return; const P = cellPos(i), d = Math.hypot(P.x - gx, P.y - gy); if (d < Math.min(bd, cell * 0.8)) { bd = d; best = { s, P: { x: P.x + gox, y: P.y + goy } } } })
+    planets.forEach(pl => { if (!pl || pl.arrived < 0) return; const P = planetPos(pl, clock), d = Math.hypot(P.x - gx, P.y - gy); if (d < 18 && d < bd + 6) { bd = d; best = { s: pl, P: { x: P.x + gox, y: P.y + goy } } } })
+    sky.forEach(s => { const P = skyPos(s.target), X = P.x + sox, Y = P.y + soy, d = Math.hypot(X - x, Y - y); if (d < bd) { bd = d; best = { s, P: { x: X, y: Y } } } })
     return best
   }
   function showTip(x: number, y: number) {
@@ -265,9 +268,9 @@ export const mountGalaxy: Mount<GalaxyContent> = (root, C, { reduce }) => {
     tip.classList.add('on'); root.style.cursor = 'default'
     if (reduce) draw()
   }
-  root.addEventListener('pointermove', e => { const r = root.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; tx = (x / W - 0.5) * 2; ty = (y / H - 0.5) * 2
+  root.addEventListener('pointermove', e => { const r = root.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top
     if (e.pointerType === 'mouse') showTip(x, y) }, { signal })
-  root.addEventListener('pointerleave', () => { tx = ty = 0; tip.classList.remove('on') }, { signal })
+  root.addEventListener('pointerleave', () => { tip.classList.remove('on') }, { signal })
   // Click the logo and it blows apart into its ideas, then pulls itself back together.
   root.addEventListener('pointerdown', e => {
     const r = root.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top
