@@ -1,7 +1,7 @@
 
 .home-wallet{
     color-scheme: dark;
-    --ink-2: rgba(244,238,228,.72); --ink-3: rgba(244,238,228,.5);
+    --ink-2: rgba(244,238,228,.72); --ink-3: rgba(244,238,228,.62);
     --glass: rgba(255,248,236,.07); --glass-line: rgba(255,248,236,.14);
     --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
   }

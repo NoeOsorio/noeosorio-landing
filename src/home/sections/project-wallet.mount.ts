@@ -99,8 +99,8 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
   const passes: Pass[] = C.projects.map((p) => {
     const b = document.createElement('button');
     b.className = 'pass'; b.type = 'button'; b.style.setProperty('--c', p.c); b.style.setProperty('--fg', p.fg);
-    b.setAttribute('aria-label', `${p.name}. ${p.text}`); b.setAttribute('aria-expanded', 'false');
-    b.innerHTML = `<div class="card"><svg class="art" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${(ART[p.art] || (() => ''))()}</svg><div class="tex"></div>
+    b.setAttribute('aria-describedby', `wallet-desc-${p.id}`); b.setAttribute('aria-expanded', 'false');
+    b.innerHTML = `<span class="sr-only" aria-hidden="true" id="wallet-desc-${esc(p.id)}">${esc(p.text)}</span><div class="card"><svg class="art" viewBox="0 0 ${W} ${H0}" preserveAspectRatio="xMidYMid slice" role="presentation" focusable="false">${(ART[p.art] || (() => ''))()}</svg><div class="tex"></div>
       <div class="title"><span class="name" id="wallet-name-${esc(p.id)}">${esc(p.name)}</span><span class="topic">${esc(p.topic)}</span></div>${NFC}${CHIP}
       <div class="num">${number(p.commits)}</div>
       <div class="bottom"><div class="field"><span class="lab">${esc(C.createdLabel)}</span><span class="val">${esc(p.created)}</span></div><div class="field"><span class="lab">&nbsp;</span><span class="val">${esc(C.holder)}</span></div>${LOGO}</div></div>`;

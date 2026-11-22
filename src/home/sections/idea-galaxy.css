@@ -1,6 +1,6 @@
 /* One full screen: a canvas where every idea becomes a star, the copy sits on top. */
 .home-galaxy {
-  --ink-2: rgba(244,238,228,.74); --ink-3: rgba(244,238,228,.5);
+  --ink-2: rgba(244,238,228,.74); --ink-3: rgba(244,238,228,.62);
   color-scheme: dark; color: var(--ink); font-family: var(--body);
   position: relative; height: 100vh; height: 100svh; min-height: 660px; overflow: hidden; background: var(--night);
 }
@@ -10,8 +10,8 @@
 .home-galaxy .copy h1 em { font-style: normal; color: var(--lime); }
 .home-galaxy .copy p { margin: 26px 0 0; max-width: 25rem; font-size: 18px; line-height: 1.55; color: var(--ink-2); }
 .home-galaxy .copy p b { color: var(--ink); font-weight: 500; }
-.home-galaxy .copy > * { animation: galaxy-rise 900ms var(--ease-out) both; }
-.home-galaxy .copy p { animation-delay: 1500ms; } .home-galaxy .copy h1 { animation-delay: 900ms; }
+.home-galaxy .copy > * { animation: galaxy-rise 600ms var(--ease-out) both; }
+.home-galaxy .copy p { animation-delay: 120ms; } .home-galaxy .copy h1 { animation-delay: 0ms; }
 @keyframes galaxy-rise { from { opacity: 0; transform: translateY(10px); } }
 .home-galaxy .tip { position: absolute; z-index: 4; left: 0; top: 0; padding: 7px 11px; border-radius: 9px; background: rgba(14,13,11,.9); box-shadow: inset 0 0 0 1px rgba(214,243,92,.35), 0 10px 24px rgba(0,0,0,.5);
        font: 500 13px var(--mono); color: var(--hot); white-space: nowrap; pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity 140ms ease, transform 140ms var(--ease-out); }

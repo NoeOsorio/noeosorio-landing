@@ -94,7 +94,7 @@ export const CookieConsent = () => {
               Analytics only if you say yes.{' '}
               <Link
                 to="/privacy-policy"
-                className="text-[rgba(244,238,228,.6)] underline underline-offset-[3px] hover:text-[#F4EEE4]"
+                className="text-[rgba(244,238,228,.7)] underline underline-offset-[3px] hover:text-[#F4EEE4]"
               >
                 Privacy
               </Link>
