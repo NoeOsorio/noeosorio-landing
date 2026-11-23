@@ -138,3 +138,15 @@ A visitor lands on /essay. It keeps its 3D model and waitlist, but now belongs t
 - Videos come from the existing "Learning out loud" data when a video is about that project. Otherwise there is no video section.
 - Demo links are the existing action links: the Sim World play link, code repositories, the Essay waitlist and the Pyventa request.
 - Out of scope for this feature: About, Services, Contact, Social, Privacy and the 404 page beyond the minimum restyle in the edge cases.
+
+## Direction update (2026-11-22)
+
+- **No card inside detail pages:** the card exists only in the entrance, where it expands until you are inside its world.
+- **Not a slideshow:** each page's protagonist is the real product, captured from the real app, as a 3D object doing its job as you scroll. Short labels sit next to the action. Approved reference: Kanji (scratchpad kanji-v3) and Essay (proj-design2).
+- **One page at a time:** each page is approved by Noe before the next is designed.
+- **Build bar** (Noe: «quiero animaciones más fluidas y con buen rendimiento cuando lo pases a limpio; hay varios errores de estilo»):
+  - one rAF and one smoothed scroll value per page
+  - transform, opacity and clip-path only
+  - no layout reads in the loop
+  - few will-change layers
+  - every style error in the prototypes is fixed in the build
