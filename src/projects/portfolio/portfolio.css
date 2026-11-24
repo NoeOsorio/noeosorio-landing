@@ -1,0 +1,129 @@
+/* /portfolio: the home wallet as a library. The card rules apply to the grid and to the copy the flight puts on <body>. */
+.pg-portfolio {
+  --ink-2: rgba(244,238,228,.72); --ink-3: rgba(244,238,228,.62);
+  --glass: rgba(255,248,236,.07); --glass-line: rgba(255,248,236,.14);
+  --gutter: max(16px, env(safe-area-inset-left, 0px), 4vw);
+  position: relative; min-height: 100vh; font-family: var(--body); color: var(--ink);
+}
+.pg-portfolio *, .pg-portfolio *::before, .pg-portfolio *::after { box-sizing: border-box; }
+.pg-portfolio svg { display: block; }
+.pg-portfolio .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+.pg-portfolio :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+
+.pf-page { position: relative; max-width: 1320px; margin: 0 auto; padding: 0 var(--gutter); }
+.pf-pool { position: absolute; left: 50%; top: -80px; width: min(1500px, 160%); height: 900px; transform: translateX(-50%); pointer-events: none; z-index: 0;
+  background: radial-gradient(closest-side, rgba(255,214,160,.13), rgba(255,214,160,0)); }
+.pf-hero { position: relative; padding-top: 128px; }
+.pf-hero h1 { margin: 0; font: 700 clamp(2.6rem, 4.6vw, 4.4rem)/1 var(--display); letter-spacing: -.035em; text-wrap: balance; }
+.pf-sent { height: 1px; margin: 27px 0 -1px; pointer-events: none; }
+
+/* Toolbar: sticks to the top; once stuck, the night fades in behind it so cards slide under it cleanly. */
+.pf-tools { position: sticky; top: 0; z-index: 15; padding: 14px 0 34px; display: flex; flex-direction: column; gap: 14px; }
+.pf-tools::before { content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); pointer-events: none; opacity: 0; transition: opacity 200ms ease;
+  background: linear-gradient(to bottom, rgb(14,13,11) 0%, rgb(14,13,11) calc(100% - var(--pf-fade, 34px)), rgba(14,13,11,0) 100%); }
+.pf-tools.stuck::before { opacity: 1; }
+.pf-row1 { display: flex; gap: 12px; align-items: center; }
+.pf-search { position: relative; flex: 1; max-width: 520px; display: block; }
+.pf-search > svg { position: absolute; left: 18px; top: 50%; width: 19px; height: 19px; transform: translateY(-50%); stroke: var(--ink-2); fill: none; stroke-width: 1.8; stroke-linecap: round; pointer-events: none; }
+.pf-search input { width: 100%; height: 52px; border-radius: 999px; border: 0; padding: 0 52px 0 48px; background: rgba(255,248,236,.09); box-shadow: inset 0 1px 0 var(--glass-line);
+  font: 500 16px var(--body); color: var(--ink); outline-offset: 3px; -webkit-appearance: none; appearance: none; }
+.pf-search input::placeholder { color: var(--ink-3); }
+.pf-search input::-webkit-search-cancel-button, .pf-search input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+.pf-clear { position: absolute; right: 6px; top: 6px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255,248,236,.12); color: var(--ink); cursor: pointer; display: none; place-items: center; transition: transform 160ms var(--ease-out); }
+.pf-clear:active { transform: scale(.94); }
+.pf-clear svg { width: 15px; height: 15px; }
+.pf-search.has .pf-clear { display: grid; }
+.pf-seg { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--glass); box-shadow: inset 0 1px 0 var(--glass-line); margin-left: auto; }
+.pf-seg button { width: 46px; height: 44px; border: 0; border-radius: 999px; background: transparent; color: var(--ink-2); cursor: pointer; display: grid; place-items: center; transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--ease-out); }
+.pf-seg button:active { transform: scale(.95); }
+.pf-seg button svg { width: 20px; height: 20px; fill: currentColor; }
+.pf-seg button[aria-pressed="true"] { background: rgba(255,248,236,.17); color: var(--ink); }
+.pf-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 0; }
+.pf-chips::-webkit-scrollbar { display: none; }
+.pf-chip { flex: none; height: 42px; padding: 0 18px; border-radius: 999px; border: 0; background: var(--glass); box-shadow: inset 0 1px 0 var(--glass-line); font: 600 14.5px var(--body); color: var(--ink); cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 160ms ease, color 160ms ease; }
+.pf-chip:active { transform: scale(.97); }
+.pf-chip[aria-pressed="true"] { background: var(--ink); color: #15130F; box-shadow: none; }
+@media (hover: hover) and (pointer: fine) { .pf-chip[aria-pressed="false"]:hover { background: rgba(255,248,236,.13); } }
+
+/* Results */
+.pf-out { position: relative; z-index: 1; padding: 10px 0 40px; }
+.pf-grid { position: relative; }
+.pf-rowx { display: grid; grid-template-columns: repeat(var(--pf-cols, 3), minmax(0, 1fr)); column-gap: var(--pf-gx, 26px); height: var(--pf-h, 270px); margin-bottom: var(--pf-gy, 34px); }
+.pf-empty { display: grid; place-items: center; padding: 30px 0 80px; }
+.pf-slot { position: relative; width: min(424px, 100%); aspect-ratio: 1.586; display: grid; place-items: center; }
+.pf-slot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.pf-btn { position: relative; height: 46px; padding: 0 22px; border-radius: 999px; border: 0; display: inline-flex; align-items: center; font: 600 15px var(--body); cursor: pointer; background: var(--ink); color: #15130F;
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 6px 18px -6px rgba(0,0,0,.6); transition: transform 160ms var(--ease-out), background-color 160ms ease; }
+.pf-btn:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .pf-btn:hover { background: #fff; } }
+
+/* The first rows arrive once, a touch apart. Scrolling never replays it. */
+@keyframes pf-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.pf-intro .pf-rowx:first-child .pass:nth-child(1) { animation: pf-rise 420ms var(--ease-out) both; }
+.pf-intro .pf-rowx:first-child .pass:nth-child(2) { animation: pf-rise 420ms var(--ease-out) 50ms both; }
+.pf-intro .pf-rowx:first-child .pass:nth-child(3) { animation: pf-rise 420ms var(--ease-out) 100ms both; }
+@media (prefers-reduced-motion: reduce) { .pf-intro .pass { animation: none !important; } .pf-tools::before { transition: none; } }
+
+@media (max-width: 1100px) { .pf-hero { padding-top: 128px; } }
+@media (max-width: 700px) {
+  .pf-hero { padding-top: 92px; }
+  .pf-sent { margin-top: 19px; }
+  .pf-tools { padding-bottom: 26px; --pf-fade: 26px; }
+  .pf-search { max-width: none; }
+  .pf-chips { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent); }
+}
+
+/* ---------- The pass. --k scales every size, so one card works from 170 to 460 px wide. Same rules on the page and on the flight's copy. ---------- */
+:is(.pg-portfolio, .project-flight) .pass[data-pf],
+:is(.pg-portfolio, .project-flight) .pass[data-pf] *,
+:is(.pg-portfolio, .project-flight) .pass[data-pf]::before,
+:is(.pg-portfolio, .project-flight) .pass[data-pf]::after { box-sizing: border-box; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] {
+  position: relative; display: block; width: 100%; padding: 0; border: 0; aspect-ratio: 1.586; border-radius: calc(var(--k, 1) * 19px);
+  color: #fff; text-decoration: none; text-align: left; background: transparent; isolation: isolate; font-family: var(--body);
+  transition: transform 240ms var(--ease-out); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+:is(.pg-portfolio, .project-flight) .pass[data-pf]::before { content: ""; position: absolute; inset: calc(var(--k) * 3px) 0 calc(var(--k) * -3px); border-radius: inherit; background: color-mix(in srgb, var(--c), #000 40%); transform: none; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf]::after { content: ""; position: absolute; inset: 4% 3% 0; border-radius: inherit; box-shadow: 0 calc(var(--k) * 16px) calc(var(--k) * 28px) calc(var(--k) * -8px) rgba(0,0,0,.6); z-index: -1; transform: none; }
+.pg-portfolio .pass[data-pf][data-inert] { cursor: default; }
+@media (hover: hover) and (pointer: fine) { .pg-portfolio .pass[data-pf]:not([data-inert]):hover { transform: translateY(-6px); } }
+.pg-portfolio .pass[data-pf]:not([data-inert]):active { transform: scale(.985); transition-duration: 120ms; }
+.pg-portfolio .pass[data-pf]:focus-visible { outline-offset: 6px; border-radius: calc(var(--k, 1) * 19px); }
+
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .card {
+  position: absolute; inset: 0; border-radius: inherit; overflow: hidden; contain: paint; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto 1fr auto auto;
+  padding: calc(var(--k) * 24px) calc(var(--k) * 28px) calc(var(--k) * 22px); background: var(--c); color: var(--fg);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(0,0,0,.2), inset 0 0 0 1px rgba(0,0,0,.08), 0 -10px 22px -6px rgba(0,0,0,.42);
+}
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .card > * { position: relative; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .art { position: absolute !important; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; border-radius: inherit; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .art-img { object-fit: cover; display: block; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .tex { position: absolute !important; inset: 0; pointer-events: none; opacity: .3; mix-blend-mode: overlay; background-size: 220px; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .title { grid-column: 1; display: flex; flex-direction: column; gap: calc(var(--k) * 6px); min-width: 0; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .name { font: 700 calc(var(--k) * 23px)/1.05 var(--display); letter-spacing: -.02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-bottom: .14em; margin-bottom: -.14em; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .topic { font: 600 max(10px, calc(var(--k) * 10px))/1 var(--body); letter-spacing: .2em; text-transform: uppercase; opacity: .74; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .nfc { grid-column: 2; width: calc(var(--k) * 26px); height: calc(var(--k) * 26px); opacity: .8; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] svg.chip { grid-column: 1; margin-top: calc(var(--k) * 22px); width: calc(var(--k) * 52px); height: calc(var(--k) * 40px); }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .num { grid-column: 1 / 3; align-self: end; margin-bottom: calc(var(--k) * 14px); font: 500 calc(var(--k) * 21px)/1 var(--mono); letter-spacing: .16em; white-space: nowrap; text-shadow: 0 1px 0 rgba(0,0,0,.18); }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .bottom { grid-column: 1 / 3; display: flex; align-items: flex-end; gap: calc(var(--k) * 30px); }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .field { display: flex; flex-direction: column; gap: calc(var(--k) * 5px); }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .lab { font: 600 calc(var(--k) * 8.5px)/1 var(--body); letter-spacing: .2em; opacity: .66; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] .val { font: 600 calc(var(--k) * 13px)/1 var(--body); letter-spacing: .14em; white-space: nowrap; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] svg.mark { margin-left: auto; width: calc(var(--k) * 54px); height: calc(var(--k) * 38px); flex: none; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] mark { background: var(--lime); color: #15210A; border-radius: .18em; padding: 0 .08em; margin: 0 -.08em; }
+
+/* Dense: only the name and the topic stay on the card. The topic never drops under 11px. */
+:is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] svg.chip, :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .num, :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .bottom { display: none; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .card { padding: calc(var(--k) * 30px) calc(var(--k) * 34px); }
+:is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .nfc { width: calc(var(--k) * 30px); height: calc(var(--k) * 30px); }
+:is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .topic { font-size: 11px; letter-spacing: .12em; }
+/* Over a busy picture the dense card's two lines keep a halo of the card's own colour, and on the narrowest phones they get the width back. */
+:is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .name, :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .topic { text-shadow: 0 0 6px var(--c), 0 0 2px var(--c); }
+@media (max-width: 420px) { :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .topic { letter-spacing: .06em; } }
+@media (max-width: 360px) {
+  :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .nfc { display: none; }
+  :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .card { padding: calc(var(--k) * 26px) calc(var(--k) * 24px); }
+  :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .topic { letter-spacing: .03em; }
+  :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .name { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+}

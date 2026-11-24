@@ -14,11 +14,12 @@ export interface ProjectEntry {
 // A porting agent flips its own line: `load: () => import('./pyventa')`. Nothing else in the site changes.
 export const PROJECTS: Record<string, ProjectEntry> = {
   kanji: { path: '/kanji', load: () => import('./kanji'), legacy: ['kanji-study-app', 'kanji'] },
-  pyventa: { path: '/pyventa', load: null, legacy: ['pyventa-web', 'pyventa'] },
-  'porter-galaxy': { path: '/porter-galaxy', load: null, legacy: ['porter-galaxy'] },
-  'maiden-os': { path: '/maiden-os', load: null, legacy: ['maiden-os'] },
-  telar: { path: '/telar', load: null, legacy: ['telar'] },
-  whiteboard: { path: '/whiteboard', load: null, legacy: ['whiteboard'] },
+  'essay-studio': { path: '/essay', load: () => import('./essay'), legacy: ['essay-studio', 'essay'] },
+  pyventa: { path: '/pyventa', load: () => import('./pyventa'), legacy: ['pyventa-web', 'pyventa'] },
+  'porter-galaxy': { path: '/porter-galaxy', load: () => import('./porter-galaxy'), legacy: ['porter-galaxy'] },
+  'maiden-os': { path: '/maiden-os', load: () => import('./maiden-os'), legacy: ['maiden-os'] },
+  telar: { path: '/telar', load: () => import('./telar'), legacy: ['telar'] },
+  whiteboard: { path: '/whiteboard', load: () => import('./whiteboard'), legacy: ['whiteboard'] },
 }
 
 // The page of a wallet card, or null when the card has none yet (Sim World never gets one).

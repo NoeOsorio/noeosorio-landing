@@ -15,7 +15,7 @@ const SITE = 'https://noeosorio.com'
 const LOCALE: Record<Lang, string> = { es: 'es_MX', en: 'en_US' }
 
 // Sets the page's own title, description, canonical, social tags and an absolute social image, and puts back what was there.
-function applyMeta(page: ProjectPage, lang: Lang) {
+export function applyMeta(page: ProjectPage, lang: Lang) {
   const m = page.meta[lang]
   const url = `${SITE}/${page.id}`
   const image = SITE + page.ogImage

@@ -14,20 +14,22 @@ const NotFound = lazy(() => import('./pages/NotFound'))
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'))
 const About = lazy(() => import('./pages/About'))
-const Portfolio = lazy(() => import('./pages/Portfolio'))
+const Portfolio = lazy(() => import('./projects/portfolio/PortfolioPage'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Social = lazy(() => import('./pages/Social'))
-const EssayPage = lazy(() => import('./pages/essay/EssayPage'))
 
 const router = createBrowserRouter([
   ...projectRoutes,
   {
-    path: "/essay",
+    path: "/portfolio",
     element: (
       <>
         <ScrollToTop />
         <Suspense fallback={<LoadingScreen />}>
-          <EssayPage />
+          <Portfolio />
+        </Suspense>
+        <Suspense fallback={null}>
+          <CookieConsent />
         </Suspense>
       </>
     )
@@ -67,14 +69,6 @@ const router = createBrowserRouter([
       { 
         path: "/services", 
         element: <Navigate to="/portfolio" replace /> 
-      },
-      { 
-        path: "/portfolio", 
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <Portfolio />
-          </Suspense>
-        ) 
       },
       { 
         path: "/portfolio/:projectId", 
