@@ -38,7 +38,7 @@ export interface WalletContent {
   title: string;
   sub: string;
   opening: string;
-  builtWith: string; runsOn: string; firstCommit: string; commitsWord: string; pricing: string; seeProject: string; listTitle: string;
+  builtWith: string; runsOn: string; firstCommit: string; commitsWord: string; pricing: string; seeProject: string; openProject: string; listTitle: string;
   problemLabel: string; howLabel: string; edgeLabel: string; platformsLabel: string; stackLabel: string; detailsTitle: string;
   weekOf: string; linesWord: string; sourceHint: string; createdLabel: string; holder: string;
   close: string;
@@ -49,7 +49,7 @@ export const wallet: WalletContent = {
   title: "Everything I've built",
   sub: "Every project is a pass in my wallet. Pick one to open it.",
   opening: "Opening",
-  builtWith: "Built with", runsOn: "Runs on", firstCommit: "First commit", commitsWord: "commits", pricing: "Pricing", seeProject: "See project", listTitle: "Latest activity", problemLabel: "The problem", howLabel: "How it works", edgeLabel: "Only here", platformsLabel: "Platforms", stackLabel: "Built with", detailsTitle: "Card details", weekOf: "Week of", linesWord: "lines", sourceHint: "See the source", createdLabel: "CREATED", holder: "NOÉ OSORIO",
+  builtWith: "Built with", runsOn: "Runs on", firstCommit: "First commit", commitsWord: "commits", pricing: "Pricing", seeProject: "See project", openProject: "Open project", listTitle: "Latest activity", problemLabel: "The problem", howLabel: "How it works", edgeLabel: "Only here", platformsLabel: "Platforms", stackLabel: "Built with", detailsTitle: "Card details", weekOf: "Week of", linesWord: "lines", sourceHint: "See the source", createdLabel: "CREATED", holder: "NOÉ OSORIO",
   close: "Close",
   projects: [
     { id: "maiden-os", pitch: {"head": "An assistant that does the work, within limits you set.", "problem": "AI assistants either do nothing useful or act with no limits.", "how": "Ask from Telegram, your Mac or your iPhone, and get the work done: a table, a study guide, an audio.", "edge": "Permission levels, spending limits and an audit log for every action.", "price": "Personal", "note": "Not available yet", "cta": null, "platforms": ["telegram", "mac", "iphone"]}, activity: [["2026-11-02", 60, 15336, 4821], ["2026-10-26", 146, 33338, 6722], ["2026-10-19", 37, 6117, 896], ["2026-10-12", 175, 29630, 3818], ["2026-10-05", 101, 23821, 1862]], price: "Personal project", source: "", page: "https://noeosorio.com/maiden-os", feats: ["Guardrails", "Notices for me"], first: "Sep 29, 2026", name: "Maiden OS", topic: "AI agents", icon: "spark", art: "obsidian", c: "#17161D", fg: "#F4EEE4", created: "09/26", commits: 632, runs: "Telegram, Mac and iPhone",

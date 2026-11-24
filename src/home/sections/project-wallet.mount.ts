@@ -10,6 +10,8 @@ import artSimworld from '../assets/cards/simworld.webp';
 import artKanji from '../assets/cards/kanji.webp';
 import artPyventa from '../assets/cards/pyventa.webp';
 import { motions } from './card-motion';
+import { pageOf, preloadPage } from '../../projects/registry';
+import { beginFlight } from '../../projects/cardFlight';
 
 // Mounts the project wallet into root. Ported from the approved prototype (specs/002-home-objects/prototypes/project-wallet.html).
 const PLAT: Record<string, [string, string]> = {
@@ -241,17 +243,25 @@ export const mountWallet: Mount<WalletContent> = (root, C, { reduce }) => {
     place(me.el, AUTH, 1); me.el.style.zIndex = '100'; me.el.style.filter = '';
     const rest = passes.filter((x) => x !== me);
 
-    const pt = p.pitch;
+    const pt = p.pitch, page = pageOf(p.id);
     const plats = pt.platforms.map((k) => `<span class="plat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PLAT[k][1]}</svg>${esc(PLAT[k][0])}</span>`).join('');
     details.innerHTML = `
       <div class="block buy"><div class="price"><b>${esc(pt.price)}</b>${pt.note ? `<span>${esc(pt.note)}</span>` : ''}</div>
-        ${pt.cta ? `<a class="btn primary" href="${esc(pt.cta[1])}" target="_blank" rel="noopener">${esc(pt.cta[0])}</a>` : ''}</div>
+        <div class="acts">${page ? `<a class="btn" href="${esc(page.path)}" data-open>${esc(C.openProject)}</a>` : ''}${pt.cta ? `<a class="btn primary" href="${esc(pt.cta[1])}" target="_blank" rel="noopener">${esc(pt.cta[0])}</a>` : ''}</div></div>
       <div class="block pitch"><h4>${esc(pt.head)}</h4>
         <div class="line"><span class="k">${esc(C.problemLabel)}</span><span class="v">${esc(pt.problem)}</span></div>
         <div class="line"><span class="k">${esc(C.howLabel)}</span><span class="v">${esc(pt.how)}</span></div>
         <div class="line edge"><span class="k">${esc(C.edgeLabel)}</span><span class="v">${esc(pt.edge)}</span></div></div>
       <div class="block meta"><div><span class="k">${esc(C.platformsLabel)}</span><span class="plats">${plats}</span></div>
         <div><span class="k">${esc(C.stackLabel)}</span><span class="chips">${p.tags.map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</span></div></div>`;
+    // «Open project»: the open card travels to its page. The tap, the pay animation and the details above are untouched.
+    const openBtn = details.querySelector<HTMLAnchorElement>('[data-open]');
+    if (openBtn) {
+      const warm = () => preloadPage(p.id);
+      openBtn.addEventListener('pointerenter', warm, { signal, once: true });
+      openBtn.addEventListener('focus', warm, { signal, once: true });
+      openBtn.addEventListener('click', (e) => { if (!e.defaultPrevented && e.button === 0 && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) beginFlight(me.el, p.id); }, { signal });
+    }
     closeBtn.style.setProperty('--x', '1');
     details.style.setProperty('--c', p.c); details.style.setProperty('--fg', p.fg);
     details.style.top = (desk() ? 0 : AUTH + H + 24) + 'px'; details.style.visibility = 'hidden'; details.style.opacity = '0';

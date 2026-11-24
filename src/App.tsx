@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import ScrollToTop from './components/ScrollToTop'
 import LoadingScreen from './components/LoadingScreen'
+import { projectRoutes, LegacyProject } from './projects/routes'
 
 // Layout (navbar, footer), the cookie banner (animation library) and the secondary pages are
 // not needed to paint the home, so they load as separate chunks.
@@ -19,6 +20,7 @@ const Social = lazy(() => import('./pages/Social'))
 const EssayPage = lazy(() => import('./pages/essay/EssayPage'))
 
 const router = createBrowserRouter([
+  ...projectRoutes,
   {
     path: "/essay",
     element: (
@@ -76,11 +78,11 @@ const router = createBrowserRouter([
       },
       { 
         path: "/portfolio/:projectId", 
-        element: <Navigate to="/portfolio" replace /> 
+        element: <LegacyProject /> 
       },
       { 
         path: "/open-source/:id", 
-        element: <Navigate to="/portfolio" replace /> 
+        element: <LegacyProject /> 
       },
       { 
         path: "/contact", 
@@ -108,11 +110,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/b2b/:projectId",
-        element: <Navigate to="/portfolio" replace />
+        element: <LegacyProject />
       },
       {
         path: "/landing/:projectId",
-        element: <Navigate to="/portfolio" replace />
+        element: <LegacyProject />
       },
       {
         path: "*",

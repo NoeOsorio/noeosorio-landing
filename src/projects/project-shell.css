@@ -1,0 +1,5 @@
+/* The frame every project page shares: the home's tokens, bar and footer around the page's own world. */
+.project-root { min-height: 100vh; }
+.project-page { position: relative; z-index: 1; }
+.project-root .home-close { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) { .project-flight * { animation: none !important; } }
