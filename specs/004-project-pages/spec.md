@@ -150,3 +150,11 @@ A visitor lands on /essay. It keeps its 3D model and waitlist, but now belongs t
   - no layout reads in the loop
   - few will-change layers
   - every style error in the prototypes is fixed in the build
+
+## Decisions (2026-11-23)
+
+- **Telar** is presented as the engine for building visual novels, not as the game. La beca is the playable example.
+  - Headline: «Visual novels that remember.» / «Novelas visuales que recuerdan.»
+  - The home wallet card's pitch for Telar must be updated to match.
+- **Pyventa** stays flat and clean, with no 3D, scanner or printer. The products carry the laser scan, and the hero product is the notebook.
+- **Maiden OS** keeps the futuristic glass look with Maiden's colors, her face in the core and the «Maiden OS» name. No device screenshots.
