@@ -42,7 +42,7 @@ function rng(seed: number) { let s = seed; return () => { s = (s * 1664525 + 101
 // The window at its natural size, and the beats of the story.
 const NATD: [number, number] = [1280, 800], NATM: [number, number] = [460, 760]
 const VDUR = { d: 22.04, m: 20.52 } // seconds of the real recording
-const B = { fly: [.012, .085], winIn: [.07, .13], morph: [.17, .26], vid: [.22, .27], v0: .27, v1: .87, out: [.875, .915], end: [.905, .97] }
+const B = { fly: [.012, .085], winIn: [.055, .11], morph: [.17, .26], vid: [.22, .27], v0: .27, v1: .87, out: [.87, .91], end: [.91, .96] }
 type TagKey = 'list' | 'd3' | 'topo' | 'find' | 'where' | 'live'
 const TAGSD: [TagKey, number, number][] = [['list', .138, .205], ['d3', .218, .268], ['topo', .280, .355], ['find', .372, .515], ['where', .585, .74], ['live', .752, .862]]
 const TAGSM: [TagKey, number, number][] = [['list', .138, .205], ['d3', .218, .268], ['topo', .280, .545], ['where', .575, .735], ['live', .748, .862]]
@@ -70,7 +70,7 @@ export const mountGalaxy: Mount<ProjectData> = (root, { lang, first }, { reduce 
   const ROWS = podRows(64)
   const W = {} as World
   let el = {} as {
-    track: HTMLElement; stage: HTMLElement; world: HTMLElement; intro: HTMLElement; con: SVGSVGElement; plate: HTMLElement; vh: HTMLVideoElement
+    track: HTMLElement; stage: HTMLElement; world: HTMLElement; gh: SVGSVGElement; intro: HTMLElement; con: SVGSVGElement; plate: HTMLElement; vh: HTMLVideoElement
     win: HTMLElement; vwr: HTMLElement; vid: HTMLVideoElement | null; ls: HTMLElement; tx: HTMLElement; dt: HTMLElement; hd: HTMLElement
     end: HTMLElement; objs: HTMLElement; d: HTMLElement[]; tags: HTMLElement[]; pa: HTMLCanvasElement[]; neb: HTMLElement[]
   }
@@ -114,6 +114,7 @@ export const mountGalaxy: Mount<ProjectData> = (root, { lang, first }, { reduce 
     const video = reduce ? '' : `<video class="vid" muted playsinline preload="metadata" poster="${scrub.poster}" aria-hidden="true"><source src="${scrub.mp4}" type="video/mp4"><source src="${scrub.webm}" type="video/webm"></video>`
     root.innerHTML = `<div class="track"><div class="stage">
   <div class="world"></div>
+  <svg class="gh" aria-hidden="true"></svg>
   <div class="plateh"><div class="plate"><video class="vh" muted loop ${reduce ? '' : 'autoplay'} playsinline preload="auto" poster="${heroV.poster}" aria-hidden="true"><source src="${heroV.mp4}" type="video/mp4"><source src="${heroV.webm}" type="video/webm"></video>${HERO[k].tick.map((t, i) => `<i class="tk" style="left:${t[0] * 100}%;top:${t[1] * 100}%;animation-delay:${(i * .57).toFixed(2)}s"></i>`).join('')}</div></div>
   <svg class="con" aria-hidden="true"></svg>
   <div class="intro"><p class="nm">Porter Galaxy</p><h1>${C.head.split(' ').map((w) => `<span class="w">${w} </span>`).join('')}</h1><p class="meta"><span>${C.price}, ${C.note.toLowerCase()}</span><span class="pl"><svg viewBox="0 0 24 24" aria-hidden="true">${icon.k8s}</svg>Kubernetes</span><span class="pl"><svg viewBox="0 0 24 24" aria-hidden="true">${icon.web}</svg>Web</span></p><a class="gbtn" href="${REPO}" target="_blank" rel="noopener">${C.cta}</a></div>
@@ -124,7 +125,7 @@ export const mountGalaxy: Mount<ProjectData> = (root, { lang, first }, { reduce 
 <section class="rmcta"><div class="in"><h2>${C.price}</h2><p>${C.plat}</p><a class="gbtn" href="${REPO}" target="_blank" rel="noopener">${C.cta}</a></div></section>`
     const q = <E extends Element>(s: string) => root.querySelector(s) as E
     el = {
-      track: q('.track'), stage: q('.stage'), world: q('.world'), intro: q('.intro'), con: q('.con'), plate: q('.plate'), vh: q('.vh'),
+      track: q('.track'), stage: q('.stage'), world: q('.world'), gh: q('.gh'), intro: q('.intro'), con: q('.con'), plate: q('.plate'), vh: q('.vh'),
       win: q('.win'), vwr: q('.vw'), vid: root.querySelector('.vid'), ls: q('.ls'), tx: q('.tx'), dt: q('.dt'), hd: q('.hd'),
       end: q('.end'), objs: q('.objs'), d: [], tags: [...root.querySelectorAll<HTMLElement>('.tag')], pa: [], neb: [],
     }
@@ -211,8 +212,9 @@ export const mountGalaxy: Mount<ProjectData> = (root, { lang, first }, { reduce 
         used.add(bi)
         const q = podp[bi]
         if (por) {
-          const gx = vw - 10 - i * 7
-          svg += `<path class="ln" d="M${L.r.toFixed(1)} ${y.toFixed(1)}L${gx} ${(y + 14).toFixed(1)}L${gx} ${(q[1] - 40 - i * 8).toFixed(1)}L${q[0].toFixed(1)} ${(q[1] - 6).toFixed(1)}"/><circle class="st" cx="${gx}" cy="${(y + 14).toFixed(1)}" r="1.8"/>`
+          // Along the line's own baseline to the right margin, then straight down: never across the words below.
+          const gx = vw - 8 - i * 4
+          svg += `<path class="ln" d="M${L.r.toFixed(1)} ${y.toFixed(1)}H${gx}V${(q[1] - 40 - i * 8).toFixed(1)}L${q[0].toFixed(1)} ${(q[1] - 6).toFixed(1)}"/><circle class="st" cx="${gx}" cy="${y.toFixed(1)}" r="1.8"/>`
         } else {
           const mx = (L.r + q[0]) / 2, my = Math.min(y, q[1]) - 18 - i * 10
           svg += `<path class="ln" d="M${L.r.toFixed(1)} ${y.toFixed(1)}L${mx.toFixed(1)} ${my.toFixed(1)}L${q[0].toFixed(1)} ${(q[1] - 6).toFixed(1)}"/><circle class="st" cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" r="1.8"/>`
@@ -220,6 +222,21 @@ export const mountGalaxy: Mount<ProjectData> = (root, { lang, first }, { reduce 
       }
     })
     el.con.innerHTML = svg
+    // Ghost galaxy: the ring of pods, faint, so the hand-offs between the hero, the list and the closing never show an empty sky.
+    {
+      const ss = main.s, gcx = main.x, gcy = main.y + NAT[1] * .12 * ss, grx = NAT[0] * (por ? .40 : .33) * ss, gry = NAT[1] * (por ? .20 : .29) * ss
+      let gs = 11
+      const gr = () => (gs = (gs * 1664525 + 1013904223) % 4294967296) / 4294967296
+      const cols = ['95,240,176', '95,240,176', '95,240,176', '255,200,87', '120,170,255', '190,150,255']
+      let g = `<ellipse cx="${gcx.toFixed(1)}" cy="${gcy.toFixed(1)}" rx="${grx.toFixed(1)}" ry="${gry.toFixed(1)}" fill="none" stroke="rgba(150,190,255,.16)" stroke-width="1"/>`
+      for (let i = 0; i < 64; i++) {
+        const a = (i / 64) * Math.PI * 2 + gr() * .08, rr = 1 + (gr() - .5) * .07
+        const x = gcx + Math.cos(a) * grx * rr, y = gcy + Math.sin(a) * gry * rr, c = cols[Math.floor(gr() * cols.length)], r = (por ? 2.2 : 3) * (.6 + gr() * .9)
+        g += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="rgba(${c},.85)"/>`
+        if (i % 9 === 0) g += `<path d="M${gcx.toFixed(1)} ${(gcy - gry).toFixed(1)}L${x.toFixed(1)} ${y.toFixed(1)}" stroke="rgba(170,205,255,.18)" stroke-width="1" fill="none"/>`
+      }
+      el.gh.innerHTML = g
+    }
     // Labels: placed from the real, transformed rectangle of the window in its main pose.
     put(el.win, 'transform', poseT(main)); put(el.win, 'opacity', '1'); put(el.win, 'visibility', 'visible')
     const r = el.win.getBoundingClientRect()
@@ -301,6 +318,9 @@ export const mountGalaxy: Mount<ProjectData> = (root, { lang, first }, { reduce 
       }
       put(n, 'opacity', (reduce ? .6 : .25 + .75 * g).toFixed(3)); put(n, 'transform', `translate3d(0,${(-p * dr * sp).toFixed(1)}px,0)`)
     })
+    // The ghost galaxy shows only in the two hand-offs: hero to list, and the recording to the closing.
+    const gho = reduce ? 0 : .5 * (S(p, .05, .085) * (1 - S(p, .1, .135)) + S(p, .84, .875) * (1 - S(p, .925, .955)))
+    put(el.gh, 'opacity', gho.toFixed(3)); put(el.gh, 'visibility', gho > 0 ? 'visible' : 'hidden')
     // The list: rests, scrolls, then every row's dot flies to the galaxy.
     const sc = EO(S(p, .09, .17)), off = W.off * (reduce ? 1 : sc)
     const lm = S(p, B.morph[0], B.morph[1])

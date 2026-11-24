@@ -1,6 +1,6 @@
 import type { Lang } from './types'
 
-// Shared by every page with a Spanish/English switch. Order: ?lang= in the URL, then the saved choice, then Spanish.
+// Shared by every page with a Spanish/English switch. Order: ?lang= in the URL, then the saved choice, then the browser language (Spanish if it starts with "es", else English).
 const KEY = 'site-lang'
 const LEGACY_KEY = 'essay-lang'
 
@@ -15,7 +15,8 @@ export function initialLang(): Lang {
     const saved = window.localStorage.getItem(KEY) ?? window.localStorage.getItem(LEGACY_KEY)
     if (isLang(saved)) return saved
   } catch { /* storage blocked: fall through */ }
-  return 'es'
+  try { if (window.navigator.language?.toLowerCase().startsWith('es')) return 'es' } catch { /* no navigator: fall through */ }
+  return 'en'
 }
 
 export function saveLang(lang: Lang) {

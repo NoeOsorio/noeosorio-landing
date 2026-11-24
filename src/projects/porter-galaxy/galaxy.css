@@ -13,6 +13,8 @@
 .pg-porter-galaxy .neb { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0; }
 /* Layers are promoted only while the page is moving. */
 .pg-porter-galaxy.moving .pa, .pg-porter-galaxy.moving .neb, .pg-porter-galaxy.moving .obj, .pg-porter-galaxy.moving .tag, .pg-porter-galaxy.moving .plate, .pg-porter-galaxy.moving .tx, .pg-porter-galaxy.moving .dt, .pg-porter-galaxy.moving .d { will-change: transform, opacity; }
+.pg-porter-galaxy .gh { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; visibility: hidden; }
+.pg-porter-galaxy.moving .gh { will-change: opacity; }
 .pg-porter-galaxy .objs { position: absolute; inset: 0; }
 .pg-porter-galaxy .obj { position: absolute; left: 0; top: 0; transform-origin: 50% 50%; opacity: 0; visibility: hidden; }
 /* The window: one frame that holds the list first and the real galaxy after. */

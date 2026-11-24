@@ -43,14 +43,14 @@ interface Pose { x: number; y: number; s: number; o: number }
 type Keys = [number, Pose][]
 
 // ---------- The story, in scroll p ----------
-const REQ = [{ n: 0, a: .10, b: .135, c: .165 }, { n: 1, a: .305, b: .335, c: .365 }, { n: 2, a: .575, b: .605, c: .635 }, { n: 2, a: .775, b: .80, c: .83 }]
+const REQ = [{ n: 0, a: .10, b: .135, c: .165 }, { n: 1, a: .305, b: .335, c: .365 }, { n: 2, a: .575, b: .605, c: .635 }, { n: 2, a: .783, b: .80, c: .82 }]
 const PN: Record<string, { i: [number, number]; o: [number, number] }> = {
-  tbl: { i: [.165, .19], o: [.305, .335] }, gde: { i: [.365, .39], o: [.575, .605] }, aud: { i: [.635, .66], o: [.775, .80] },
-  gat: { i: [.83, .85], o: [.90, .915] }, led: { i: [.905, .922], o: [.966, .981] },
+  tbl: { i: [.165, .19], o: [.305, .335] }, gde: { i: [.365, .39], o: [.575, .605] }, aud: { i: [.635, .66], o: [.75, .775] },
+  gat: { i: [.82, .84], o: [.90, .915] }, led: { i: [.905, .922], o: [.966, .981] },
 }
 const PNL = ['tbl', 'gde', 'aud', 'gat', 'led']
 const LT = Array.from({ length: 6 }, (_, i) => .915 + i * .0072)
-const LEV: [number, number, number][] = [[0, .165, .19], [1, .19, .30], [1, .375, .56], [1, .645, .77], [2, .83, .895]]
+const LEV: [number, number, number][] = [[0, .165, .19], [1, .19, .30], [1, .375, .56], [1, .645, .77], [2, .82, .895]]
 const TAGS: [keyof MaidenCopy['t'], string, number, number][] = [['tg', 'tbl', .105, .16], ['tbl', 'tbl', .195, .30], ['mac', 'gde', .31, .36], ['guide', 'gde', .41, .57], ['ip', 'aud', .58, .63], ['aud', 'aud', .68, .77], ['ask', 'gat', .855, .89], ['lim', 'led', .925, .945], ['log', 'led', .95, .97]]
 const GAP = 32, SIDE = 24, TOP = 76, RM2 = 132
 const NZ = 'url("data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .7 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>') + '")'
@@ -143,7 +143,7 @@ export const mountMaidenOs: Mount<ProjectData> = (root, { lang, first }, { reduc
   }
   function gatHTML() {
     const G = C.gat
-    return `<div class="gfl" id="gfl"></div><div class="pc gt"><div class="gsw"><div data-r=".872,.882,out"><h3>${G.t}</h3><p>${G.p}</p><div class="am2"><em>${G.a}</em><span>${G.o}</span></div><div class="btns"><b>${G.no}</b><b class="y" data-r=".862,.872,press">${G.yes}</b></div></div><div data-r=".880,.892,f"><h3 style="color:#5FD08A">${G.dn}</h3><p>${G.dp}</p></div></div><div class="slit" data-r=".865,.886,slit"></div>
+    return `<div class="gfl" id="gfl"></div><div class="pc gt"><div class="gsw"><div data-r=".872,.882,out"><h3>${G.t}</h3><p>${G.p}</p><div class="am2"><em>${G.a}</em><span>${G.o}</span></div><div class="btns"><b>${G.no}</b><b class="y" data-r=".862,.872,press">${G.yes}</b></div></div><div data-r=".884,.894,f"><h3 style="color:#5FD08A">${G.dn}</h3><p>${G.dp}</p></div></div><div class="slit" data-r=".865,.886,slit"></div>
  <div class="mt"><div class="t"><span>${G.sp}</span><b><span style="display:inline-grid"><span style="grid-area:1/1;text-align:right" data-r=".872,.884,out">$0.22</span><span style="grid-area:1/1;text-align:right" data-r=".884,.894,f">$0.62</span></span> / $3</b></div><div class="tr"><i class="m0"></i><i class="m1"></i><i class="m1f" data-r=".876,.897,x"></i></div></div></div>`
   }
   function ledHTML() {
@@ -358,7 +358,7 @@ export const mountMaidenOs: Mount<ProjectData> = (root, { lang, first }, { reduc
     let f = 'idle'
     REQ.forEach((r) => { if (p >= r.a && p < r.b + .012) f = 'listen'; else if (p >= r.b + .012 && p < r.c + .012) f = 'think' })
     if ((p >= .17 && p < .30) || (p >= .375 && p < .57) || (p >= .645 && p < .77)) f = 'act'
-    if (p >= .83 && p < .872) f = 'appr'; else if (p >= .872 && p < .906) f = 'done'
+    if (p >= .82 && p < .872) f = 'appr'; else if (p >= .872 && p < .906) f = 'done'
     if (p >= LT[4] && p < LT[4] + .016) f = 'worried'
     if (p >= .985) f = 'done'
     return f

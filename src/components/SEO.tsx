@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 
 interface SEOProps {
@@ -25,6 +26,19 @@ export const SEO = ({
   author = "Noé Osorio",
   twitterHandle = "@noeosorio.dev"
 }: SEOProps) => {
+  // index.html carries the home's canonical; every other page points at itself and puts the home's back on leave.
+  useEffect(() => {
+    let path = '/';
+    try { path = new URL(url).pathname; } catch { /* not absolute: leave as is */ }
+    if (path === '/' || path === '') return;
+    let el = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const created = !el;
+    if (!el) { el = document.createElement('link'); el.rel = 'canonical'; document.head.appendChild(el); }
+    const prev = el.getAttribute('href');
+    el.setAttribute('href', url);
+    return () => { if (created) el?.remove(); else if (prev !== null) el?.setAttribute('href', prev); };
+  }, [url]);
+
   useDocumentMeta({
     title,
     description,

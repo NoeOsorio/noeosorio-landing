@@ -111,7 +111,7 @@
 :is(.pg-portfolio, .project-flight) .pass[data-pf] .lab { font: 600 calc(var(--k) * 8.5px)/1 var(--body); letter-spacing: .2em; opacity: .66; }
 :is(.pg-portfolio, .project-flight) .pass[data-pf] .val { font: 600 calc(var(--k) * 13px)/1 var(--body); letter-spacing: .14em; white-space: nowrap; }
 :is(.pg-portfolio, .project-flight) .pass[data-pf] svg.mark { margin-left: auto; width: calc(var(--k) * 54px); height: calc(var(--k) * 38px); flex: none; }
-:is(.pg-portfolio, .project-flight) .pass[data-pf] mark { background: var(--lime); color: #15210A; border-radius: .18em; padding: 0 .08em; margin: 0 -.08em; }
+:is(.pg-portfolio, .project-flight) .pass[data-pf] mark { background: color-mix(in srgb, var(--lime) 22%, transparent); color: inherit; border-radius: .12em; padding: 0 .04em; margin: 0 -.04em; text-decoration: underline; text-decoration-color: var(--lime); text-decoration-thickness: .1em; text-underline-offset: .13em; text-decoration-skip-ink: none; }
 
 /* Dense: only the name and the topic stay on the card. The topic never drops under 11px. */
 :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] svg.chip, :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .num, :is(.pg-portfolio, .project-flight) .pass[data-pf][data-dense] .bottom { display: none; }
