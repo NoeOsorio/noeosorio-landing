@@ -15,7 +15,7 @@ export interface PyventaCopy {
   plat: string
   cta: string
   // Labels beside the scenes of the scroll story.
-  t: { reader: string; line: string; f5: string; change: string; ticket: string; drop: string; offsale: string; sends: string; phone: string }
+  t: { reader: string; line: string; charge: string; change: string; ticket: string; drop: string; offsale: string; sends: string; phone: string }
   metaTitle: string
   metaDescription: string
 }
@@ -27,7 +27,7 @@ export const COPY: Record<Lang, PyventaCopy> = {
     price: 'A pedido',
     plat: 'Para tiendas, en la web y en el celular.',
     cta: 'Solicítalo',
-    t: { reader: 'Lee el código de barras', line: 'Renglón, precio y total', f5: 'Cobra con F5', change: 'Cambio al instante', ticket: 'Sale el ticket', drop: 'Se cae el internet', offsale: 'La venta sigue', sends: 'Se envía al volver', phone: 'El celular escanea precios' },
+    t: { reader: 'Lee el código de barras', line: 'Renglón, precio y total', charge: 'Cobra en un toque', change: 'Cambio al instante', ticket: 'Sale el ticket', drop: 'Se cae el internet', offsale: 'La venta sigue', sends: 'Se envía al volver', phone: 'El celular escanea precios' },
     metaTitle: 'Pyventa Web: punto de venta que sigue sin internet | Noé Osorio',
     metaDescription: 'Punto de venta para tiendas, en la web y en el celular. Cobra con lector de código de barras, imprime el ticket y sigue vendiendo aunque se caiga el internet.',
   },
@@ -37,7 +37,7 @@ export const COPY: Record<Lang, PyventaCopy> = {
     price: pitch.price,
     plat: 'For shops, on the web and on the phone.',
     cta: pitch.cta![0],
-    t: { reader: 'Reads the barcode', line: 'Line, price and total', f5: 'Charge with F5', change: 'Change due', ticket: 'The ticket prints', drop: 'The internet drops', offsale: 'The sale still goes through', sends: 'It sends itself when back', phone: 'Phone as price scanner' },
+    t: { reader: 'Reads the barcode', line: 'Line, price and total', charge: 'Charge in one tap', change: 'Change due', ticket: 'The ticket prints', drop: 'The internet drops', offsale: 'The sale still goes through', sends: 'It sends itself when back', phone: 'Phone as price scanner' },
     metaTitle: 'Pyventa Web: a point of sale that keeps selling offline | Noé Osorio',
     metaDescription: `${card.text} ${pitch.how} ${pitch.edge}`,
   },

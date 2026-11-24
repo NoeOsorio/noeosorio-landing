@@ -45,9 +45,9 @@ type Screen = [string] | [string, Mode, [number, number]]
 const DS: Screen[] = [[pos4], [pos0, 'fade', [.075, .095]], [pos1, 'wipe', [.13, .156]], [pos2, 'wipe', [.21, .236]], [pos3, 'wipe', [.29, .316]], [pos4, 'wipe', [.37, .396]],
   [cobro0, 'fade', [.448, .457]], [cobro, 'fade', [.50, .506]], [cambio, 'fade', [.545, .554]],
   [off0, 'fade', [.752, .762]], [off1, 'wipe', [.785, .812]], [offCobro, 'fade', [.828, .837]], [offCambio, 'fade', [.858, .867]], [off3, 'fade', [.885, .894]]]
-const MS: Screen[] = [[mPos4], [mPos0, 'fade', [.075, .095]], [mPos1, 'fade', [.13, .142]], [mPos2, 'fade', [.21, .222]], [mPos3, 'fade', [.29, .302]], [mPos4, 'fade', [.37, .382]],
-  [mCobro0, 'fade', [.448, .457]], [mCobro, 'fade', [.50, .506]], [mCambio, 'fade', [.545, .554]],
-  [mOff0, 'fade', [.752, .762]], [mOff1, 'fade', [.785, .797]], [mOffCobro, 'fade', [.828, .837]], [mOffCambio, 'fade', [.858, .867]], [mOff3, 'fade', [.885, .894]]]
+const MS: Screen[] = [[mPos4], [mPos0, 'fade', [.07, .095]], [mPos1, 'fade', [.125, .15]], [mPos2, 'fade', [.205, .23]], [mPos3, 'fade', [.285, .31]], [mPos4, 'fade', [.365, .39]],
+  [mCobro0, 'fade', [.44, .462]], [mCobro, 'fade', [.494, .512]], [mCambio, 'fade', [.538, .558]],
+  [mOff0, 'fade', [.744, .766]], [mOff1, 'fade', [.781, .801]], [mOffCobro, 'fade', [.822, .842]], [mOffCambio, 'fade', [.852, .872]], [mOff3, 'fade', [.879, .899]]]
 const TS = [.13, .21, .29, .37] // the four scans
 
 type Key = 'mon' | 'ph' | 'prn' | 'sg' | 'rcp'
@@ -55,15 +55,15 @@ type Shot = 'rcpH' | 'hero' | 'scan' | 'pay' | 'tick' | 'phn'
 // key, the object it names, the shot it is placed in, the side, and the window it shows in
 const TAGS: [string, string, Shot, 'below' | 'right', number, number][] = [
   ['reader', 'sg', 'scan', 'below', .115, .40], ['line', 'main', 'scan', 'below', .20, .42],
-  ['f5', 'main', 'pay', 'below', .452, .50], ['change', 'main', 'pay', 'below', .515, .57],
+  ['charge', 'main', 'pay', 'below', .452, .50], ['change', 'main', 'pay', 'below', .515, .57],
   ['ticket', 'prn', 'tick', 'right', .618, .715],
-  ['drop', 'main', 'pay', 'below', .762, .80], ['offsale', 'main', 'pay', 'below', .808, .865], ['sends', 'main', 'pay', 'below', .872, .896],
+  ['drop', 'main', 'pay', 'below', .748, .803], ['offsale', 'main', 'pay', 'below', .811, .865], ['sends', 'main', 'pay', 'below', .872, .896],
   ['phone', 'ph', 'phn', 'right', .932, .972]]
 
 const NAT: Record<Key, [number, number]> = { mon: [1000, 730], ph: [300, 650], prn: [300, 560], sg: [300, 340], rcp: [540, 900] }
 const GAP = 40, LH = 22, SIDE = 24, TOP = 76
 
-interface Pose { x: number; y: number; s: number; ry: number; rx: number; rz?: number; o: number }
+interface Pose { x: number; y: number; s: number; ry: number; rx: number; rz?: number; o: number; e?: 1 }
 type Keys = [number, Pose][]
 
 const cl = (x: number, a = 0, b = 1) => Math.min(b, Math.max(a, x))
@@ -200,7 +200,6 @@ export const mountPyventa: Mount<ProjectData> = (root, { lang, first }, { reduce
       const s = Math.min(aw * .93 / NAT.mon[0], (vh * .54) / NAT.mon[1], (room - NAT.sg[1] * .82) / NAT.mon[1])
       const my0 = TOP + 10 + NAT.mon[1] * s / 2
       S0.hero = { mon: { x: ax0 + aw / 2, y: my0, s, ry: -10, rx: 3, o: 1 } }
-      S0.heroFlat = { mon: { x: ax0 + aw / 2, y: my0, s, ry: 0, rx: 0, o: 1 } }
       const sgs = Math.min(1.05, (vh * .38) / NAT.sg[1], (room - NAT.mon[1] * s) / NAT.sg[1])
       heroSg = { x: vw - SIDE - NAT.sg[0] * sgs / 2 - 4, y: (vh - 30) - NAT.sg[1] * sgs / 2, s: sgs, ry: 0, rx: 0, o: 1 }
       glowC = [ax0 + aw / 2, my0 + 20, Math.min(aw * 1.35, vh * 1.2)]
@@ -226,7 +225,6 @@ export const mountPyventa: Mount<ProjectData> = (root, { lang, first }, { reduce
       const ay0 = yb + 22, ay1 = vh - SIDE, ah = ay1 - ay0
       const sph = Math.min(ah / NAT.ph[1], (vw * .5) / NAT.ph[0])
       S0.hero = { ph: { x: SIDE + NAT.ph[0] * sph / 2 + 4, y: ay0 + NAT.ph[1] * sph / 2, s: sph, ry: 0, rx: 0, o: 1 } }
-      S0.heroFlat = S0.hero
       const sgs = Math.min(ah / NAT.sg[1] * .95, (vw - 2 * SIDE - NAT.ph[0] * sph - 14) / NAT.sg[0])
       heroSg = { x: vw - SIDE - NAT.sg[0] * sgs / 2, y: ay1 - NAT.sg[1] * sgs / 2, s: sgs, ry: 0, rx: 0, o: 1 }
       glowC = [vw / 2, ay0 + ah / 2, Math.max(vw * 1.3, ah * 1.4)]
@@ -250,10 +248,10 @@ export const mountPyventa: Mount<ProjectData> = (root, { lang, first }, { reduce
     K.rcp = [[0, R], [.012, R], [.034, Object.assign({}, R, { y: R.y + 20, s: R.s * .99, ry: R.ry + 6, rz: 2.5, o: 0 })], [.052, Object.assign({}, R, { y: R.y + 64, s: R.s * .985, ry: R.ry + 10, rz: 4.5, o: 0 })], [1, Object.assign({}, R, { y: R.y + 64, o: 0 })]]
     K.sg = [[0, HS], [.045, HS], [.075, z(HS, 0)], [.088, z(B.sg, 0)], [.10, B.sg], [.42, B.sg], [.445, z(B.sg, 0)], [1, z(B.sg, 0)]]
     if (!por) {
-      K.mon = [[0, A.mon], [.015, A.mon], [.06, S0.heroFlat.mon], [.10, B.mon], [.42, B.mon], [.445, Cc.mon], [.575, Cc.mon], [.60, z(Cc.mon, 0)], [.725, z(Cc.mon, 0)], [.75, Cc.mon], [.90, Cc.mon], [.925, z(Cc.mon, 0)], [1, z(Cc.mon, 0)]]
-      K.ph = [[0, z(E.ph, 0)], [.90, z(E.ph, 0)], [.925, E.ph], [.968, E.ph], [.982, z(E.ph, 0)], [1, z(E.ph, 0)]]
+      K.mon = [[0, A.mon], [.034, A.mon], [.10, Object.assign({ e: 1 as const }, B.mon)], [.42, B.mon], [.445, Cc.mon], [.575, Cc.mon], [.60, z(Cc.mon, 0)], [.725, z(Cc.mon, 0)], [.75, Cc.mon], [.90, Cc.mon], [.925, z(Cc.mon, 0)], [1, z(Cc.mon, 0)]]
+      K.ph = [[0, z(E.ph, 0)], [.90, z(E.ph, 0)], [.925, E.ph], [.968, E.ph], [.978, z(E.ph, 0)], [1, z(E.ph, 0)]]
     } else {
-      K.ph = [[0, A.ph], [.055, A.ph], [.10, B.ph], [.42, B.ph], [.445, Cc.ph], [.575, Cc.ph], [.60, z(Cc.ph, 0)], [.725, z(Cc.ph, 0)], [.75, Cc.ph], [.968, Cc.ph], [.982, z(Cc.ph, 0)], [1, z(Cc.ph, 0)]]
+      K.ph = [[0, A.ph], [.055, A.ph], [.10, B.ph], [.42, B.ph], [.445, Cc.ph], [.575, Cc.ph], [.60, z(Cc.ph, 0)], [.725, z(Cc.ph, 0)], [.75, Cc.ph], [.968, Cc.ph], [.978, z(Cc.ph, 0)], [1, z(Cc.ph, 0)]]
     }
     K.prn = [[0, z(D.prn, 0)], [.575, z(D.prn, 0)], [.60, D.prn], [.725, D.prn], [.75, z(D.prn, 0)], [1, z(D.prn, 0)]]
     KEYS = K
@@ -276,17 +274,25 @@ export const mountPyventa: Mount<ProjectData> = (root, { lang, first }, { reduce
   function poseAt(keys: Keys, p: number): Pose {
     let i = 0
     while (i < keys.length - 2 && p > keys[i + 1][0]) i++
-    const a = keys[i], b = keys[i + 1], t = EIO(S(p, a[0], b[0])), A = a[1], B = b[1]
+    const a = keys[i], b = keys[i + 1], t = (b[1].e ? EO : EIO)(S(p, a[0], b[0])), A = a[1], B = b[1]
     return { x: A.x + (B.x - A.x) * t, y: A.y + (B.y - A.y) * t, s: A.s + (B.s - A.s) * t, ry: A.ry + (B.ry - A.ry) * t, rx: A.rx + (B.rx - A.rx) * t, rz: (A.rz || 0) + ((B.rz || 0) - (A.rz || 0)) * t, o: A.o + (B.o - A.o) * t }
   }
   function screens(list: HTMLElement[], defs: Screen[], p: number, wipe: boolean) {
     for (let i = 0; i < list.length; i++) {
       const d = defs[i], w = d[2], mode = d[1], el = list[i]
+      const nx = i < defs.length - 1 ? defs[i + 1][2] : null
+      if (!wipe) {
+        // Phone: one screen at a time. The old one leaves in the first half of the next window, the new one arrives in the second half.
+        let o = w ? EO(S(p, (w[0] + w[1]) / 2, w[1])) : 1
+        if (nx) o *= 1 - EO(S(p, nx[0], (nx[0] + nx[1]) / 2))
+        put(el, 'visibility', o < .01 ? 'hidden' : 'visible'); put(el, 'opacity', o.toFixed(3)); put(el, 'clipPath', 'none')
+        continue
+      }
       let e = 1
       if (w) e = S(p, w[0], w[1])
-      const nx = i < defs.length - 1 ? defs[i + 1][2] : null, covered = !!nx && p >= nx[1]
+      const covered = !!nx && p >= nx[1]
       put(el, 'visibility', (w && e <= 0) || covered ? 'hidden' : 'visible')
-      if (mode === 'wipe' && wipe) { put(el, 'clipPath', e >= 1 ? 'none' : `inset(0 ${((1 - EIO(e)) * 100).toFixed(2)}% 0 0)`); put(el, 'opacity', '1') }
+      if (mode === 'wipe') { put(el, 'clipPath', e >= 1 ? 'none' : `inset(0 ${((1 - EIO(e)) * 100).toFixed(2)}% 0 0)`); put(el, 'opacity', '1') }
       else if (mode) { put(el, 'opacity', EO(e).toFixed(3)); put(el, 'clipPath', 'none') }
     }
   }
@@ -300,7 +306,7 @@ export const mountPyventa: Mount<ProjectData> = (root, { lang, first }, { reduce
     put(glow, 'opacity', (1 - S(p, .03, .12)).toFixed(3))
     const hv = 1 - S(p, .045, .075)
     if ((hv > 0) !== W.heroOn) { W.heroOn = hv > 0; W.sg.classList.toggle('hero-on', hv > 0) }
-    const eo = S(p, .986, .998) * (1 - S(sy, W.top + W.span, W.top + W.span + W.vh * .3))
+    const eo = S(p, .979, .992) * (1 - S(sy, W.top + W.span, W.top + W.span + W.vh * .3))
     put(end, 'opacity', eo.toFixed(3)); put(end, 'visibility', eo > 0 ? 'visible' : 'hidden')
     // the screens
     if (!por) {
