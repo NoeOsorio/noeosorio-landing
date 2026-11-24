@@ -77,6 +77,9 @@ export const mountWhiteboard: Mount<ProjectData> = (root, { lang, first }, { red
   const V = { vw: 0, vh: 0, por: false, top: 0, span: 0, hold: 0, range: 1 }
   let heroAt: number | undefined
   let U = 0
+  // The hero's own clock, in abstract seconds. It advances in real time; if the visitor scrolls before it is done it fast-forwards
+  // (about 400 ms) so the whole drawing is complete before the eraser may start.
+  let hu = 0, huRate = 1
 
   // ---------- Build ----------
   function build() {
@@ -438,11 +441,11 @@ export const mountWhiteboard: Mount<ProjectData> = (root, { lang, first }, { red
 
   // ---------- Frame ----------
   let lastIdle = -1, sy = 0, built = false
-  function frame(p: number, now: number) {
+  function frame(p: number) {
     let uu: number
     if (reduce) uu = HEROEND - .01
-    else if (p > .012) uu = uOfP(p)
-    else uu = heroAt !== undefined ? Math.min((now - heroAt) / 1000, HEROEND - .01) : 0
+    else if (p > .012) uu = hu < HEROEND - .01 ? hu : uOfP(p)
+    else uu = hu
     U = uu
     apply(uu)
     const idle = sy > V.top + V.span ? 1 : 0
@@ -450,22 +453,26 @@ export const mountWhiteboard: Mount<ProjectData> = (root, { lang, first }, { red
   }
   let target = 0, ps = 0, raf = 0, prev = 0
   const targetP = () => reduce ? 0 : cl(scrollY - V.top, 0, V.range) / V.range
-  const heroRunning = (now: number) => ps <= .012 && heroAt !== undefined && (now - heroAt * 1000) / 1000 < HEROEND && !document.hidden
+  const heroRunning = () => heroAt !== undefined && hu < HEROEND - .01 && !document.hidden
   function tick(now: number) {
     raf = 0
     const dt = Math.min(64, now - prev)
     prev = now
     const d = target - ps
     if (Math.abs(d) < .0002) ps = target; else ps += d * (1 - Math.exp(-dt / 130))
-    frame(ps, now)
-    if (ps !== target || heroRunning(now)) raf = requestAnimationFrame(tick)
+    if (heroAt !== undefined && hu < HEROEND - .01) {
+      if (ps > .012 && huRate === 1) huRate = Math.max(1, (HEROEND - .01 - hu) / .4)
+      hu = Math.min(HEROEND - .01, hu + dt / 1000 * huRate)
+    }
+    frame(ps)
+    if (ps !== target || heroRunning()) raf = requestAnimationFrame(tick)
     else root.classList.remove('moving')
   }
   function kick() {
     if (!built || disposed) return
     sy = scrollY
     target = targetP()
-    if (reduce) { ps = target; frame(ps, performance.now()); return }
+    if (reduce) { ps = target; frame(ps); return }
     if (raf || disposed) return
     root.classList.add('moving')
     prev = performance.now()
@@ -489,7 +496,7 @@ export const mountWhiteboard: Mount<ProjectData> = (root, { lang, first }, { red
     if (disposed) return
     build(); built = true
     // A language switch or a late arrival keeps the hero in its finished state instead of replaying it.
-    if (!first || reduce) { heroAt = performance.now() / 1000 - HEROEND - 1; kick() }
+    if (!first || reduce) { heroAt = performance.now() / 1000; hu = HEROEND; kick() }
     else begin()
   })
 

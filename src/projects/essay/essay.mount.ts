@@ -84,14 +84,23 @@ function wireForm(host: HTMLElement, C: EssayCopy, lang: Lang, signal: AbortSign
         wl.sending = true; status = 'idle'
         const email = input.value
         paint()
+        // A write that never completes (offline, blocked) gives up after 12 s with the failure message and frees the button.
+        let timedOut = false
+        const timer = setTimeout(() => {
+          timedOut = true
+          console.error('waitlist failed: timeout')
+          status = 'failed'; wl.sending = false; wl.refresh?.()
+        }, 12000)
+        signal.addEventListener('abort', () => clearTimeout(timer), { once: true })
         joinWaitlist(email, lang).then(
           () => { wl.done = true },
           (error: { code?: string; message?: string }) => {
+            if (timedOut) return
             // The reason only, never the email.
             console.error('waitlist failed:', error?.code ?? error?.message)
             status = 'failed'
           },
-        ).finally(() => { wl.sending = false; wl.refresh?.() })
+        ).finally(() => { clearTimeout(timer); if (!timedOut) wl.sending = false; wl.refresh?.() })
       }, { signal })
     }
     const input = form.querySelector('input') as HTMLInputElement
@@ -184,10 +193,10 @@ export const mountEssay: Mount<ProjectData> = (root, { lang, first }, { reduce }
     Object.assign(W, { sw, sh: sw * 1.12, vw, vh, m, unit: sw / 100, top: track.getBoundingClientRect().top + scrollY, span: track.offsetHeight - vh })
     // Where each note rests on the sheet: fixed once, the frame only moves it.
     notes.forEach((n, i) => {
-      const pos = m ? [19, 64] : ([[92, 4], [95, 28], [90, 52], [94, 76]][i])
+      const pos = m ? [19, 105] : ([[103, 0], [103, 25], [103, 50], [103, 75]][i])
       n.style.left = pos[0] + '%'
       n.style.top = pos[1] + '%'
-      n.style.width = m ? '62cqw' : ''
+      n.style.width = m ? '62cqw' : '33cqw'
     })
     last.delete(rig)
   }
@@ -196,17 +205,15 @@ export const mountEssay: Mount<ProjectData> = (root, { lang, first }, { reduce }
   function render(p: number) {
     const { sw, sh, vw, vh, m, unit } = W
     const tilt = EIO(S(p, 0.62, 0.8))
-    const dx = m ? 0 : vw * (0.12 + 0.05 * tilt)
+    const dx = m ? 0 : vw * (0.09 + 0.08 * tilt)
     const dy = m ? 150 - 100 * EO(S(p, 0.07, 0.16)) + 20 * tilt : 30 * tilt
     const sc = m ? 1 - 0.3 * tilt : 1 - 0.1 * tilt
     put(rig, 'transform', `translate3d(${dx.toFixed(2)}px,${dy.toFixed(2)}px,0) rotateX(${(tilt * 52).toFixed(3)}deg) rotateZ(${(-tilt * 31).toFixed(3)}deg) scale(${sc.toFixed(4)})`)
     const sceneO = 1 - S(p, 0.8, 0.855)
     put(scene, 'opacity', sceneO.toFixed(3)); put(scene, 'visibility', sceneO <= 0 ? 'hidden' : 'visible')
-    // The paper that fills the screen shrinks onto the sheet.
+    // The paper that fills the screen melts into the sheet's own paper: both fade, so no edge ever crosses the page.
     const c = EIO(S(p, 0.54, 0.62))
-    const cx = vw / 2 + dx, cy = vh / 2 + dy
-    const L = cx - sw / 2, T = cy - sh / 2, R = vw - (cx + sw / 2), B = vh - (cy + sh / 2)
-    put(paperA, 'clipPath', `inset(${(T * c).toFixed(1)}px ${(R * c).toFixed(1)}px ${(B * c).toFixed(1)}px ${(L * c).toFixed(1)}px round ${(c * sw * 0.03).toFixed(2)}px)`)
+    put(paperA, 'opacity', (1 - c).toFixed(3))
     put(paperA, 'visibility', c >= 0.999 ? 'hidden' : 'visible')
     put(shd, 'opacity', c.toFixed(3)); put(bgp, 'opacity', c.toFixed(3))
     put(sheet, 'transform', `translateZ(${(tilt * 4 * unit).toFixed(3)}px)`)
@@ -234,7 +241,7 @@ export const mountEssay: Mount<ProjectData> = (root, { lang, first }, { reduce }
     const st = (10 - 6 * EO(S(p, 0.64, 0.78))).toFixed(1)
     if (st !== scoreText) { scoreText = st; score.textContent = st }
     // Captions.
-    const win = [[0.1, 0.3], [0.31, 0.52], [0.6, 0.8]]
+    const win = [[0.1, 0.3], [0.31, 0.57], [0.6, 0.8]]
     caps.forEach((e, i) => {
       const [a, b] = win[i]
       put(e, 'opacity', (S(p, a, a + 0.03) - S(p, b - 0.03, b)).toFixed(3))

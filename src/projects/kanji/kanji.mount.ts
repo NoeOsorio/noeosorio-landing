@@ -195,7 +195,7 @@ export const mountKanji: Mount<ProjectData> = (root, { lang, first }, { reduce }
     web: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
     phone: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
   }
-  root.innerHTML = `<div class="track"><div class="stage">
+  root.innerHTML = `<div class="track"><div class="stage"><div class="inner">
   <div class="world"><div class="pa mat"></div></div>
   <div class="intro"><p class="pname">Kanji Study App</p><h1>${C.head}<span class="hanko"></span></h1><p class="pmeta"><span>${C.note}, ${C.price.toLowerCase()}</span><span class="plat"><svg viewBox="0 0 24 24" aria-hidden="true">${platIcon.web}</svg><span>Web</span></span><span class="plat"><svg viewBox="0 0 24 24" aria-hidden="true">${platIcon.phone}</svg><span>${C.phone}</span></span></p><a class="kbtn" href="${REPO}" target="_blank" rel="noopener">${C.cta}</a></div>
   <div class="end"><h2>${C.price}</h2><p>${C.plat}</p><a class="kbtn" href="${REPO}" target="_blank" rel="noopener">${C.cta}</a></div>
@@ -221,12 +221,12 @@ export const mountKanji: Mount<ProjectData> = (root, { lang, first }, { reduce }
     <div style="display:contents">${CARDS.map(([a, b]) => `<div class="card3d"><div class="face front"><img src="${a}" alt=""><img class="ok" src="${b}" alt=""></div><div class="face back"><i></i></div></div>`).join('')}</div>
   </div></div></div>
   <div class="labs"></div>
-</div></div>
+</div></div></div>
 <section class="rmcta"><div class="in"><h2>${C.price}</h2><p>${C.plat}</p><a class="kbtn" href="${REPO}" target="_blank" rel="noopener">${C.cta}</a></div></section>`
 
   const $ = <E extends Element>(sel: string) => root.querySelector(sel) as E
   const $$ = <E extends Element>(sel: string) => [...root.querySelectorAll<E>(sel)]
-  const track = $<HTMLElement>('.track'), stage = $<HTMLElement>('.stage'), intro = $<HTMLElement>('.intro'), end = $<HTMLElement>('.end')
+  const track = $<HTMLElement>('.track'), inner = $<HTMLElement>('.inner'), stage = $<HTMLElement>('.stage'), intro = $<HTMLElement>('.intro'), end = $<HTMLElement>('.end')
   const rig = $<HTMLElement>('.rig'), desk = $<HTMLElement>('.desk'), objs = $<HTMLElement>('.objs'), under = $<HTMLElement>('.under')
   const dim = $<HTMLElement>('.dim'), inkEl = $<HTMLElement>('.ink'), pen = $<HTMLElement>('.pen')
   const screens = $$<HTMLElement>('.scr'), lays = $$<HTMLElement>('.lay'), cards = $$<HTMLElement>('.card3d')
@@ -375,6 +375,7 @@ export const mountKanji: Mount<ProjectData> = (root, { lang, first }, { reduce }
     const key = m + ':' + (vw < 1200)
     if (builtFor !== key) { buildObjects(); builtFor = key }
     placeObjects()
+    hold()
     labs.forEach((l) => { l.w = l.el.offsetWidth; l.h = l.el.offsetHeight })
   }
 
@@ -462,7 +463,7 @@ export const mountKanji: Mount<ProjectData> = (root, { lang, first }, { reduce }
     // Labels: placed from where things really are on screen, worked out with the scene's own transforms (no reads).
     const want = labs.map((l) => {
       let o = 0
-      if (l.k === 'lessons') o = EO(S(p, .085, .105)) * (1 - S(p, .125, .135))
+      if (l.k === 'lessons') o = EO(S(p, .1, .118)) * (1 - S(p, .132, .142))
       else if (l.k === 'read') o = S(lk[0], .55, 1) * (m ? 1 - S(p, .175, .19) : 1)
       else if (l.k === 'phr') o = S(lk[1], .55, 1) * (m ? S(p, .195, .21) : 1)
       else if (l.k === 'write') o = EO(S(p, .335, .355)) * (1 - S(p, .515, .525))
@@ -506,6 +507,14 @@ export const mountKanji: Mount<ProjectData> = (root, { lang, first }, { reduce }
     } else labs.forEach((l) => put(l.el, 'opacity', '0'))
   }
 
+  // When the stage unpins and the footer rises, the whole scene holds still on screen and the stage's lower edge wipes it away from
+  // the bottom, so nothing of the end scene ever slides up under the header. Locked to the scroll, not damped.
+  function hold() {
+    if (reduce) return
+    const d = Math.max(0, scrollY - (W.top + W.span))
+    put(inner, 'transform', d > 0 ? `translate3d(0,${d.toFixed(1)}px,0)` : 'none')
+  }
+
   // ---------- One rAF, one damped scroll value ----------
   let target = 0, cur = 0, raf = 0, prev = 0
   const targetP = () => cl(scrollY - W.top, 0, W.span - W.hold) / (W.span - W.hold)
@@ -520,6 +529,7 @@ export const mountKanji: Mount<ProjectData> = (root, { lang, first }, { reduce }
     raf = requestAnimationFrame(tick)
   }
   function wake() {
+    hold()
     target = targetP()
     if (raf || disposed) return
     root.classList.add('moving')

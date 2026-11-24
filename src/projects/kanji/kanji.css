@@ -8,6 +8,8 @@
 .pg-kanji .mat, .kj-mat { background: var(--paper, #F1EBDF) url("./assets/washi.svg") 0 0 / 520px 520px; }
 .pg-kanji .track { position: relative; }
 .pg-kanji .stage { position: sticky; top: 0; overflow: hidden; width: 100%; }
+.pg-kanji .inner { position: absolute; inset: 0; }
+.pg-kanji.moving .inner { will-change: transform; }
 .pg-kanji .world { position: absolute; inset: 0; overflow: hidden; }
 .pg-kanji .world .pa { position: absolute; inset: -8%; }
 .pg-kanji .world::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 75% 70% at 50% 46%, rgba(60,40,10,0) 55%, rgba(60,40,10,.11) 100%); pointer-events: none; }
