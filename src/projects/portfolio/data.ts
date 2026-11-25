@@ -39,6 +39,8 @@ export function stressItems(): Item[] | null {
   return Array.from({ length: Math.min(5000, Math.floor(n)) }, (_, i) => ITEMS[i % ITEMS.length])
 }
 
+export const OG_IMAGE = '/og/portfolio.png'
+
 export const META = {
   title: `${wallet.title} | Noé Osorio`,
   description: 'Every project I have built, from AI agents to learning tools and games. Search by name or topic and open any of them.',
