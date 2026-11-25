@@ -204,7 +204,7 @@ export const mountKanji: Mount<ProjectData> = (root, { lang, first }, { reduce }
     <div style="display:contents">${Array.from({ length: 2 }, (_, i) => `<i class="slab" style="transform:translateZ(${-(i + 1) * 1.8}cqw)"></i>`).join('')}</div>
     <div class="body"></div>
     <div class="screen">
-      <div class="scr"><img src="${writeDone}" alt=""></div>
+      <div class="scr"><img src="${writeDone}" alt="" fetchpriority="high"></div>
       <div class="scr"><img src="${indice}" alt=""></div>
       <div class="scr"><img src="${lessonTop}" alt=""><i class="dim"></i></div>
       <div class="scr"><img src="${lessonScrolled}" alt=""></div>

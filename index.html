@@ -39,12 +39,9 @@
     <style>html, body { background: #18181b; }</style>
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- Preconnect to External Resources -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- Only the two kanji on the Kanji wallet card come from the font service, as a tiny subset that never blocks the first paint. -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
-    <!-- Fonts with display swap -->
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Oswald:wght@500;600;700&family=Yuji+Syuku&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&text=%E5%AD%97%E6%BC%A2&display=swap" media="print" onload="this.media='all'" />
   </head>
   <body>
     <div id="root"></div>
