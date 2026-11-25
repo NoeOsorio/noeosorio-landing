@@ -4,13 +4,13 @@ import SocialLinks from './SocialLinks'
 import { footerLinks } from '../data/footerLinks'
 import { siteLinks } from '../data/siteLinks'
 
-const linkClass = 'text-zinc-400 hover:text-lime-300 transition-colors'
+const linkClass = 'text-zinc-400 hover:text-lime-300 transition-colors [overflow-wrap:anywhere]'
 
 const Footer = () => {
   return (
     <footer className="border-t border-zinc-800 bg-zinc-900/50 backdrop-blur-xl">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="space-y-4">
             <Logo />
@@ -53,7 +53,7 @@ const Footer = () => {
           </div>
 
           {/* Say hi */}
-          <div>
+          <div className="min-w-0">
             <h3 className="text-white font-semibold mb-4">Say hi</h3>
             <a href={`mailto:${siteLinks.email}`} className={linkClass}>
               {siteLinks.email}

@@ -1,0 +1,108 @@
+/* Pyventa Web. Everything is scoped under .pg-pyventa; the shell gives the page root that class. */
+.pg-pyventa {
+  --wall: #ECE7D6; --pi: #1E1B16; --pi2: rgba(30,27,22,.72); --red: #D2402F;
+  background: var(--wall); color: var(--pi);
+}
+.pg-pyventa *, .pg-pyventa *::before, .pg-pyventa *::after { box-sizing: border-box; }
+/* The sheet of the card's flight lives on <body>, so its class sits outside the scope. */
+.pv-mat { background: #ECE7D6; }
+.pg-pyventa .track { position: relative; }
+.pg-pyventa .stage { position: sticky; top: 0; overflow: hidden; width: 100%; perspective: 2600px; perspective-origin: 50% 50%; }
+.pg-pyventa .world { position: absolute; inset: 0; background: var(--wall); }
+.pg-pyventa .world::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(80,66,30,.03) 0 1px, transparent 1px 3px); }
+.pg-pyventa .world::after { content: ""; position: absolute; left: 50%; top: -20%; width: 140vmax; height: 100vmax; margin-left: -70vmax; background: radial-gradient(closest-side, rgba(255,252,240,.75), rgba(255,252,240,0)); pointer-events: none; }
+.pg-pyventa .vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, rgba(70,52,20,0) 58%, rgba(70,52,20,.075) 100%); }
+.pg-pyventa .hglow { position: absolute; left: 0; top: 0; border-radius: 50%; pointer-events: none; opacity: 0; background: radial-gradient(closest-side, rgba(255,251,238,.95), rgba(255,238,196,.42) 52%, rgba(255,238,196,0)); }
+.pg-pyventa .obj { position: absolute; left: 0; top: 0; transform-origin: 50% 50%; opacity: 0; visibility: hidden; }
+/* Layers are promoted only while the page is moving. */
+.pg-pyventa.moving .obj, .pg-pyventa.moving .tag, .pg-pyventa.moving .it, .pg-pyventa.moving .tkw img, .pg-pyventa.moving .laser, .pg-pyventa.moving .pulse { will-change: transform, opacity; }
+/* monitor */
+.pg-pyventa .mon { width: 1000px; height: 730px; }
+.pg-pyventa .bezel { position: absolute; left: 0; top: 0; width: 1000px; height: 638px; border-radius: 24px; background: linear-gradient(160deg, #3a3731, #161411 62%); box-shadow: inset 0 0 0 2px #4b473f, inset 0 2px 3px rgba(255,255,255,.2); }
+.pg-pyventa .bezel::after { content: ""; position: absolute; left: 50%; top: 7px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: #26231f; }
+.pg-pyventa .sc { position: absolute; left: 18px; top: 18px; width: 964px; height: 602px; border-radius: 8px; overflow: hidden; background: #fff; }
+.pg-pyventa .sc .L, .pg-pyventa .pscr .L { position: absolute; inset: 0; }
+.pg-pyventa .sc img, .pg-pyventa .pscr img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+.pg-pyventa .sc .hl { position: absolute; left: 0; top: 0; right: 0; height: 5.75%; background: rgba(79,85,200,.15); opacity: 0; }
+.pg-pyventa .gloss { position: absolute; inset: 0; background: linear-gradient(115deg, rgba(255,255,255,0) 38%, rgba(255,255,255,.09) 50%, rgba(255,255,255,0) 62%); pointer-events: none; }
+.pg-pyventa .stand { position: absolute; left: 0; top: 628px; width: 1000px; height: 102px; }
+/* phone */
+.pg-pyventa .ph { width: 300px; height: 650px; }
+.pg-pyventa .pbody { position: absolute; left: 0; top: 0; width: 300px; height: 628px; border-radius: 46px; background: linear-gradient(160deg, #3b3730, #14110e 60%); box-shadow: inset 0 0 0 2px #4b473f, inset 0 2px 3px rgba(255,255,255,.2); }
+.pg-pyventa .pscr { position: absolute; left: 9px; top: 9px; width: 282px; height: 610px; border-radius: 38px; overflow: hidden; background: #fff; }
+.pg-pyventa .pshadow { position: absolute; left: 30px; top: 620px; width: 240px; height: 28px; background: radial-gradient(closest-side, rgba(70,52,20,.34), rgba(70,52,20,0)); }
+.pg-pyventa .cam { background: radial-gradient(120% 80% at 50% 40%, #4a3a26, #17120c); }
+.pg-pyventa .cam .feedv { position: absolute; inset: -6%; overflow: hidden; }
+.pg-pyventa .cam .pk { position: absolute; inset: 0; background: linear-gradient(160deg, #4a6fc0, #34509a 70%); }
+.pg-pyventa .cam .lb { position: absolute; left: 22%; top: 42.4%; width: 56%; height: 15.6%; background: #fbfaf5; border-radius: 2%; transform: rotate(-2deg); }
+.pg-pyventa .cam .lb svg { position: absolute; inset: 8% 6%; width: 88%; height: 84%; }
+.pg-pyventa .cam .ls { position: absolute; left: 11%; right: 11%; top: 42%; height: 2px; background: var(--red); box-shadow: 0 0 8px 2px rgba(210,64,47,.6); opacity: 0; }
+.pg-pyventa .cam img.chrome { z-index: 2; }
+/* ticket: a paper object, no machine */
+.pg-pyventa .prn { width: 300px; height: 560px; }
+.pg-pyventa .tkw { position: absolute; left: 5px; top: 6px; width: 290px; height: 548px; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 64px), transparent 100%); mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 64px), transparent 100%); }
+.pg-pyventa .tkw img { position: absolute; left: 30px; top: 12px; width: 230px; height: 436px; display: block; filter: drop-shadow(0 10px 14px rgba(60,40,10,.22)) drop-shadow(0 1px 2px rgba(60,40,10,.25)); }
+/* products and the simulated laser */
+.pg-pyventa .sg { width: 300px; height: 340px; }
+.pg-pyventa .sg .it { position: absolute; left: 24px; top: 8px; width: 252px; height: 319px; opacity: 0; visibility: hidden; }
+.pg-pyventa .sg .it svg { display: block; }
+/* The laser and its pulse have a fixed base size; the frame scales them to the barcode they are on. */
+.pg-pyventa .sg .laser { position: absolute; left: 0; top: 0; width: 100px; height: 26px; opacity: 0; transform-origin: 0 0; background: linear-gradient(to bottom, rgba(255,64,44,0) 0, rgba(255,64,44,0) 22%, rgba(255,64,44,.28) 38%, rgba(255,120,100,1) 46%, rgba(255,120,100,1) 54%, rgba(255,64,44,.28) 62%, rgba(255,64,44,0) 78%, rgba(255,64,44,0) 100%); -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent); }
+.pg-pyventa .sg .pulse { position: absolute; left: 0; top: 0; width: 100px; height: 100px; opacity: 0; transform-origin: 0 0; background: radial-gradient(closest-side, rgba(255,86,64,.5), rgba(255,86,64,.18) 55%, rgba(255,86,64,0)); }
+.pg-pyventa .sg .hl0 { position: absolute; left: 0; top: 0; height: 26px; opacity: 0; visibility: hidden; background: linear-gradient(to bottom, rgba(255,64,44,0) 0, rgba(255,64,44,0) 22%, rgba(255,64,44,.28) 38%, rgba(255,120,100,1) 46%, rgba(255,120,100,1) 54%, rgba(255,64,44,.28) 62%, rgba(255,64,44,0) 78%, rgba(255,64,44,0) 100%); -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent); }
+.pg-pyventa .sg .hp0 { position: absolute; left: 0; top: 0; opacity: 0; visibility: hidden; background: radial-gradient(closest-side, rgba(255,86,64,.5), rgba(255,86,64,.18) 55%, rgba(255,86,64,0)); }
+/* In the hero the notebook is mid-scan on its own, until the first scroll takes it over. */
+.pg-pyventa .sg.hero-on .hl0 { visibility: visible; animation: pv-hsweep 2.8s cubic-bezier(.65,0,.35,1) infinite; will-change: transform, opacity; }
+.pg-pyventa .sg.hero-on .hp0 { visibility: visible; animation: pv-hpulse 2.8s ease-out infinite; will-change: transform, opacity; }
+@keyframes pv-hsweep { 0% { opacity: 0; transform: translate3d(var(--lx), var(--y0), 0); } 12% { opacity: 1; } 72% { opacity: 1; } 86%, 100% { opacity: 0; transform: translate3d(var(--lx), var(--y1), 0); } }
+@keyframes pv-hpulse { 0%, 70% { opacity: 0; transform: translate3d(var(--px), var(--py), 0) scale(.85); } 80% { opacity: .85; } 100% { opacity: 0; transform: translate3d(var(--px), var(--py), 0) scale(1.15); } }
+/* labels */
+.pg-pyventa .tag { position: absolute; left: 0; top: 0; white-space: nowrap; font: 600 16px/22px var(--body); letter-spacing: -.005em; color: var(--pi); opacity: 0; visibility: hidden; }
+/* the receipt: the headline is printed on it */
+.pg-pyventa .rcp { position: absolute; left: 0; top: 0; width: 540px; transform-origin: 50% 50%; }
+.pg-pyventa.por .rcp { width: 384px; }
+.pg-pyventa .rsheet { position: relative; background: #FCF9F0; color: #1b1914; padding: 330px 40px 0; filter: drop-shadow(16px 26px 22px rgba(60,40,10,.26)) drop-shadow(2px 3px 3px rgba(60,40,10,.2)); }
+.pg-pyventa.por .rsheet { padding: 170px 30px 0; }
+.pg-pyventa .rsheet::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .2  0 0 0 .08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"), repeating-linear-gradient(0deg, rgba(120,100,50,.02) 0 1px, transparent 1px 4px), linear-gradient(90deg, rgba(60,40,10,.05), rgba(255,255,255,.5) 12%, rgba(255,255,255,0) 34%, rgba(60,40,10,0) 76%, rgba(60,40,10,.06)); }
+.pg-pyventa .rsheet > * { position: relative; }
+.pg-pyventa .rl { font: 500 16px/1.3 var(--mono); letter-spacing: .02em; }
+.pg-pyventa .rmeta { display: flex; justify-content: space-between; gap: 12px; color: rgba(27,25,20,.62); font-size: 15px; margin: 3px 0; }
+.pg-pyventa .rl.c { text-align: center; }
+.pg-pyventa .rl.b { font-weight: 700; letter-spacing: .14em; }
+.pg-pyventa .rdash { height: 0; margin: 14px 0; border-top: 2px dashed rgba(27,25,20,.42); }
+.pg-pyventa .rh { margin: 6px 0 4px; font: 700 54px/.98 var(--display); letter-spacing: -.03em; color: #16140f; text-wrap: balance; }
+.pg-pyventa.por .rh { font-size: 38px; }
+.pg-pyventa .rrow { display: flex; align-items: center; gap: 10px; margin: 7px 0; }
+.pg-pyventa .rrow i { flex: 1; height: 0; border-top: 2px dotted rgba(27,25,20,.4); transform: translateY(3px); }
+.pg-pyventa .rrow svg { width: 20px; height: 20px; stroke: #1b1914; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.pg-pyventa .rbtn { display: flex; align-items: center; justify-content: space-between; margin: 20px 0 22px; height: 60px; padding: 0 20px; border: 2.5px solid #16140f; border-radius: 4px; color: #16140f; text-decoration: none; font: 800 21px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; background: transparent; transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--ease-out); -webkit-tap-highlight-color: transparent; }
+.pg-pyventa .rbtn:active { transform: scale(.97); }
+.pg-pyventa .rbtn:focus-visible { outline: 2px solid #5E8A10; outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) { .pg-pyventa .rbtn:hover { background: #16140f; color: #FBF8EE; } }
+.pg-pyventa .rtear { height: 14px; margin: 0 -40px; background: linear-gradient(-45deg, transparent 9px, #FCF9F0 0), linear-gradient(45deg, transparent 9px, #FCF9F0 0); background-size: 18px 14px; background-position: 0 100%; transform: translateY(13px); }
+.pg-pyventa.por .rtear { margin: 0 -30px; }
+/* The paper feeds in from above and its lines land one after another. */
+.pg-pyventa .stage.feed .rsheet { animation: pv-rfeed .86s var(--ease-out) both; }
+.pg-pyventa .stage.feed .rsheet > * { animation: pv-rline .24s var(--ease-out) both; animation-delay: calc(var(--i) * 46ms); }
+@keyframes pv-rfeed { from { transform: translateY(-34%); } to { transform: none; } }
+@keyframes pv-rline { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+.pg-pyventa.rm .rsheet, .pg-pyventa.rm .rsheet > * { animation: none !important; }
+.pg-pyventa.rm .sg .hl0, .pg-pyventa.rm .sg .hp0 { animation: none; }
+/* the end */
+.pg-pyventa .end { position: absolute; z-index: 6; left: 50%; top: 50%; width: min(34rem, calc(100% - 48px)); transform: translate(-50%, -50%); text-align: center; opacity: 0; visibility: hidden; }
+.pg-pyventa .end h2 { margin: 0 0 14px; font: 700 clamp(2.6rem, 5.2vw, 4.4rem)/1 var(--display); letter-spacing: -.04em; color: var(--pi); }
+.pg-pyventa .end p { margin: 0 0 26px; font: 400 clamp(1.05rem, 1.4vw, 1.25rem)/1.5 var(--body); color: var(--pi2); }
+.pg-pyventa .pbtn { display: inline-flex; align-items: center; justify-content: center; height: 52px; padding: 0 28px; border-radius: 999px; background: var(--pi); color: #F6EFDF; font: 600 16px var(--body); text-decoration: none; white-space: nowrap; box-shadow: 0 8px 20px -8px rgba(30,27,22,.6); transition: transform 160ms var(--ease-out), background-color 160ms ease; -webkit-tap-highlight-color: transparent; }
+@media (hover: hover) and (pointer: fine) { .pg-pyventa .pbtn:hover { background: #000; } }
+.pg-pyventa .pbtn:active { transform: scale(.97); }
+.pg-pyventa .pbtn:focus-visible { outline: 2px solid #5E8A10; outline-offset: 3px; }
+/* Reduced motion: one composed scene, no scrolling film. */
+.pg-pyventa.rm .track { height: auto !important; }
+.pg-pyventa.rm .stage { position: relative; }
+.pg-pyventa .rmcta { display: none; }
+.pg-pyventa.rm .rmcta { display: block; background: var(--wall); padding: 40px max(16px, 4vw) 90px; color: var(--pi); }
+.pg-pyventa .rmcta .in { max-width: 1100px; margin: 0 auto; }
+.pg-pyventa .rmcta h2 { margin: 0 0 12px; font: 700 clamp(2.2rem, 4.2vw, 3.4rem)/1 var(--display); letter-spacing: -.035em; }
+.pg-pyventa .rmcta p { margin: 0 0 22px; font: 400 1.15rem/1.5 var(--body); color: var(--pi2); }
+.pg-pyventa.rm .end { display: none; }
+@media (max-width: 760px) { .pg-pyventa .end h2 { font-size: 2.4rem; } }

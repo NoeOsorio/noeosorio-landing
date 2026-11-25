@@ -33,12 +33,12 @@ const Contact = () => {
             </p>
           </div>
 
-          <div className="p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all mb-12">
+          <div className="p-5 min-[420px]:p-8 bg-zinc-800/50 rounded-xl border border-zinc-700/50 hover:border-lime-300/30 transition-all mb-12">
             <div className="p-4 bg-lime-300/10 text-lime-300 rounded-xl w-fit mb-6">
               <HiMail className="w-6 h-6" aria-hidden="true" />
             </div>
-            <h2 className="text-2xl font-semibold text-white mb-6">
-              <a href={`mailto:${siteLinks.email}`} className="hover:text-lime-300 transition-colors">
+            <h2 className="text-xl min-[420px]:text-2xl font-semibold text-white mb-6 min-w-0">
+              <a href={`mailto:${siteLinks.email}`} className="hover:text-lime-300 transition-colors [overflow-wrap:anywhere]">
                 {siteLinks.email}
               </a>
             </h2>

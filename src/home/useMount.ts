@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-export type Mount<T> = (root: HTMLElement, data: T, env: { reduce: boolean }) => () => void;
+export type Mount<T> = (root: HTMLElement, data: T, env: { reduce: boolean; footerOnly?: boolean }) => () => void;
 
 // Runs a section's mount once per element. The callback keeps its identity across renders,
 // so a re-render never tears a section down and builds it again.

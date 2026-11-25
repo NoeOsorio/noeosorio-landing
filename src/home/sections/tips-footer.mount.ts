@@ -21,8 +21,11 @@ const GLYPH: Record<string, string> = {
   LinkedIn: '<rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 10.5 V16.5 M8 7.5 V7.6 M11.5 16.5 V10.5 M11.5 13 C 11.5 11.5 12.5 10.4 14 10.4 C 15.5 10.4 16.2 11.4 16.2 13 V16.5"/>',
 }
 
+// `footerOnly` mounts just the site footer (the LED sign, the links, the fine print). Project pages use it as their close;
+// the home mounts everything.
 export const mountClose: Mount<TipsContent> = (root, C, env) => {
   const reduce = env.reduce
+  const footerOnly = env.footerOnly === true
   const ac = new AbortController()
   const { signal } = ac
   let stopped = false
@@ -47,7 +50,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     observers.add(io); io.observe(el); return io
   }
 
-  root.innerHTML = `<section class="wrap" aria-label="${esc(C.sectionLabel)}">
+  root.innerHTML = footerOnly ? '<footer class="band sitefoot"></footer>' : `<section class="wrap" aria-label="${esc(C.sectionLabel)}">
   <div class="scene">
     <div class="device">
       <i class="cam" aria-hidden="true"></i>
@@ -93,6 +96,7 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
   }
   void screen
 
+  if (!footerOnly) {
   // ---------- The ask ----------
   vAsk.innerHTML = `<div class="merchant"><svg viewBox="60 100 280 200" fill="var(--screen-ink)" aria-hidden="true">${logoPaths()}</svg><div><b>${esc(C.merchant)}</b><span>${esc(C.place)}</span></div></div><div class="bill"><span>${esc(C.receiptLine)}</span><i></i><span>${esc(C.total)}</span></div>
     <h2 class="ask">${esc(C.ask)}</h2><p class="askSub">${esc(C.askSub)}</p>
@@ -148,6 +152,8 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     const beats = [1300, 2400, 3700, 5300]
     says.forEach((s, i) => s.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 320, delay: beats[i], easing: E, fill: 'forwards' }))
     last.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: 6500, easing: E, fill: 'forwards' })
+  }
+
   }
 
   // ---------- LED sign ----------
@@ -253,6 +259,8 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     }
   }
 
+  let chanCleanup: () => void = () => {}
+  if (!footerOnly) {
   // ---------- Robots only ----------
   // A captcha in reverse. People who wiggle the mouse fail it, and still get what robots get.
   const RB = C.robot, robot = $<HTMLElement>('.robot'), term = $<HTMLElement>('.term')
@@ -543,7 +551,8 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     return () => { ro.disconnect() }
   }
 
-  const chanCleanup = mountChannel()
+  chanCleanup = mountChannel()
+  }
 
   // ---------- Footer ----------
   const F = C.foot, sf = $<HTMLElement>('.sitefoot')
@@ -586,3 +595,6 @@ export const mountClose: Mount<TipsContent> = (root, C, env) => {
     root.innerHTML = ''
   }
 }
+
+// The close of a project page: only the site footer.
+export const mountFooter: Mount<TipsContent> = (root, C, env) => mountClose(root, C, { ...env, footerOnly: true })

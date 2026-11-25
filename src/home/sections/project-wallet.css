@@ -149,7 +149,9 @@
 
 .home-wallet .buy .price span{ font: 500 14px var(--body); color: var(--ink-2); }
 
-.home-wallet .buy .btn{ margin-left: auto; flex: none; height: 46px; padding: 0 24px; font-size: 15.5px; }
+.home-wallet .buy .acts{ margin-left: auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.home-wallet .buy .btn{ flex: none; height: 46px; padding: 0 24px; font-size: 15.5px; }
+.home-wallet .buy{ flex-wrap: wrap; }
 
 .home-wallet .meta{ display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 20px 24px; }
 
