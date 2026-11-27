@@ -132,7 +132,7 @@ export const tips: TipsContent = {
     ],
   },
   foot: {
-    line: 'Built by hand. The code, the design and the mistakes are all mine.',
+    line: 'Claude writes the code, but somehow the bugs are still mine.',
     siteLabel: 'site',
     elsewhereLabel: 'elsewhere',
     now: 'Now building Essay Studio',
