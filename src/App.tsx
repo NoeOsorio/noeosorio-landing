@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import ScrollToTop from './components/ScrollToTop'
 import LoadingScreen from './components/LoadingScreen'
+import RouteError from './components/RouteError'
 import { projectRoutes, LegacyProject } from './projects/routes'
 
 // Layout (navbar, footer), the cookie banner (animation library) and the secondary pages are
@@ -18,7 +19,10 @@ const Portfolio = lazy(() => import('./projects/portfolio/PortfolioPage'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Social = lazy(() => import('./pages/Social'))
 
-const router = createBrowserRouter([
+const router = createBrowserRouter([{
+  // One error screen for every route; a tab left open across a deploy reloads into the new build instead.
+  errorElement: <RouteError />,
+  children: [
   ...projectRoutes,
   {
     path: "/portfolio",
@@ -120,7 +124,8 @@ const router = createBrowserRouter([
       }
     ]
   }
-])
+  ],
+}])
 
 function App() {
   return <RouterProvider router={router} />
