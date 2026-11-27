@@ -11,14 +11,14 @@ import '../../home/sections/tips-footer.css'
 import '../project-shell.css'
 import { applyMeta } from '../ProjectShell'
 import type { ProjectPage } from '../types'
-import { META } from './data'
+import { META, OG_IMAGE } from './data'
 import { mountPortfolio } from './portfolio.mount'
 
 // /portfolio is not a project page, but it wears the same frame: the home's stars, bar and footer around its own grid.
 const PAGE: ProjectPage = {
   id: 'portfolio',
   tone: 'dark',
-  ogImage: '/og/portfolio.png',
+  ogImage: OG_IMAGE,
   meta: { es: META, en: META },
   mount: () => () => {},
 }
