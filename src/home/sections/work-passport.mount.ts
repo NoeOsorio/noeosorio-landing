@@ -345,7 +345,9 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
   // ---------- Phones: the pages one under another; each gets its stamps as it scrolls in ----------
   const stack = q<HTMLElement>('#stack');
   const mobile = CONTENT.pages.map((p) => { const box = document.createElement('div'); box.className = 'mpage'; const pg = pageEl(p, 'r'); box.appendChild(pg); stack.appendChild(box); return { box, pg }; });
-  const mfit = () => mobile.forEach((m) => { m.pg.style.zoom = String(m.box.clientWidth / 610); });
+  // The 610 × 700 page is scaled to the phone's width and its box gets the exact scaled height. CSS zoom left Safari with a box
+  // taller than the page (an empty strip of cover under every page), so the scale is a transform and the height is set here.
+  const mfit = () => mobile.forEach((m) => { const k = m.box.clientWidth / 610; m.pg.style.transform = `scale(${k})`; m.box.style.height = `${(700 * k).toFixed(2)}px`; });
   addEventListener('resize', mfit, { signal }); mfit();
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { const m = mobile.find((m) => m.box === e.target) as (typeof mobile)[number]; land(m.pg, 120, null); io.unobserve(e.target); } }), { threshold: 0.4 });
   mobile.forEach((m) => io.observe(m.box));

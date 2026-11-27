@@ -149,7 +149,7 @@
              radial-gradient(ellipse 80% 120px at 14% 96px, rgba(255,200,128,.15) 0%, transparent 100%) 0 0 / 100% 340px no-repeat,
              radial-gradient(ellipse 70% 46% at 22% 30%, rgba(246,178,100,.11) 0%, transparent 92%) 0 150px / 100% 439px repeat-y; }
 
-.home-passport .mpage{ position: relative; width: 100%; max-width: 100%; aspect-ratio: 610 / 700; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 6px var(--cover), 0 24px 50px rgba(0,0,0,.55), 0 34px 70px -34px rgba(244,190,120,.18); }
+.home-passport .mpage{ position: relative; flex: none; width: 100%; max-width: 100%; aspect-ratio: 610 / 700; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 6px var(--cover), 0 24px 50px rgba(0,0,0,.55), 0 34px 70px -34px rgba(244,190,120,.18); }
 
 .home-passport .mpage .page{ position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 0; background: var(--paper); padding-left: 52px; }}
 
