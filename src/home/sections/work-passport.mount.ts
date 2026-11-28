@@ -364,9 +364,9 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
     let pg: HTMLElement | null = null;
     if (p === 'COVER') { front.appendChild(coverEl()); back.appendChild(pageEl('INSIDE', 'l')); }
     else { pg = pageEl(p, 'top'); front.appendChild(pg); back.appendChild(div('page pblank')); }
-    const lift = div('mshade lift'), under = div('mshade under');
-    front.append(lift, under); leaf.append(front, back); pad.appendChild(leaf);
-    return { leaf, front, back, pg, lift, under };
+    const lift = div('mshade lift'), under = div('mshade under'), dusk = div('mshade dusk');
+    front.append(lift, under); back.append(dusk); leaf.append(front, back); pad.appendChild(leaf);
+    return { leaf, front, back, pg, lift, under, dusk };
   });
   pad.appendChild(div('pbind leather'));
   mtrack.style.height = `calc(100vh + ${(M - 1) * 85}vh)`;
@@ -386,7 +386,7 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
       const t = k < M - 1 ? ease(clamp(mc - k)) : 0, sh = Math.sin(Math.PI * t);
       const above = k > 0 ? ease(clamp(mc - (k - 1))) : 1;   // how far the leaf on top of this one has lifted
       const shown = k === base || (turning && k === base + 1);
-      // Pages that cannot be seen leave the layout entirely: in a 3D scene even a hidden page keeps a full-size layer.
+      // Pages that cannot be seen leave the layout entirely, so they hold no layer at all.
       put(L.leaf, 'display', shown ? 'block' : 'none');
       if (!shown) return;
       // The turn is drawn flat: the page foreshortens toward its top edge, widens a little as it lifts toward the reader, and past
@@ -394,11 +394,14 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
       put(L.leaf, 'transform', t > 0 ? `scale(${(1 + 0.045 * sh).toFixed(4)}, ${Math.cos(Math.PI * Math.min(t, 0.97)).toFixed(4)})` : 'none');
       put(L.leaf, 'zIndex', String(t > 0.5 ? 300 + k : 200 - k));
       // Past the hinge the page shows its back; near the end it fades as it leaves the top of the screen.
-      const fade = String(1 - clamp((t - 0.6) / 0.3));
+      const fade = String(1 - clamp((t - 0.55) / 0.25));
       put(L.front, 'display', t <= 0.5 ? 'block' : 'none'); put(L.back, 'display', t > 0.5 ? 'block' : 'none');
       put(L.front, 'opacity', fade); put(L.back, 'opacity', fade);
       put(L.lift, 'opacity', t > 0 && t <= 0.5 ? (sh * 0.85).toFixed(3) : '0');
-      put(L.under, 'opacity', above < 1 ? (Math.sin(Math.PI * above) * 0.75 * (1 - above * 0.6)).toFixed(3) : '0');
+      // The shadow falls on this page the moment the page above leaves it, then thins as that page goes away.
+      put(L.under, 'opacity', above > 0 && above < 1 ? ((1 - above) * Math.min(1, above * 5) * 0.8).toFixed(3) : '0');
+      // The back of a turned page is darkest while it stands near upright and lightens as it lies back above the binding.
+      put(L.dusk, 'opacity', t > 0.5 ? (sh * 0.4).toFixed(3) : '0');
       // A page's stamps land once the page above it has gone, or as soon as the reader stops with it mostly uncovered.
       if (L.pg && !mlanded.has(k) && (above > 0.96 || (mc === mt && above > 0.5))) { mlanded.add(k); land(L.pg, 80, pad); }
     });
@@ -416,7 +419,10 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
     if (run && !mraf) { mread(); if (mc !== mt) { mprev = 0; mtrack.classList.add('moving'); mraf = requestAnimationFrame(mframe); } }
     else if (!run && mraf) { cancelAnimationFrame(mraf); mraf = 0; }
   }
-  addEventListener('scroll', () => { mread(); msync(); }, { passive: true, signal });
+  // A page left half turned when the reader stops scrolling finishes its turn, or falls back, whichever is nearer.
+  let settleTimer = 0;
+  const settle = () => { settleTimer = 0; const r = Math.round(mt); if (Math.abs(r - mt) > 0.001) { mt = r; msync(); } };
+  addEventListener('scroll', () => { mread(); msync(); if (settleTimer) clearTimeout(settleTimer); settleTimer = window.setTimeout(settle, 160); }, { passive: true, signal });
   addEventListener('resize', () => { mfit(); mread(); mrender(); msync(); }, { signal });
   document.addEventListener('visibilitychange', msync, { signal });
   phone.addEventListener('change', () => { mfit(); mread(); mc = mt; mrender(); msync(); }, { signal });
@@ -438,6 +444,7 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
     raf = 0;
     if (mraf) cancelAnimationFrame(mraf);
     mraf = 0;
+    if (settleTimer) clearTimeout(settleTimer);
     timers.forEach((id) => clearTimeout(id));
     timers.clear();
     vis.disconnect();

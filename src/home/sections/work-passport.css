@@ -189,6 +189,11 @@
 
 .home-passport .mshade.lift{ background: linear-gradient(180deg, rgba(43,36,24,.42), rgba(43,36,24,.08) 45%, rgba(255,250,235,.10) 82%, rgba(43,36,24,0)); }
 
+.home-passport .mshade.dusk{ background: rgba(26,20,10,.9); }
+
+/* The cover is dark, so its bend reads as a band of light moving across the leather rather than a shadow. */
+.home-passport .mleaf.cover .mshade.lift{ background: linear-gradient(180deg, rgba(255,236,200,0) 0%, rgba(255,236,200,.05) 35%, rgba(255,236,200,.22) 70%, rgba(255,236,200,0) 100%); }
+
 .home-passport .mshade.under{ background: linear-gradient(180deg, rgba(30,22,10,.5) 0%, rgba(30,22,10,.18) 38%, rgba(30,22,10,0) 78%); }
 
 .home-passport.pp-reduce .mtrack{ display: none; }
