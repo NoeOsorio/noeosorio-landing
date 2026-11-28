@@ -139,17 +139,68 @@
 
 .home-passport .stamp:hover > svg{ transform: scale(1.04); }}
 
-.home-passport .stack{ display: none; }
+.home-passport .stack, .home-passport .mtrack{ display: none; }
+
+/* Pages of the phone passport: bound at the top, so the paper darkens toward the top edge and the perforation runs across. */
+.home-passport .page.top{ border-radius: 0 0 14px 14px; padding: 58px 52px 40px; background: linear-gradient(180deg, #BCA77E 0%, #D9C8A4 4%, var(--paper) 15%, var(--paper) 100%); }
+.home-passport .page.top::after{ content: ""; position: absolute; left: 34px; right: 34px; top: 9px; height: 0; border-top: 2px dashed rgba(150,46,40,.55); }
+.home-passport .page.top .visas{ top: 66px; }
+.home-passport .page.pblank{ border-radius: 0 0 14px 14px; background: linear-gradient(0deg, #BCA77E 0%, #D9C8A4 4%, #E7DCC3 15%, #E7DCC3 100%); }
 
 @media (max-width: 760px){.home-passport .track{ display: none; }
 
-.home-passport .stack{ display: flex; flex-direction: column; gap: 28px; padding-block: 48px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-           /* Same lamp, scaled: one pool over the title, then one tile per page. Gradients end well inside each tile, so tiles join without a seam. */
-           background:
-             radial-gradient(ellipse 80% 120px at 14% 96px, rgba(255,200,128,.15) 0%, transparent 100%) 0 0 / 100% 340px no-repeat,
-             radial-gradient(ellipse 70% 46% at 22% 30%, rgba(246,178,100,.11) 0%, transparent 92%) 0 150px / 100% 439px repeat-y; }
+.home-passport .mtrack{ display: block; position: relative; }
 
-.home-passport .mpage{ position: relative; width: 100%; max-width: 100%; aspect-ratio: 610 / 700; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 6px var(--cover), 0 24px 50px rgba(0,0,0,.55), 0 34px 70px -34px rgba(244,190,120,.18); }
+.home-passport .mstage{ position: sticky; top: 0; height: 100vh; height: 100svh; overflow: clip; display: flex; flex-direction: column; box-sizing: border-box;
+           padding: 44px max(16px, env(safe-area-inset-right, 0px)) 18px max(16px, env(safe-area-inset-left, 0px));
+           /* The same desk lamp, from the upper left, ending well inside the stage. */
+           background: radial-gradient(ellipse 90% 40% at 22% 52%, rgba(255,200,128,.13) 0%, rgba(246,176,98,.05) 52%, transparent 94%); }
+
+.home-passport .mroom{ position: relative; flex: 1; min-height: 0; }
+
+.home-passport .pad{ position: absolute; left: 50%; top: 0; width: 610px; height: 700px; transform-origin: 50% 0; }
+
+.home-passport .pback{ position: absolute; left: -6px; top: -14px; width: 622px; height: 724px; border-radius: 6px 6px 20px 20px; box-shadow: 0 16px 34px rgba(0,0,0,.55); }
+
+.home-passport .pedge{ position: absolute; left: 3px; top: 672px; width: 604px; height: 28px; border-radius: 0 0 14px 14px; background: #E2D6BB; box-shadow: 0 1px 0 #CBBC9B; }
+
+.home-passport .pbind{ position: absolute; left: -6px; top: -14px; width: 622px; height: 30px; border-radius: 6px 6px 3px 3px; z-index: 500; box-shadow: 0 7px 12px -5px rgba(0,0,0,.55); }
+
+.home-passport .pbind::after{ content: ""; position: absolute; left: 18px; right: 18px; top: 14px; height: 0; border-top: 1.5px dashed rgba(207,174,99,.55); }
+
+.home-passport .mleaf{ position: absolute; left: 0; top: 0; width: 610px; height: 700px; transform-origin: 50% 0; }
+
+.home-passport .mleaf.cover{ left: -6px; top: -14px; width: 622px; height: 724px; }
+
+
+
+.home-passport .mface{ position: absolute; inset: 0; }
+
+/* On paper this light, plain ink looks the same as multiplied ink, and each multiplied stamp in flight costs a page-sized layer on a phone. */
+.home-passport .mleaf .stamp{ mix-blend-mode: normal; }
+
+.home-passport .mface.back{ transform: scaleY(-1); }
+
+.home-passport .mleaf.cover .page.coverfront{ border-radius: 6px 6px 20px 20px; padding-top: 110px; }
+
+.home-passport .mleaf.cover .page.inside{ border-radius: 20px 20px 6px 6px; }
+
+.home-passport .mshade{ position: absolute; inset: 0; pointer-events: none; opacity: 0; border-radius: inherit; }
+
+.home-passport .mshade.lift{ background: linear-gradient(180deg, rgba(43,36,24,.42), rgba(43,36,24,.08) 45%, rgba(255,250,235,.10) 82%, rgba(43,36,24,0)); }
+
+.home-passport .mshade.dusk{ background: rgba(26,20,10,.9); }
+
+/* The cover is dark, so its bend reads as a band of light moving across the leather rather than a shadow. */
+.home-passport .mleaf.cover .mshade.lift{ background: linear-gradient(180deg, rgba(255,236,200,0) 0%, rgba(255,236,200,.05) 35%, rgba(255,236,200,.22) 70%, rgba(255,236,200,0) 100%); }
+
+.home-passport .mshade.under{ background: linear-gradient(180deg, rgba(30,22,10,.5) 0%, rgba(30,22,10,.18) 38%, rgba(30,22,10,0) 78%); }
+
+.home-passport.pp-reduce .mtrack{ display: none; }
+
+.home-passport.pp-reduce .stack{ display: flex; flex-direction: column; gap: 28px; padding-block: 48px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+.home-passport .mpage{ position: relative; flex: none; width: 100%; max-width: 100%; aspect-ratio: 610 / 700; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 6px var(--cover), 0 24px 50px rgba(0,0,0,.55); }
 
 .home-passport .mpage .page{ position: absolute; left: 0; top: 0; transform-origin: 0 0; border-radius: 0; background: var(--paper); padding-left: 52px; }}
 

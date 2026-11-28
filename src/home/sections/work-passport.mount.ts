@@ -169,7 +169,14 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
       <div class="room"><div class="book" id="book"><div class="book-shadow"></div></div></div>
     </div>
   </div>
+  <div class="mtrack" id="mtrack">
+    <div class="mstage">
+      <div class="head"><h2></h2><p class="sub"></p></div>
+      <div class="mroom" id="mroom"><div class="pad" id="pad"><div class="pback leather"></div></div></div>
+    </div>
+  </div>
   <div class="stack" id="stack"><div class="head"><h2></h2><p class="sub"></p></div></div>${INK_DEFS}`;
+  if (reduce) root.classList.add('pp-reduce');
   const q = <T extends Element>(sel: string) => root.querySelector(sel) as T;
 
   function stampEl(s: Spec, isMain: boolean, scale = 1) {
@@ -342,14 +349,92 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
   document.addEventListener('visibilitychange', sync, { signal });
   fit(); read(); cur = target; render(); sync();
 
-  // ---------- Phones: the pages one under another; each gets its stamps as it scrolls in ----------
+  // ---------- Phones: a closed passport held at the top, like a notepad. Scrolling lifts the cover, then each page flips up and away;
+  // each page holds while its stamps land. Reduced motion keeps the pages one under another instead. ----------
+  const phone = matchMedia('(max-width: 760px)');
+  const mtrack = q<HTMLElement>('#mtrack'), mroom = q<HTMLElement>('#mroom'), pad = q<HTMLElement>('#pad');
+  const div = (cls: string) => { const d = document.createElement('div'); d.className = cls; return d; };
+  const put = (el: HTMLElement, k: string, v: string) => { const s = el.style as unknown as Record<string, string>; if (s[k] !== v) s[k] = v; };
+  const items: (PassportContent['pages'][number] | 'COVER')[] = ['COVER', ...CONTENT.pages];
+  const M = items.length;
+  // The pages still under the top one show as a thin stack of edges below it: strips, not full pages, to keep layers small.
+  const edges = [2, 1, 0].map((i) => { const e = div('pedge'); e.style.transform = `translateY(${(i + 1) * 3.5}px)`; pad.appendChild(e); return e; }).reverse();
+  const mleaves = items.map((p, k) => {
+    const leaf = div('mleaf' + (k ? '' : ' cover')), front = div('mface front'), back = div('mface back');
+    let pg: HTMLElement | null = null;
+    if (p === 'COVER') { front.appendChild(coverEl()); back.appendChild(pageEl('INSIDE', 'l')); }
+    else { pg = pageEl(p, 'top'); front.appendChild(pg); back.appendChild(div('page pblank')); }
+    const lift = div('mshade lift'), under = div('mshade under'), dusk = div('mshade dusk');
+    front.append(lift, under); back.append(dusk); leaf.append(front, back); pad.appendChild(leaf);
+    return { leaf, front, back, pg, lift, under, dusk };
+  });
+  pad.appendChild(div('pbind leather'));
+  mtrack.style.height = `calc(100vh + ${(M - 1) * 85}vh)`;
+
+  let mk = 1, my = 0, mt = 0, mc = 0, mraf = 0, mprev = 0;
+  const mlanded = new Set<number>();
+  function mfit() { const r = mroom.getBoundingClientRect(); mk = Math.max(0.2, Math.min((r.width - 8) / 622, (r.height - 40) / 744)); my = Math.max(14 * mk, (r.height - 724 * mk) * 0.42 + 14 * mk); }
+  function mread() {
+    const max = mtrack.offsetHeight - innerHeight, p = max > 0 ? clamp(-mtrack.getBoundingClientRect().top / max) : 0;
+    const x = p * (M - 1), i = Math.floor(x), f = x - i;
+    mt = Math.min(M - 1, i + clamp((f - 0.15) / 0.6));
+  }
+  function mrender() {
+    put(pad, 'transform', `translateX(-50%) translateY(${my.toFixed(1)}px) scale(${mk.toFixed(4)})`);
+    const base = Math.min(M - 1, Math.floor(mc)), turning = mc > base + 0.0005;
+    mleaves.forEach((L, k) => {
+      const t = k < M - 1 ? ease(clamp(mc - k)) : 0, sh = Math.sin(Math.PI * t);
+      const above = k > 0 ? ease(clamp(mc - (k - 1))) : 1;   // how far the leaf on top of this one has lifted
+      const shown = k === base || (turning && k === base + 1);
+      // Pages that cannot be seen leave the layout entirely, so they hold no layer at all.
+      put(L.leaf, 'display', shown ? 'block' : 'none');
+      if (!shown) return;
+      // The turn is drawn flat: the page foreshortens toward its top edge, widens a little as it lifts toward the reader, and past
+      // the edge shows its back above the binding. No 3D scene, so a turning page costs one page-sized layer, not a large 3D surface.
+      put(L.leaf, 'transform', t > 0 ? `scale(${(1 + 0.045 * sh).toFixed(4)}, ${Math.cos(Math.PI * Math.min(t, 0.97)).toFixed(4)})` : 'none');
+      put(L.leaf, 'zIndex', String(t > 0.5 ? 300 + k : 200 - k));
+      // Past the hinge the page shows its back; near the end it fades as it leaves the top of the screen.
+      const fade = String(1 - clamp((t - 0.55) / 0.25));
+      put(L.front, 'display', t <= 0.5 ? 'block' : 'none'); put(L.back, 'display', t > 0.5 ? 'block' : 'none');
+      put(L.front, 'opacity', fade); put(L.back, 'opacity', fade);
+      put(L.lift, 'opacity', t > 0 && t <= 0.5 ? (sh * 0.85).toFixed(3) : '0');
+      // The shadow falls on this page the moment the page above leaves it, then thins as that page goes away.
+      put(L.under, 'opacity', above > 0 && above < 1 ? ((1 - above) * Math.min(1, above * 5) * 0.8).toFixed(3) : '0');
+      // The back of a turned page is darkest while it stands near upright and lightens as it lies back above the binding.
+      put(L.dusk, 'opacity', t > 0.5 ? (sh * 0.4).toFixed(3) : '0');
+      // A page's stamps land once the page above it has gone, or as soon as the reader stops with it mostly uncovered.
+      if (L.pg && !mlanded.has(k) && (above > 0.96 || (mc === mt && above > 0.5))) { mlanded.add(k); land(L.pg, 80, pad); }
+    });
+    const left = M - 1 - base;
+    edges.forEach((e, i) => put(e, 'display', i < left ? 'block' : 'none'));
+  }
+  function mframe(now: number) {
+    const dt = Math.min(64, now - (mprev || now)); mprev = now;
+    mc += (mt - mc) * (1 - Math.exp(-dt / 130)); if (Math.abs(mt - mc) < 0.0005) mc = mt;
+    mrender();
+    if (mc === mt) { mraf = 0; mtrack.classList.remove('moving'); } else mraf = requestAnimationFrame(mframe);
+  }
+  function msync() {
+    const run = phone.matches && !reduce && onScreen && !document.hidden && !disposed;
+    if (run && !mraf) { mread(); if (mc !== mt) { mprev = 0; mtrack.classList.add('moving'); mraf = requestAnimationFrame(mframe); } }
+    else if (!run && mraf) { cancelAnimationFrame(mraf); mraf = 0; }
+  }
+  // A page left half turned when the reader stops scrolling finishes its turn, or falls back, whichever is nearer.
+  let settleTimer = 0;
+  const settle = () => { settleTimer = 0; const r = Math.round(mt); if (Math.abs(r - mt) > 0.001) { mt = r; msync(); } };
+  addEventListener('scroll', () => { mread(); msync(); if (settleTimer) clearTimeout(settleTimer); settleTimer = window.setTimeout(settle, 160); }, { passive: true, signal });
+  addEventListener('resize', () => { mfit(); mread(); mrender(); msync(); }, { signal });
+  document.addEventListener('visibilitychange', msync, { signal });
+  phone.addEventListener('change', () => { mfit(); mread(); mc = mt; mrender(); msync(); }, { signal });
+  mfit(); mread(); mc = mt; mrender();
+
+  // Reduced motion: the pages one under another, stamps already on them.
   const stack = q<HTMLElement>('#stack');
-  const mobile = CONTENT.pages.map((p) => { const box = document.createElement('div'); box.className = 'mpage'; const pg = pageEl(p, 'r'); box.appendChild(pg); stack.appendChild(box); return { box, pg }; });
-  const mfit = () => mobile.forEach((m) => { m.pg.style.zoom = String(m.box.clientWidth / 610); });
-  addEventListener('resize', mfit, { signal }); mfit();
-  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { const m = mobile.find((m) => m.box === e.target) as (typeof mobile)[number]; land(m.pg, 120, null); io.unobserve(e.target); } }), { threshold: 0.4 });
-  mobile.forEach((m) => io.observe(m.box));
-  const vis = new IntersectionObserver((es) => { onScreen = es[es.length - 1].isIntersecting; sync(); });
+  const mobile = reduce ? CONTENT.pages.map((p) => { const box = div('mpage'); const pg = pageEl(p, 'r'); box.appendChild(pg); stack.appendChild(box); return { box, pg }; }) : [];
+  // The 610 × 700 page is scaled with a transform and its box gets the exact scaled height (CSS zoom left Safari's box too tall).
+  const stackFit = () => mobile.forEach((m) => { const k = m.box.clientWidth / 610; m.pg.style.transform = `scale(${k})`; m.box.style.height = `${(700 * k).toFixed(2)}px`; });
+  addEventListener('resize', stackFit, { signal }); stackFit();
+  const vis = new IntersectionObserver((es) => { onScreen = es[es.length - 1].isIntersecting; sync(); msync(); });
   vis.observe(root);
 
   return () => {
@@ -357,12 +442,15 @@ export const mountPassport: Mount<PassportContent> = (root, CONTENT, { reduce })
     ac.abort();
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
+    if (mraf) cancelAnimationFrame(mraf);
+    mraf = 0;
+    if (settleTimer) clearTimeout(settleTimer);
     timers.forEach((id) => clearTimeout(id));
     timers.clear();
-    io.disconnect();
     vis.disconnect();
     root.getAnimations({ subtree: true }).forEach((a) => a.cancel());
     root.removeAttribute('aria-labelledby');
+    root.classList.remove('pp-reduce');
     root.replaceChildren();
   };
 };
